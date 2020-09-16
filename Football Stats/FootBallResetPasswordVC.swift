@@ -8,15 +8,38 @@
 
 import UIKit
 
-class FootBallResetPasswordVC: UIViewController {
+class FootBallResetPasswordVC: UIViewController , UITextFieldDelegate {
 
-    override func viewDidLoad() {
+    @IBOutlet var txtemail: UITextField!
+    
+    
+    @IBOutlet var btnback: UIButton!
+    @IBOutlet var btnnext: UIButton!
+    
+    
+    @IBAction func btnbackAction(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    @IBAction func btnAction(_ sender: Any)
+    {
+        let login: FootBallSignupVC? = (storyboard?.instantiateViewController(withIdentifier: "FootBallSignupVC") as! FootBallSignupVC)
+            self.navigationController?.pushViewController(login!, animated: true)
+        
+    }
+    override func viewDidLoad()
+    
+    
+    {
         super.viewDidLoad()
-
+        btnnext.clipsToBounds = true
+        btnnext.layer.cornerRadius = 10
         // Do any additional setup after loading the view.
     }
     
-
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+       {
+           return textField .resignFirstResponder()
+       }
     /*
     // MARK: - Navigation
 

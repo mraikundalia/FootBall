@@ -13,6 +13,11 @@
 		E618B5B8250C7E2E00778AF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E618B5B6250C7E2E00778AF1 /* Main.storyboard */; };
 		E618B5BA250C7E5B00778AF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E618B5B9250C7E5B00778AF1 /* Assets.xcassets */; };
 		E618B5BD250C7E5B00778AF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E618B5BB250C7E5B00778AF1 /* LaunchScreen.storyboard */; };
+		E618B5C5250C951A00778AF1 /* FootballLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618B5C4250C951A00778AF1 /* FootballLoginVC.swift */; };
+		E618B5C7250C953D00778AF1 /* FootBallSignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618B5C6250C953D00778AF1 /* FootBallSignupVC.swift */; };
+		E618B5C9250C955D00778AF1 /* FootBallResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618B5C8250C955D00778AF1 /* FootBallResetPasswordVC.swift */; };
+		E618B5CB250CB81400778AF1 /* FootBallTabControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618B5CA250CB81400778AF1 /* FootBallTabControllerViewController.swift */; };
+		E682725B251078B00052BA54 /* FootBallProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E682725A251078B00052BA54 /* FootBallProfileVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +29,11 @@
 		E618B5B9250C7E5B00778AF1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E618B5BC250C7E5B00778AF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E618B5BE250C7E5B00778AF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E618B5C4250C951A00778AF1 /* FootballLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballLoginVC.swift; sourceTree = "<group>"; };
+		E618B5C6250C953D00778AF1 /* FootBallSignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallSignupVC.swift; sourceTree = "<group>"; };
+		E618B5C8250C955D00778AF1 /* FootBallResetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallResetPasswordVC.swift; sourceTree = "<group>"; };
+		E618B5CA250CB81400778AF1 /* FootBallTabControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallTabControllerViewController.swift; sourceTree = "<group>"; };
+		E682725A251078B00052BA54 /* FootBallProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallProfileVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +73,11 @@
 				E618B5B9250C7E5B00778AF1 /* Assets.xcassets */,
 				E618B5BB250C7E5B00778AF1 /* LaunchScreen.storyboard */,
 				E618B5BE250C7E5B00778AF1 /* Info.plist */,
+				E618B5C4250C951A00778AF1 /* FootballLoginVC.swift */,
+				E618B5C6250C953D00778AF1 /* FootBallSignupVC.swift */,
+				E618B5C8250C955D00778AF1 /* FootBallResetPasswordVC.swift */,
+				E618B5CA250CB81400778AF1 /* FootBallTabControllerViewController.swift */,
+				E682725A251078B00052BA54 /* FootBallProfileVC.swift */,
 			);
 			path = "Football Stats";
 			sourceTree = "<group>";
@@ -139,8 +154,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E618B5B5250C7E2D00778AF1 /* ViewController.swift in Sources */,
+				E618B5CB250CB81400778AF1 /* FootBallTabControllerViewController.swift in Sources */,
+				E618B5C7250C953D00778AF1 /* FootBallSignupVC.swift in Sources */,
+				E618B5C9250C955D00778AF1 /* FootBallResetPasswordVC.swift in Sources */,
+				E618B5C5250C951A00778AF1 /* FootballLoginVC.swift in Sources */,
 				E618B5B1250C7E2D00778AF1 /* AppDelegate.swift in Sources */,
 				E618B5B3250C7E2D00778AF1 /* SceneDelegate.swift in Sources */,
+				E682725B251078B00052BA54 /* FootBallProfileVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
