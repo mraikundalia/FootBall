@@ -1,44 +1,35 @@
 //
-//  FootBallResetPasswordVC.swift
+//  FootBallContactVC.swift
 //  Football Stats
 //
-//  Created by Chakri on 12/09/20.
+//  Created by Chakri on 19/09/20.
 //  Copyright © 2020 Mehul. All rights reserved.
 //
 
 import UIKit
 
-class FootBallResetPasswordVC: UIViewController , UITextFieldDelegate {
+class FootBallContactVC: UIViewController
+{
 
-    @IBOutlet var txtemail: UITextField!
-    
-    
-    @IBOutlet var btnback: UIButton!
-    @IBOutlet var btnnext: UIButton!
-    
-    
     @IBAction func btnbackAction(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
-    @IBAction func btnAction(_ sender: Any)
-    {
-        
-         self.navigationController?.popViewController(animated: true)
-    }
+    @IBOutlet var btnsend: UIButton!
     override func viewDidLoad()
-    
-    
     {
         super.viewDidLoad()
-        btnnext.clipsToBounds = true
-        btnnext.layer.cornerRadius = 10
+        btnsend.clipsToBounds = true
+        btnsend.layer.cornerRadius = 20;
+        contacttextview.clipsToBounds = true
+        contacttextview.layer.cornerRadius = 10
+        contacttextview.layer.borderColor = UIColor.lightGray.cgColor
+        contacttextview.layer.borderWidth = 1
+        
         // Do any additional setup after loading the view.
     }
+    @IBOutlet var contacttextview: UITextView!
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-       {
-           return textField .resignFirstResponder()
-       }
+
     /*
     // MARK: - Navigation
 

@@ -64,6 +64,19 @@ class FootBallSignupVC: UIViewController {
     {
         return textField .resignFirstResponder()
     }
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange,
+                           replacementString string: String) -> Bool
+    {
+        if textField  == txtconfirmpassword || textField == txpassword
+        {
+        let maxLength = 10
+            let currentString: NSString = txtconfirmpassword!.text! as NSString
+        let newString: NSString =
+            currentString.replacingCharacters(in: range, with: string) as NSString
+        return newString.length <= maxLength
+        }
+        return true
+    }
     /*
     // MARK: - Navigation
 
@@ -73,5 +86,11 @@ class FootBallSignupVC: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
 
 }

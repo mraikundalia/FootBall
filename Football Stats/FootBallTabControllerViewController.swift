@@ -8,17 +8,25 @@
 
 import UIKit
 
-class FootBallTabControllerViewController: UITabBarController {
+class FootBallTabControllerViewController: UITabBarController, UITabBarControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         let appearance = UITabBarItem.appearance()
         let attributes = [NSAttributedString.Key.font:UIFont(name: "American Typewriter", size: 17)]
         appearance.setTitleTextAttributes(attributes as [NSAttributedString.Key : Any], for: .normal)
-     
+        //self.tabBarController?.delegate = self
+        self.selectedIndex = 4
+     //    self.tabBarController?.selectedIndex = 4
         //self.tabBarController?.tabBar.selectedItem = 1
         // Do any additional setup after loading the view.
     }
+    
+//    func tabBarController(_ tabBarController: UITabBarController,
+//            shouldSelect viewController: UIViewController) -> Bool {
+//          self.tabBarController!.selectedIndex = 3
+//        return true
+//    }
     
 
     /*
