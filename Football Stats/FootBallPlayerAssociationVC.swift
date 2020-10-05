@@ -7,10 +7,23 @@
 //
 
 import UIKit
+import  Alamofire
 
-class FootBallPlayerAssociationVC: UIViewController {
-
-    
+class FootBallPlayerAssociationVC: UIViewController
+{
+    var hud : MBProgressHUD!
+    var playname:String = ""
+    var databasename:String = ""
+var isme: String = ""
+    var iamadmin: String = ""
+      var playerid: String = ""
+    @IBOutlet var lblunassociate: UILabel!
+    @IBOutlet var lblthisisme: UILabel!
+    @IBOutlet var lbladmin: UILabel!
+    @IBAction func btnsaveAction(_ sender: Any) {
+        self.Updategroupchild()
+    }
+    @IBOutlet var btnsave: UIButton!
     @IBOutlet var borderview1: UIView!
     
     @IBOutlet var borderview2: UIView!
@@ -19,10 +32,37 @@ class FootBallPlayerAssociationVC: UIViewController {
     }
     @IBAction func btncheckAction2(_ sender: Any)
     {
+        if (btncheck2.isSelected == true)
+      {
+       btncheck2.backgroundColor = UIColor.white
+        btncheck2.setBackgroundImage(UIImage(named: ""), for:.normal)
+      iamadmin = "0"
+       btncheck2.isSelected = false;
+      }
+      else
+      {
+       //btncheck2.backgroundColor = UIColor.red
+        btncheck2.setBackgroundImage(UIImage(named: "checkmark"), for:.normal)
+          iamadmin = "1"
+       btncheck2.isSelected = true;
+      }
     }
     @IBAction func btncheckAction1(_ sender: Any)
     {
-        
+        if (btncheck1.isSelected == true)
+          {
+           btncheck1.backgroundColor = UIColor.white
+            btncheck1.setBackgroundImage(UIImage(named: ""), for:.normal)
+         isme = "0"
+           btncheck1.isSelected = false;
+          }
+          else
+          {
+           //btncheck1.backgroundColor = UIColor.red
+            btncheck1.setBackgroundImage(UIImage(named: "checkmark"), for:.normal)
+        isme = "1"
+           btncheck1.isSelected = true;
+          }
     }
     
     @IBAction func btncheckAction3(_ sender: Any)
@@ -30,12 +70,14 @@ class FootBallPlayerAssociationVC: UIViewController {
         if (btncheck3.isSelected == true)
            {
             btncheck3.backgroundColor = UIColor.white
+            btncheck3.setBackgroundImage(UIImage(named: ""), for: .normal)
 
             btncheck3.isSelected = false;
            }
            else
            {
-            btncheck3.backgroundColor = UIColor.red
+            btncheck3.setBackgroundImage(UIImage(named: "checkmark"), for:.normal)
+
           self.showSimpleAlert()
             btncheck3.isSelected = true;
            }
@@ -74,9 +116,15 @@ class FootBallPlayerAssociationVC: UIViewController {
         borderview2.layer.borderColor = UIColor.darkGray.cgColor
         borderview2.layer.borderWidth = 1
         
+        btnsave.clipsToBounds = true
+        borderview2.layer.cornerRadius = 22
+        
         btncheck3.backgroundColor = UIColor.white
          btncheck2.backgroundColor = UIColor.white
          btncheck1.backgroundColor = UIColor.white
+        btnsave.layer.cornerRadius = 22
+        btnsave.clipsToBounds  = true
+        self.GroupchildApi()
         // Do any additional setup after loading the view.
     }
     
@@ -99,8 +147,259 @@ class FootBallPlayerAssociationVC: UIViewController {
                 alert.addAction(UIAlertAction(title: "Un Associate",
                                               style: UIAlertAction.Style.default,
                                               handler: {(_: UIAlertAction!) in
-                                                //Sign out action
+                                                self.Playerunassociate()
                 }))
                 self.present(alert, animated: true, completion: nil)
             }
+    
+    
+    func GroupchildApi()
+                  {
+                    //SVProgressHUD.show()
+          
+                   hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                    hud.labelText = "Loading..."
+                    
+                      let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                            
+            let verify_param = ["storedProcedureName":"getDatabaseGroup_child"
+                     ,"input1":str2 as Any ,"input2":databasename,"input3":playname] as [String : Any]
+                  let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                     AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                        response in
+                       DispatchQueue.main.async{
+
+                              self.hud.hide(true)
+
+                              }
+                      //  SVProgressHUD.dismiss()
+                     if let json = response.value
+                     {
+                let jsonResponse = json as! NSDictionary
+                    print(jsonResponse)
+                     do
+                     {
+                      
+                      var skippedArray = NSMutableArray()
+                    skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                        if skippedArray.count>0
+                        {
+            
+                   let dataarray = skippedArray.firstObject as! NSDictionary
+                                  
+                                        
+                     if let partname = dataarray.value(forKey: "emailadd") as? String
+                   {
+                      self.txtemail.text = partname
+
+                    }
+                    if let partname = dataarray.value(forKey: "fullName") as? String
+                     {
+                      self.textname.text = partname
+                      }
+                    if let partname = dataarray.value(forKey: "name") as? String
+                     {
+                      self.txtgroupnickname.text = partname
+                      }
+                    if let partname = dataarray.value(forKey: "playerID") as? String
+                     {
+                      self.txtplayerid.text = partname
+                      
+                      self.txtplayerid.isUserInteractionEnabled = false
+                      }
+                                  if let partname = dataarray.value(forKey: "ModifyAdminStatus") as? String
+                                            {
+                                             if partname == "No"
+                                             {
+                                              self.btncheck2.isHidden = true
+                                              self.lbladmin.isHidden = true
+                                              self.iamadmin = "0"
+                                              }
+                                             }
+                                  
+                                  if let partname = dataarray.value(forKey: "visibleUnAssociate") as? String
+                                       {
+                                        if partname == "No"
+                                        {
+                                          self.btncheck3.isHidden = true
+                                          self.lblunassociate.isHidden = true
+                                         }
+                                        }
+                                  if let partname = dataarray.value(forKey: "thisIsMe") as? String
+                                  {
+                                   if partname == "1"
+                                   {
+                                   
+                                    }
+                                      else
+                                   {
+                                        self.btncheck1.isHidden = true
+                                      self.lblthisisme.isHidden = true
+                                      }
+                                   }
+                                  
+                                  if let partname = dataarray.value(forKey: "visbleAdminPanel") as? String
+                                  {
+                                   if partname == "Yes"
+                                   {
+                                     
+                                    }
+                                      else
+                                   {
+                                      self.borderview2.isHidden = true
+                                      }
+                                   }
+                                  if let partname = dataarray.value(forKey: "ModifyThisIsMe") as? String
+                                  {
+                                   if partname == "Yes"
+                                   {
+                                   
+                                    }
+                                      else
+                                   {
+                                      self.txtgroupnickname.isUserInteractionEnabled = true
+                                      }
+                                   }
+                                  
+                                  if let partname = dataarray.value(forKey: "ModifyName") as? String
+                                  {
+                                   if partname == "Yes"
+                                   {
+                                     
+                                    }
+                                      else
+                                   {
+                                      self.txtgroupnickname.isUserInteractionEnabled = true
+                                      
+                                      }
+                                      
+                                   }
+                        }
+                            
+                            
+                            }
+                          }
+                         }
+                    
+                    }
+    func Playerunassociate()
+            {
+                      hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                      hud.labelText = "Loading..."
+                  //let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                
+                let verify_param = ["storedProcedureName": "unassociatePlayer","input1":txtplayerid.text!] as [String : Any]
+                       //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+                       let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                       AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                       if let json = response.value {
+                       let jsonResponse = json as! NSDictionary
+                          DispatchQueue.main.async{
+                              self.hud.hide(true)
+
+                          }
+                       print(jsonResponse)
+                           
+                       do
+                       {
+
+                        var skippedArray = NSMutableArray()
+                        skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                       
+                        let dataarray = skippedArray.firstObject as! NSDictionary
+                                    
+                var stringvalue:String = ""
+                   stringvalue = jsonResponse["status"] as! String
+                      
+                      if stringvalue == "Failure"
+                      {
+                          let dataarray = skippedArray.firstObject as! NSDictionary
+                                                     
+                          var stringvalue:String = ""
+                          stringvalue = dataarray.value(forKey:"returnV") as! String
+                          DispatchQueue.main.async{
+
+                              self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+
+                          }
+                        
+                      }
+                          else
+                      {
+                    let dataarray = skippedArray.firstObject as! NSDictionary
+                   var stringvalue:String = ""
+                   stringvalue = dataarray.value(forKey:"returnV") as! String
+                      DispatchQueue.main.async{
+                     self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+                                    }
+                                     }
+                                    //}
+                                  
+                                }
+                               }
+               }
+}
+    
+      func Updategroupchild()
+                {
+                          hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                          hud.labelText = "Loading..."
+                    let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                      let myInt1 = Int(isme)
+                      let myInt2 = Int(iamadmin)
+                    let plyid = Int(txtplayerid.text ?? "")
+                    let verify_param = ["storedProcedureName": "updateDatabaseGroup_child","input1":str2 as Any,"input2":plyid as Any,"input3":myInt1 as Any,"input4":txtgroupnickname.text!,"input5":myInt2 as Any] as [String : Any]
+                           //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+                           let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                           AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                           if let json = response.value {
+                           let jsonResponse = json as! NSDictionary
+                              DispatchQueue.main.async{
+                                  self.hud.hide(true)
+
+                              }
+                           print(jsonResponse)
+                               
+                           do
+                           {
+
+                            var skippedArray = NSMutableArray()
+                            skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                           
+                            let dataarray = skippedArray.firstObject as! NSDictionary
+                                        
+                    var stringvalue:String = ""
+                       stringvalue = jsonResponse["status"] as! String
+                          
+                          if stringvalue == "Failure"
+                          {
+                              let dataarray = skippedArray.firstObject as! NSDictionary
+                                                         
+                              var stringvalue:String = ""
+                              stringvalue = dataarray.value(forKey:"Update") as! String
+                              DispatchQueue.main.async{
+
+                                  self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+
+                              }
+                            
+                          }
+                              else
+                          {
+                        let dataarray = skippedArray.firstObject as! NSDictionary
+                       var stringvalue:String = ""
+                       stringvalue = dataarray.value(forKey:"Update") as! String
+                          DispatchQueue.main.async{
+                         self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+                                        }
+                                         }
+                                        //}
+                                      
+                                    }
+                                   }
+                   }
+    }
 }

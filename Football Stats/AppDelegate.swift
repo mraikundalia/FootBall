@@ -35,3 +35,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+
+/*
+ 
+ message = "near by stores";
+ status = ok;
+ stores =     (
+             {
+         "seller_city" = Kakinada;
+         "seller_distance" = 0;
+         "seller_id" = 35;
+         "seller_store_image" = "https://www.ellocart.in/uploads/sellers/ELOCXc9puoudexIz/f8334f748067cd8b7ba975bebf9c0d3e.jpeg";
+         "seller_store_name" = "Revansh Electronics";
+     },
+             {
+         "seller_city" = Kakinada;
+         "seller_distance" = 0;
+         "seller_id" = 40;
+         "seller_store_image" = "https://www.ellocart.in/uploads/sellers/ELOCe9Mtk0tAJFcN/fd92db091cce41b5fdbab26578358249.jpeg";
+         "seller_store_name" = "Vamsi Fancy Store";
+     }
+ );
+ 
+ 
+ service calling
+ 
+ 
+ 
+ if(jsonResponse["status"] as! String == "ok"){
+    self.shopNamesArray = jsonResponse["stores"] as! NSArray
+    self.userHomeTableView.dataSource = self
+    self.userHomeTableView.delegate = self
+    self.userHomeTableView.reloadData()
+    self.noshopLabel.alpha = 0.0
+ }
+ else{
+ 
+ }
+ 
+ // cellfor row
+ 
+ let cell = tableView.dequeueReusableCell(withIdentifier: "OrderDetail", for: indexPath as IndexPath) as! UserCartCell
+              DispatchQueue.main.async{
+              let array = self.shopNamesArray[indexPath.row]
+              cell.userCartProductName.text = (array as AnyObject).value(forKey: "seller_store_name") as? String
+ DispatchQueue.main.async{
+ cell.storeImage.sd_setImage(with: URL(string:(array as AnyObject).value(forKey: "seller_store_image") as! String), placeholderImage: UIImage(named: ""))
+ }
+            }
+ */

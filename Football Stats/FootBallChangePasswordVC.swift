@@ -7,10 +7,10 @@
 //
 
 import UIKit
-
+import Alamofire
 class FootBallChangePasswordVC: UIViewController {
 
-    
+    var hud : MBProgressHUD!
     @IBOutlet var txtconfirmpassword: UITextField!
     @IBOutlet var txtnewpassword: UITextField!
     @IBOutlet var txtcurrentpassword: UITextField!
@@ -20,6 +20,8 @@ class FootBallChangePasswordVC: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     @IBAction func btnconfirmAction(_ sender: Any) {
+        self.Changepasswordmethod()
+        
     }
     @IBOutlet var btnconfirm: UIButton!
     override func viewDidLoad() {
@@ -30,7 +32,40 @@ class FootBallChangePasswordVC: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+       func Changepasswordmethod(){
+                        
+            //[SVProgressHUD show];
+            //SVProgressHUD.show()
+           hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
+           hud.labelText = "Loading..."
+   let str2 =  UserDefaults.standard.object(forKey: "registerid")
+       let verify_param = ["storedProcedureName": "sp_changePassword","input1":str2 as Any,"input2":txtcurrentpassword.text!,"input3":txtconfirmpassword.text!] as [String : Any]
+            //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                        AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                        if let json = response.value {
+                        let jsonResponse = json as! NSDictionary
+                           DispatchQueue.main.async{
+                               self.hud.hide(true)
+
+                           }
+                        print(jsonResponse)
+                            DispatchQueue.main.async{
+
+                                    self.hud.hide(true)
+
+                                }
+                        do
+                        {
+                           
+                            
+                          }
+               
+                       
+                     }
+                    }
+    }
     /*
     // MARK: - Navigation
 

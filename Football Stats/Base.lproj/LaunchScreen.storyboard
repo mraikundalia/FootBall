@@ -8,6 +8,7 @@
     </dependencies>
     <customFonts key="customFonts">
         <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
             <string>HelveticaNeue-Bold</string>
         </array>
     </customFonts>
@@ -29,12 +30,24 @@
                                 <color key="textColor" red="0.95294117649999999" green="0.98039215690000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 1.2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aJW-3W-TK6">
+                                <rect key="frame" x="107" y="722" width="200" height="37"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="37" id="DKC-ce-2aE"/>
+                                    <constraint firstAttribute="width" constant="200" id="sls-Vm-aat"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.47450980390000003" green="0.64313725489999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="EuP-Ya-Jog" secondAttribute="trailing" constant="69" id="S2a-K2-k92"/>
                             <constraint firstItem="EuP-Ya-Jog" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="335" id="TOO-mv-cH5"/>
                             <constraint firstItem="EuP-Ya-Jog" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="70" id="aCe-QE-QUj"/>
+                            <constraint firstItem="aJW-3W-TK6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="eWB-Wb-TbU"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="aJW-3W-TK6" secondAttribute="bottom" constant="103" id="kyh-gX-Frl"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

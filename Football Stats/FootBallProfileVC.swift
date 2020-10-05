@@ -7,9 +7,56 @@
 //
 
 import UIKit
+import Alamofire
+import iOSDropDown
 
-class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIImagePickerControllerDelegate
+class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIImagePickerControllerDelegate , DKDropMenuDelegate , NIDropDownDelegate
 {
+    func niDropDownDelegateMethod(_ sender: NIDropDown!) {
+        
+    }
+    
+    func niDropDownDelegateMethod(_ sender: UIView!, withTitle title: String!)
+    {
+        if btndropdown.tag == 1
+        {
+            btnteamsupport.setTitle(title, for:.normal)
+        }
+        else if btndropdown.tag == 0
+        {
+        btngender.setTitle(title, for: .normal)
+        }
+        else if btndropdown.tag == 2
+               {
+               btndatabse.setTitle(title, for: .normal)
+               }
+    }
+    
+    func niDropDownHidden(_ sender: NIDropDown!)
+    {
+       
+        btndropdown.isHidden = true
+    }
+    
+    @IBAction func databaseAction(_ sender: Any) {
+        let myFloatForR = 250
+               var r = CGFloat(myFloatForR)
+              // lazy var value: Float = 200
+               btndropdown.isHidden = false
+               btndropdown.show((sender as! UIButton), theHeight: &r, theArr: (database.value(forKey: "database_name") as! [Any]), theImgArr: nil, theDirection: "down", with: self)
+               btndropdown.setDropDownSelectionColor(UIColor.gray)
+               btndropdown.delegate = self
+                  btndropdown.tag = 2
+    }
+    
+    
+    @IBOutlet var lbldatabaseheightcon: NSLayoutConstraint!
+    
+    var menu = ["Mehul", "Chakri", "John" ,"Chirsty","Pickle","Jack Cheese"]
+  
+    var btndropdown = NIDropDown ()
+    
+    @IBOutlet var innerview: UIView!
     
     @IBOutlet var defaultdatabase1: UILabel!
     
@@ -17,27 +64,114 @@ class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIIm
     
     @IBOutlet var defaultdatabasearrowimage: UIImageView!
     
-    
+    var hud : MBProgressHUD!
+
     @IBOutlet var btnnext: UIButton!
     @IBOutlet var btndatabse: UIButton!
     
+    @IBAction func btnActionteamsupport(_ sender: Any)
+    {
+        let myFloatForR = 250
+               var r = CGFloat(myFloatForR)
+              // lazy var value: Float = 200
+               btndropdown.isHidden = false
+               btndropdown.show((sender as! UIButton), theHeight: &r, theArr: (teamsupport.value(forKey: "valueList") as! [Any]), theImgArr: nil, theDirection: "down", with: self)
+               btndropdown.setDropDownSelectionColor(UIColor.gray)
+               btndropdown.delegate = self
+        btndropdown.tag = 1
+    }
     
+    @IBAction func btngenderAction(_ sender: Any)
+    {
+//       dkdropdown.add(names: ["hello", "goodbye", "why?"])
+//              dkdropdown.delegate = self
+        
+        //var f =  CGFloat()
+       // f = 200
+    //btndropdown = NIDropDown.show(sender, theHeight: &f, theArr: menu, theImgArr: nil, theDirection: "down", withViewController: self)
+        let myFloatForR = 100
+        var r = CGFloat(myFloatForR)
+       // lazy var value: Float = 200
+        btndropdown.isHidden = false
+        btndropdown.show((sender as! UIButton), theHeight: &r, theArr: (genderarray.value(forKey: "valueList") as! [Any]), theImgArr: nil, theDirection: "down", with: self)
+        btndropdown.setDropDownSelectionColor(UIColor.gray)
+        btndropdown.delegate = self
+        btndropdown.tag = 0
+//          if(btn == nil) {
+//                CGFloat f = 200;
+//                dropDown1 = [[NIDropDown alloc]showDropDown:sender theHeight:&f theArr:arr theImgArr:arrImage theDirection:@"down" withViewController:self];
+//                [dropDown1 setDropDownSelectionColor:[UIColor grayColor]];
+//                dropDown1.delegate = self;
+//            }
+//            else {
+//                [dropDown1 hideDropDown:sender];
+//        //        [self rel];
+//            }
+           
+    }
     @IBAction func btnnextAction(_ sender: Any)
     {
-        
-        let login: FootBallMainSegmentVC? = (storyboard?.instantiateViewController(withIdentifier: "FootBallMainSegmentVC") as! FootBallMainSegmentVC)
-        login?.text = "Profile"
+        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-        self.navigationController?.pushViewController(login!, animated: true)
-        
+                hud.labelText = "Loading..."
+           let str2 =  UserDefaults.standard.object(forKey: "registerid")
+        //let myInt3 = (str2 as! NSString).integerValue
+
+       // var imagestring = NSString()
+       // imagestring = self.convertImageToBase64String(image: profileimage.image!) as NSString
+                        //String(UserDefaults.standard.integer(forKey: "registerid"))
+        let verify_param = ["storedProcedureName":"sp_updatePlayerProfile","input1":str2 as Any,"input2":txtfirstname.text!,"input3":txtsurname.text!,"input4":txtmobileno.text!,"input5":txtdateofbirth.text!,"input6":btngender.currentTitle!,"input7":btnteamsupport.currentTitle!,"input8":btndatabse.currentTitle!] as [String : Any]
+                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                           AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                              response in
+                            //  SVProgressHUD.dismiss()
+                           if let json = response.value
+                           {
+                      let jsonResponse = json as! NSDictionary
+                          print(jsonResponse)
+                            DispatchQueue.main.async{
+
+                                           self.hud.hide(true)
+
+                                           }
+                           do
+                           {
+                            
+//                            let login: FootBallMainSegmentVC? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallMainSegmentVC") as! FootBallMainSegmentVC)
+//                login?.text = "Profile"
+//
+//                self.navigationController?.pushViewController(login!, animated: true)
+                                    
+//                              UserDefaults.standard.set(jsonResponse.object(forKey: "register_id"), forKey: "registerid")
+//                            var skippedArray = NSMutableArray()
+//                            skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+//
+//                            let dataarray = skippedArray.firstObject as! NSDictionary
+//                            self.txtname.text = (dataarray.value(forKey: "emailadd") as! String)
+//                              self.txtfirstname.text = (dataarray.value(forKey: "firstName") as! String)
+//                            self.txtsurname.text = (dataarray.value(forKey: "surName") as! String)
+//                            self.btnteamsupport.setTitle((dataarray.value(forKey: "team_supported") as! String), for: .normal)
+//                            self.txtdateofbirth .text = (dataarray.value(forKey: "dob") as! String)
+//                            self.txtmobileno.text = (dataarray.value(forKey: "mobilenumber") as! String)
+                            //self.genderarray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+                      
+                            //Integer
+//                              let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
+//                                 self.navigationController?.pushViewController(login!, animated: true)
+                          }
+                        }
+                       }
+
         
     }
     
     
-    enum TabIndex : Int {
-           case firstChildTab = 0
-           case secondChildTab = 1
-       }
+     func  convertImageToBase64String(image : UIImage ) -> String
+    {
+        let strBase64 =  image.pngData()?.base64EncodedString()
+        return strBase64!
+    }
+   
     var imagePicker = UIImagePickerController()
 
     @IBAction func btncameraaction(_ sender: Any)
@@ -92,10 +226,14 @@ class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIIm
     
     @IBOutlet var btnteamsupport: UIButton!
     
+    var genderarray = NSMutableArray()
+    var teamsupport = NSMutableArray()
+    var database = NSMutableArray ()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //Default Database
+        self.Profilecall()
         btndatabse.clipsToBounds = true
         btndatabse.layer.borderColor = UIColor.darkGray.cgColor
         btndatabse.layer.borderWidth = 1
@@ -107,8 +245,18 @@ class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIIm
         profileimage.clipsToBounds = true
         btnnext.clipsToBounds = true
         btnnext.layer.cornerRadius = 22
-              
-        // Do any additional setup after loading the view.
+  
+//        genderdropdown.optionArray = ["Option 1", "Option 2", "Option 3"]
+//        //Its Id Values and its optional
+//        genderdropdown.optionIds = [1,23,54,22]
+//
+//        // Image Array its optional
+//        //dropDown.ImageArray = [👩🏻‍🦳,🙊,🥞]
+//        // The the Closure returns Selected Index and String
+//        genderdropdown.didSelect{(selectedText , index ,id) in
+//        self.genderdropdown.text = "Selected String: \(selectedText) \n index: \(index)"
+//        // Do any additional setup after loading the view.
+//    }
     }
     
    func openCamera()
@@ -153,17 +301,139 @@ class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIIm
                    profileimage.image = image
                }
 
-
+        self.uploadprofile()
            picker.dismiss(animated: true,completion: nil)
     }
+    func Profilecall()
+        {
+
+            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                hud.labelText = "Loading..."
+          //SVProgressHUD.show()
+//            var string = String.self
+//            string = UserDefaults.standard.integer(forKey: "registerid")
+            let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                    
+                //String(UserDefaults.standard.integer(forKey: "registerid"))
+            let verify_param = ["storedProcedureName":"getMyProfile","input1":str2 as Any] as [String : Any]
+                let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                   AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                      response in
+                    DispatchQueue.main.async{
+
+                        self.hud.hide(true)
+
+                        }
+                    //  SVProgressHUD.dismiss()
+                   if let json = response.value
+                   {
+              let jsonResponse = json as! NSDictionary
+                  print(jsonResponse)
+                   do
+                   {
+                      //UserDefaults.standard.set(jsonResponse.object(forKey: "register_id"), forKey: "registerid")
+                    var skippedArray = NSMutableArray()
+                    skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                
+                    let dataarray = skippedArray.firstObject as! NSDictionary
+                    self.txtname.text = (dataarray.value(forKey: "emailadd") as! String)
+                      self.txtfirstname.text = (dataarray.value(forKey: "firstName") as! String)
+                    self.txtsurname.text = (dataarray.value(forKey: "surName") as! String)
+                    self.btnteamsupport.setTitle((dataarray.value(forKey: "team_supported") as! String), for: .normal)
+                    self.txtdateofbirth .text = (dataarray.value(forKey: "dob") as! String)
+                    self.txtmobileno.text = (dataarray.value(forKey: "mobilenumber") as! String)
+                    self.btngender.setTitle((dataarray.value(forKey: "sex") as! String), for: .normal)
+                    
+                    DispatchQueue.main.async{
+                        if let partname = dataarray.value(forKey: "playerPicture") as? String
+                            {
+                                if partname.count>0
+                                {
+                                    let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                               let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                               print(decodedimage)
+                               self.profileimage.image = decodedimage
+                                }
+                         
+                        
+                            }
+                            }
+                   // var genderarray = NSMutableArray()
+                    
+                    self.genderarray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+                     self.teamsupport = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
+                    self.database = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                    
+                    if self.database.count>0
+                    {
+                        self.lbldatabaseheightcon.constant = 20
+                        self.btndatabse.isHidden = false
+                        self.defaultdatabasearrowimage.isHidden = false
+                      //  UserDefaults.standard.array(dataarray, forKey:"databasearray")
+
+                        
+                    }
+                    else
+                    {
+                        self.lbldatabaseheightcon.constant = 0
+                        self.btndatabse.isHidden = true
+                        self.defaultdatabasearrowimage.isHidden = true
+                    }
+
+                    //Integer
+//                      let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
+//                         self.navigationController?.pushViewController(login!, animated: true)
+                  }
+                }
+               }
+          
+          }
+    // MARK: DKDropMenuDelegate
+    func itemSelected(withIndex: Int, name: String)
+    {
+        print("\(name) selected");
+        //let String  = NSString ()
+    //String = name
+        btngender.setTitle(name, for: .normal)
+    }
+func uploadprofile()
     
-//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-//    imagePicker.dismiss(animated: true, completion: nil)
-//    if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-//        profileimage.image = image
-//    }
-      
-    
+{
+    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+        hud.labelText = "Loading..."
+       let str2 =  UserDefaults.standard.object(forKey: "registerid")
+    var imagestring = NSString()
+    imagestring = self.convertImageToBase64String(image: profileimage.image!) as NSString
+                    //String(UserDefaults.standard.integer(forKey: "registerid"))
+    //let myInt3 = (str2 as! NSString).integerValue
+    //let myInt3 = Int(str2) ?? 0
+     //var value: Int { string.digits.integer ?? 0 }
+    //let myInt3 = (str2 as! NSString).integerValue
+    let verify_param = ["storedProcedureName":"updateProfilePicture","input1":str2 as Any ,"input2":imagestring] as [String : Any]
+                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                       AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                          response in
+                        //  SVProgressHUD.dismiss()
+                       if let json = response.value
+                       {
+                  let jsonResponse = json as! NSDictionary
+                      print(jsonResponse)
+                        DispatchQueue.main.async{
+
+                                       self.hud.hide(true)
+
+                                       }
+                       do
+                       {
+                        
+
+                      }
+                    }
+                   }
+   
+    }
     /*
     // MARK: - Navigation
 

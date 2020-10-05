@@ -7,9 +7,9 @@
 //
 
 import UIKit
-
+import Alamofire
 class FootBallResetPasswordVC: UIViewController , UITextFieldDelegate {
-
+  var hud : MBProgressHUD!
     @IBOutlet var txtemail: UITextField!
     
     
@@ -23,7 +23,7 @@ class FootBallResetPasswordVC: UIViewController , UITextFieldDelegate {
     @IBAction func btnAction(_ sender: Any)
     {
         
-         self.navigationController?.popViewController(animated: true)
+        self.Passwordresetcall()
     }
     override func viewDidLoad()
     
@@ -32,6 +32,7 @@ class FootBallResetPasswordVC: UIViewController , UITextFieldDelegate {
         super.viewDidLoad()
         btnnext.clipsToBounds = true
         btnnext.layer.cornerRadius = 10
+       
         // Do any additional setup after loading the view.
     }
     
@@ -39,6 +40,36 @@ class FootBallResetPasswordVC: UIViewController , UITextFieldDelegate {
        {
            return textField .resignFirstResponder()
        }
+    func Passwordresetcall()
+            {
+              //SVProgressHUD.show()
+                hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                       hud.labelText = "Loading..."
+                let verify_param = ["storedProcedureName": "sp_forgottenPassword","input1":txtemail.text!] as [String : Any]
+                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                       AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON {
+                          response in
+                        //  SVProgressHUD.dismiss()
+                       if let json = response.value
+                       {
+                  let jsonResponse = json as! NSDictionary
+                      print(jsonResponse)
+                        DispatchQueue.main.async{
+
+                                       self.hud.hide(true)
+                      self.navigationController?.popViewController(animated: true)
+                                       }
+                       do
+                       {
+                         // UserDefaults.standard.set(jsonResponse.object(forKey: "register_id"), forKey: "registerid")  //Integer
+    //                      let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
+    //                         self.navigationController?.pushViewController(login!, animated: true)
+                      }
+                    }
+                   }
+              
+              }
     /*
     // MARK: - Navigation
 

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import  Alamofire
 class FootBallContactVC: UIViewController
 {
 
@@ -15,6 +15,7 @@ class FootBallContactVC: UIViewController
         self.navigationController?.popViewController(animated: true)
     }
     @IBOutlet var btnsend: UIButton!
+      var hud : MBProgressHUD!
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -29,7 +30,37 @@ class FootBallContactVC: UIViewController
     }
     @IBOutlet var contacttextview: UITextView!
     
+    func getcontact(){
+                          
+             hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+             hud.labelText = "Loading..."
+        let str2 =  UserDefaults.standard.object(forKey: "registerid")
+         let verify_param = ["storedProcedureName": "proc_contactUs","input1":str2 as Any,"input2":contacttextview.text!] as [String : Any]
+              //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+                          let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                          AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                          if let json = response.value {
+                          let jsonResponse = json as! NSDictionary
+                             DispatchQueue.main.async{
+                                 self.hud.hide(true)
 
+                             }
+                          print(jsonResponse)
+                              DispatchQueue.main.async{
+
+                                      self.hud.hide(true)
+
+                                  }
+                          do
+                          {
+                             
+                              
+                            }
+                 
+                         
+                       }
+                      }
+      }
     /*
     // MARK: - Navigation
 

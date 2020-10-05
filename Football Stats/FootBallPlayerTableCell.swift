@@ -10,6 +10,7 @@ import UIKit
 
 class FootBallPlayerTableCell: UITableViewCell {
 
+    @IBOutlet var checkbutton: UIButton!
     @IBOutlet var profilename: UILabel!
     @IBOutlet var profileimage: UIImageView!
     override func awakeFromNib() {
