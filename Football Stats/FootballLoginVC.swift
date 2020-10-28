@@ -23,27 +23,43 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate{
     @IBOutlet var btnlogin: UIButton!
     @IBOutlet var txtpassword: UITextField!
     
+    
+    @IBAction func btncloseAction(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    
     @IBAction func btnremberAction(_ sender: Any)
     {
-        if (btnrememberme.isSelected == true)
-                 {
-                  btnrememberme.backgroundColor = UIColor.white
-                   btnrememberme.setBackgroundImage(UIImage(named: ""), for:.normal)
-                    UserDefaults.standard.set(nil, forKey: "emailid")
-                  btnrememberme.isSelected = false;
-                 }
-                 else
-                 {
-                  //btncheck1.backgroundColor = UIColor.red
-                   btnrememberme.setBackgroundImage(UIImage(named: "checkmark"), for:.normal)
-                    //UserDefaults.standard.set(txtemail.text, forKey: "emailid")
-                
-                  btnrememberme.isSelected = true;
-                    let myValue:NSString = txtemail.text! as NSString
+        if txtemail.text?.count == 0
+        
+        {
+            self.showToast(message: "Please Enter Email", font: UIFont.systemFont(ofSize: 13))
+        }
+       else
+        {
+            if (btnrememberme.isSelected == true)
+            {
+             btnrememberme.backgroundColor = UIColor.white
+              btnrememberme.setBackgroundImage(UIImage(named: ""), for:.normal)
+               UserDefaults.standard.set(nil, forKey: "emailid")
+             btnrememberme.isSelected = false;
+              // txtemail.isUserInteractionEnabled = true
+            }
+            else
+            {
+             //btncheck1.backgroundColor = UIColor.red
+              btnrememberme.setBackgroundImage(UIImage(named: "checkmark"), for:.normal)
+               //UserDefaults.standard.set(txtemail.text, forKey: "emailid")
+          // txtemail.isUserInteractionEnabled = false
+             btnrememberme.isSelected = true;
+               let myValue:NSString = txtemail.text! as NSString
 
-                    UserDefaults.standard.set(myValue, forKey:"emailid")
-                    UserDefaults.standard.synchronize()
-                 }
+               UserDefaults.standard.set(myValue, forKey:"emailid")
+               UserDefaults.standard.synchronize()
+            }
+        }
     }
     
     @IBOutlet var btnforgotpassword: UIButton!
@@ -64,7 +80,23 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate{
     @IBOutlet var btnsignup: UIButton!
     @IBAction func btnloginAction(_ sender: Any)
     {
-        self.loginMethod()
+        if txtemail.text == "" || txtemail.text?.count == 0
+        {
+            self.showToast(message: "Please Enter Email", font: UIFont.systemFont(ofSize: 13))
+
+            
+        }
+        else if txtpassword.text == "" || txtpassword.text?.count == 0
+        {
+            self.showToast(message: "Please Enter Password", font: UIFont.systemFont(ofSize: 13))
+        }
+        else
+        {
+            self.txtpassword.resignFirstResponder()
+            self.txtemail.resignFirstResponder()
+            self.loginMethod()
+        }
+        
     }
     
     @IBAction func btnappleAction(_ sender: Any)
@@ -95,12 +127,19 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate{
         btnrememberme.layer.cornerRadius = 2
         btnrememberme.layer.borderWidth = 1
         btnrememberme.layer.borderColor = UIColor.darkGray.cgColor
+        txtemail.clipsToBounds = true
+        txtemail.layer.cornerRadius = 5
+        txtpassword.clipsToBounds = true
+        txtpassword.layer.cornerRadius = 5;
+        txtemail.delegate = self
+        txtpassword.delegate = self
          // UserDefaults.standard.set(txtemail.text, forKey: "emailid")
         if let favorites = UserDefaults.standard.object(forKey: "emailid")
         {
              // userDefault has a value
             txtemail.text =  ((favorites as Any) as! String)
              btnrememberme.setBackgroundImage(UIImage(named: "checkmark"), for:.normal)
+           // txtemail.isUserInteractionEnabled = false
            
             
         }
@@ -128,13 +167,14 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate{
         //SVProgressHUD.show()
        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-       hud.labelText = "Loading..."
+       hud.labelText = ""
 
     
    let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":txtemail.text!,"input3":txtpassword.text!] as [String : Any]
         //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
                     let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                    AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+    
+    AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
                     if let json = response.value {
                     let jsonResponse = json as! NSDictionary
                         
@@ -177,9 +217,11 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate{
                             let dataarray = skippedArray.firstObject as! NSDictionary
                                                        
                             var stringvalue:String = ""
-                            stringvalue = dataarray.value(forKey:"returnV") as! String
+                            stringvalue = dataarray.value(forKey:"ErrorDescription") as! String
                             DispatchQueue.main.async{
-
+                                self.btnrememberme.setBackgroundImage(UIImage(named: ""), for:.normal)
+                                UserDefaults.standard.set(nil, forKey: "emailid")
+                                UserDefaults.standard.synchronize()
                                 self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
                             }
                         }
@@ -249,7 +291,8 @@ extension UIViewController {
 
 func showToast(message : String, font: UIFont) {
 
-    let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2-75, y: self.view.frame.size.height-100, width: 150, height: 35))
+  //  let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2-75, y: self.view.frame.size.height-100, width: 150, height: 35))
+    let toastLabel = UILabel(frame: CGRect(x: 0, y: self.view.frame.size.height-180, width: self.view.frame.size.width, height: 45))
     toastLabel.backgroundColor = UIColor.black
     toastLabel.textColor = UIColor.white
     toastLabel.font = font
@@ -259,9 +302,52 @@ func showToast(message : String, font: UIFont) {
     toastLabel.layer.cornerRadius = 10;
     toastLabel.clipsToBounds  =  true
     self.view.addSubview(toastLabel)
-    UIView.animate(withDuration: 4.0, delay: 0.1, options: .curveEaseOut, animations: {
+    UIView.animate(withDuration: 5.0, delay: 0.2, options: .curveEaseOut, animations: {
          toastLabel.alpha = 0.0
     }, completion: {(isCompleted) in
         toastLabel.removeFromSuperview()
     })
 } }
+extension UIView {
+    func addShadow(to edges: [UIRectEdge], radius: CGFloat = 3.0, opacity: Float = 0.6, color: CGColor = UIColor.black.cgColor) {
+
+        let fromColor = color
+        let toColor = UIColor.clear.cgColor
+        let viewFrame = self.frame
+        for edge in edges {
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.colors = [fromColor, toColor]
+            gradientLayer.opacity = opacity
+
+            switch edge {
+            case .top:
+                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+                gradientLayer.frame = CGRect(x: 0.0, y: 0.0, width: viewFrame.width, height: radius)
+            case .bottom:
+                gradientLayer.startPoint = CGPoint(x: 0.5, y: 1.0)
+                gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.0)
+                gradientLayer.frame = CGRect(x: 0.0, y: viewFrame.height - radius, width: viewFrame.width, height: radius)
+            case .left:
+                gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+                gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+                gradientLayer.frame = CGRect(x: 0.0, y: 0.0, width: radius, height: viewFrame.height)
+            case .right:
+                gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.5)
+                gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.5)
+                gradientLayer.frame = CGRect(x: viewFrame.width - radius, y: 0.0, width: radius, height: viewFrame.height)
+            default:
+                break
+            }
+            self.layer.addSublayer(gradientLayer)
+        }
+    }
+
+    func removeAllShadows() {
+        if let sublayers = self.layer.sublayers, !sublayers.isEmpty {
+            for sublayer in sublayers {
+                sublayer.removeFromSuperlayer()
+            }
+        }
+    }
+}

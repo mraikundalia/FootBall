@@ -21,13 +21,13 @@ class FootBallJoinGroupVC: UIViewController {
     {
         hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                     hud.labelText = "Loading..."
+                     hud.labelText = ""
         let str2 =  UserDefaults.standard.object(forKey: "registerid")
 
         let verify_param = ["storedProcedureName": "sp_enterIntoLeague","input1":str2 as Any,"input2":txtenterleaguenumber.text!,"input3":txtleaguepassword.text!] as [String : Any]
 
                  let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                 AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON {
+                 AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON {
                     response in
                   //  SVProgressHUD.dismiss()
                  if let json = response.value
@@ -89,12 +89,12 @@ class FootBallJoinGroupVC: UIViewController {
 
         hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                     hud.labelText = "Loading..."
+                     hud.labelText = ""
       let str2 =  UserDefaults.standard.object(forKey: "registerid")
         let verify_param = ["storedProcedureName": "sp_create_new_database","input1":str2 as Any,"input2":txtcreateleague.text!] as [String : Any]
 
                  let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                 AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON {
+                 AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON {
                     response in
                   //  SVProgressHUD.dismiss()
                  if let json = response.value
@@ -109,42 +109,21 @@ class FootBallJoinGroupVC: UIViewController {
                  do
                  {
                     var skippedArray = NSMutableArray()
-
+                    var stringvalue:String = ""
+                        stringvalue = jsonResponse["status"] as! String
                     skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-
-                    let dataarray = skippedArray.firstObject as! NSDictionary
-
-
-                                    let keyExists = dataarray["register_id"] != nil
-
-                    if keyExists
+                        let dataarray = skippedArray.firstObject as! NSDictionary
+                    if stringvalue == "Success"
                     {
-
-            UserDefaults.standard.set(skippedArray.value(forKeyPath: "registeredPlayer_ID"), forKey: "registerid")  //Integer
-            let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
-        self.navigationController?.pushViewController(login!, animated: true)
-
-                            }
-                        else{
-                var stringvalue:String = ""
-                                 stringvalue = dataarray.value(forKey:"returnV") as! String
-                 if (stringvalue == "Invalid email address" || stringvalue == "Failure - Invalid email address" || stringvalue == "Email address has already been registered..")
-                {
-
-                 let alert = UIAlertController(title: "", message: stringvalue,         preferredStyle: UIAlertController.Style.alert)
-
-                 alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: { _ in
-                        //Cancel Action
-                    }))
-                    alert.addAction(UIAlertAction(title: "OK",
-                                                  style: UIAlertAction.Style.default,
-                                                  handler: {(_: UIAlertAction!) in
-                                                    //Sign out action
-                    }))
-                    self.present(alert, animated: true, completion: nil)
+                          self.showToast(message: "League Number Created", font: UIFont.systemFont(ofSize: 13))
                     }
-
-            }
+                    else
+                    {
+                        var stringvalue1:String = ""
+                        stringvalue1 = dataarray.value(forKey:"Update") as! String
+                        self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
+                    }
+                   
                 }
               }
              }

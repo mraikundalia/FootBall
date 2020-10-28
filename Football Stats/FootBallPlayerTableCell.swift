@@ -13,7 +13,14 @@ class FootBallPlayerTableCell: UITableViewCell {
     @IBOutlet var checkbutton: UIButton!
     @IBOutlet var profilename: UILabel!
     @IBOutlet var profileimage: UIImageView!
-    override func awakeFromNib() {
+    @IBOutlet var playernum: UILabel!
+    
+    @IBOutlet var borderview: UIView!
+    @IBOutlet var serialnum: UILabel!
+    
+    override func awakeFromNib()
+    
+    {
         super.awakeFromNib()
         // Initialization code
     }

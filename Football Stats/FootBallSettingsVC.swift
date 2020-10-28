@@ -10,6 +10,7 @@ import UIKit
 
 class FootBallSettingsVC: UIViewController {
 
+    @IBOutlet var btnsignout: UIButton!
     @IBOutlet var btnbasicSettings: UIButton!
     @IBOutlet var btncontactus: UIButton!
     @IBOutlet var btnsecuritysettings: UIButton!
@@ -30,21 +31,33 @@ class FootBallSettingsVC: UIViewController {
         self.navigationController?.pushViewController(login!, animated: true)
     }
     
+    @IBAction func btnsignoutAction(_ sender: Any) {
+          UserDefaults.standard.set(nil, forKey: "registerid")
+        let login: FootballLoginVC? = (self.storyboard?.instantiateViewController(withIdentifier: "FootballLoginVC") as! FootballLoginVC)
+        self.navigationController?.pushViewController(login!, animated: true)
+
+    }
+    
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
         btnbasicSettings.clipsToBounds = true
-        btnbasicSettings.layer.cornerRadius = 22
-        btnbasicSettings.layer.borderColor = UIColor.lightGray.cgColor
+        btnbasicSettings.layer.cornerRadius = 8
+        btnbasicSettings.layer.borderColor = UIColor.black.cgColor
         btnbasicSettings.layer.borderWidth = 1;
         btncontactus.clipsToBounds = true
-        btncontactus.layer.cornerRadius = 22
-        btncontactus.layer.borderColor = UIColor.lightGray.cgColor
+        btncontactus.layer.cornerRadius = 8
+        btncontactus.layer.borderColor = UIColor.black.cgColor
         btncontactus.layer.borderWidth = 1;
         btnsecuritysettings.clipsToBounds = true
-        btnsecuritysettings.layer.cornerRadius = 22
-        btnsecuritysettings.layer.borderColor = UIColor.lightGray.cgColor
+        btnsecuritysettings.layer.cornerRadius = 8
+        btnsecuritysettings.layer.borderColor = UIColor.black.cgColor
         btnsecuritysettings.layer.borderWidth = 1;
+        btnsignout.clipsToBounds = true
+            btnsignout.layer.cornerRadius = 8
+            btnsignout.layer.borderColor = UIColor.black.cgColor
+            btnsignout.layer.borderWidth = 1;
         
 
         // Do any additional setup after loading the view.

@@ -20,6 +20,16 @@
 		E618B5C7250C953D00778AF1 /* FootBallSignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618B5C6250C953D00778AF1 /* FootBallSignupVC.swift */; };
 		E618B5C9250C955D00778AF1 /* FootBallResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618B5C8250C955D00778AF1 /* FootBallResetPasswordVC.swift */; };
 		E618B5CB250CB81400778AF1 /* FootBallTabControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618B5CA250CB81400778AF1 /* FootBallTabControllerViewController.swift */; };
+		E624190A2546A63D0030D43D /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62419052546A6380030D43D /* Poppins-Light.ttf */; };
+		E624190B2546A63D0030D43D /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62419062546A6390030D43D /* Poppins-Medium.ttf */; };
+		E624190C2546A63D0030D43D /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62419072546A63A0030D43D /* Poppins-Regular.ttf */; };
+		E624190D2546A63D0030D43D /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62419082546A63B0030D43D /* Poppins-Bold.ttf */; };
+		E624190E2546A63D0030D43D /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62419092546A63D0030D43D /* Poppins-SemiBold.ttf */; };
+		E62419112546EB760030D43D /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E624190F2546EB740030D43D /* Roboto-Regular.ttf */; };
+		E62419122546EB760030D43D /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62419102546EB750030D43D /* Roboto-Medium.ttf */; };
+		E62419152546EC790030D43D /* Oswald-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62419132546EC700030D43D /* Oswald-Medium.ttf */; };
+		E62419162546EC790030D43D /* Oswald-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62419142546EC770030D43D /* Oswald-Regular.ttf */; };
+		E62419182547052B0030D43D /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62419172547052A0030D43D /* Roboto-Bold.ttf */; };
 		E625BC89251CEDE40028C73F /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E625BC87251CEDE40028C73F /* Model.swift */; };
 		E625BC8A251CEDE40028C73F /* SingletonClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E625BC88251CEDE40028C73F /* SingletonClass.swift */; };
 		E64619C42515C69900C088B9 /* FootBallPlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64619C32515C69900C088B9 /* FootBallPlayVC.swift */; };
@@ -38,8 +48,10 @@
 		E6477A5A2521AA39002A9B77 /* DKDropMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6477A592521AA38002A9B77 /* DKDropMenu.swift */; };
 		E6477A8A2521E67C002A9B77 /* NIDropDown.m in Sources */ = {isa = PBXBuildFile; fileRef = E6477A892521E67C002A9B77 /* NIDropDown.m */; };
 		E682725B251078B00052BA54 /* FootBallProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E682725A251078B00052BA54 /* FootBallProfileVC.swift */; };
+		E695B8A22538AB770019AD65 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695B8A12538AB770019AD65 /* Constant.swift */; };
 		E699302F2518869E003EAF85 /* FootBallMainSegmentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E699302E2518869E003EAF85 /* FootBallMainSegmentVC.swift */; };
 		E699303125188F01003EAF85 /* FootBallPlayerTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E699303025188F01003EAF85 /* FootBallPlayerTableCell.swift */; };
+		E6AB25C1253B0B6D00A2586F /* FootBallPickGameSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AB25C0253B0B6D00A2586F /* FootBallPickGameSettingVC.swift */; };
 		E6B7A6D8251A268B00215ABB /* FootBallGameSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B7A6D7251A268B00215ABB /* FootBallGameSettingVC.swift */; };
 		E6B7A6DA251A3FD900215ABB /* FootBallAddPlayersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B7A6D9251A3FD900215ABB /* FootBallAddPlayersVC.swift */; };
 		E6B7A6DC251A411100215ABB /* FootBallNewLocationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B7A6DB251A411100215ABB /* FootBallNewLocationVC.swift */; };
@@ -68,6 +80,17 @@
 		E618B5C6250C953D00778AF1 /* FootBallSignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallSignupVC.swift; sourceTree = "<group>"; };
 		E618B5C8250C955D00778AF1 /* FootBallResetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallResetPasswordVC.swift; sourceTree = "<group>"; };
 		E618B5CA250CB81400778AF1 /* FootBallTabControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallTabControllerViewController.swift; sourceTree = "<group>"; };
+		E61D80F6254838E800D72407 /* Football StatsRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Football StatsRelease.entitlements"; sourceTree = "<group>"; };
+		E62419052546A6380030D43D /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
+		E62419062546A6390030D43D /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
+		E62419072546A63A0030D43D /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		E62419082546A63B0030D43D /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		E62419092546A63D0030D43D /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
+		E624190F2546EB740030D43D /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		E62419102546EB750030D43D /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		E62419132546EC700030D43D /* Oswald-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oswald-Medium.ttf"; sourceTree = "<group>"; };
+		E62419142546EC770030D43D /* Oswald-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oswald-Regular.ttf"; sourceTree = "<group>"; };
+		E62419172547052A0030D43D /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		E625BC87251CEDE40028C73F /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		E625BC88251CEDE40028C73F /* SingletonClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingletonClass.swift; sourceTree = "<group>"; };
 		E64619C32515C69900C088B9 /* FootBallPlayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallPlayVC.swift; sourceTree = "<group>"; };
@@ -87,8 +110,10 @@
 		E6477A882521E67B002A9B77 /* NIDropDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIDropDown.h; sourceTree = "<group>"; };
 		E6477A892521E67C002A9B77 /* NIDropDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIDropDown.m; sourceTree = "<group>"; };
 		E682725A251078B00052BA54 /* FootBallProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallProfileVC.swift; sourceTree = "<group>"; };
+		E695B8A12538AB770019AD65 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		E699302E2518869E003EAF85 /* FootBallMainSegmentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallMainSegmentVC.swift; sourceTree = "<group>"; };
 		E699303025188F01003EAF85 /* FootBallPlayerTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallPlayerTableCell.swift; sourceTree = "<group>"; };
+		E6AB25C0253B0B6D00A2586F /* FootBallPickGameSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallPickGameSettingVC.swift; sourceTree = "<group>"; };
 		E6B7A6D7251A268B00215ABB /* FootBallGameSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallGameSettingVC.swift; sourceTree = "<group>"; };
 		E6B7A6D9251A3FD900215ABB /* FootBallAddPlayersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallAddPlayersVC.swift; sourceTree = "<group>"; };
 		E6B7A6DB251A411100215ABB /* FootBallNewLocationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootBallNewLocationVC.swift; sourceTree = "<group>"; };
@@ -146,6 +171,17 @@
 		E618B5AF250C7E2D00778AF1 /* Football Stats */ = {
 			isa = PBXGroup;
 			children = (
+				E61D80F6254838E800D72407 /* Football StatsRelease.entitlements */,
+				E62419172547052A0030D43D /* Roboto-Bold.ttf */,
+				E62419132546EC700030D43D /* Oswald-Medium.ttf */,
+				E62419142546EC770030D43D /* Oswald-Regular.ttf */,
+				E62419102546EB750030D43D /* Roboto-Medium.ttf */,
+				E624190F2546EB740030D43D /* Roboto-Regular.ttf */,
+				E62419082546A63B0030D43D /* Poppins-Bold.ttf */,
+				E62419052546A6380030D43D /* Poppins-Light.ttf */,
+				E62419062546A6390030D43D /* Poppins-Medium.ttf */,
+				E62419072546A63A0030D43D /* Poppins-Regular.ttf */,
+				E62419092546A63D0030D43D /* Poppins-SemiBold.ttf */,
 				E6477A882521E67B002A9B77 /* NIDropDown.h */,
 				E6477A892521E67C002A9B77 /* NIDropDown.m */,
 				E6477A592521AA38002A9B77 /* DKDropMenu.swift */,
@@ -188,6 +224,8 @@
 				E60C2A17251F2AD3005C58C1 /* Football Stats-Bridging-Header.h */,
 				E6E41DFB2520D57800B3562A /* FootBallSelectPlayerVC.swift */,
 				E6E41DFD2520E42300B3562A /* FootBallCollectionCel.swift */,
+				E695B8A12538AB770019AD65 /* Constant.swift */,
+				E6AB25C0253B0B6D00A2586F /* FootBallPickGameSettingVC.swift */,
 			);
 			path = "Football Stats";
 			sourceTree = "<group>";
@@ -253,9 +291,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E62419122546EB760030D43D /* Roboto-Medium.ttf in Resources */,
+				E62419182547052B0030D43D /* Roboto-Bold.ttf in Resources */,
 				E618B5BD250C7E5B00778AF1 /* LaunchScreen.storyboard in Resources */,
 				E618B5BA250C7E5B00778AF1 /* Assets.xcassets in Resources */,
+				E624190D2546A63D0030D43D /* Poppins-Bold.ttf in Resources */,
 				E618B5B8250C7E2E00778AF1 /* Main.storyboard in Resources */,
+				E624190C2546A63D0030D43D /* Poppins-Regular.ttf in Resources */,
+				E624190E2546A63D0030D43D /* Poppins-SemiBold.ttf in Resources */,
+				E62419162546EC790030D43D /* Oswald-Regular.ttf in Resources */,
+				E62419152546EC790030D43D /* Oswald-Medium.ttf in Resources */,
+				E62419112546EB760030D43D /* Roboto-Regular.ttf in Resources */,
+				E624190A2546A63D0030D43D /* Poppins-Light.ttf in Resources */,
+				E624190B2546A63D0030D43D /* Poppins-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,8 +361,10 @@
 				E64619C62515C6CE00C088B9 /* PickTeamsVC.swift in Sources */,
 				E6E41DFC2520D57800B3562A /* FootBallSelectPlayerVC.swift in Sources */,
 				E64619CE2515F3B400C088B9 /* FootBallBasicSettingsVC.swift in Sources */,
+				E6AB25C1253B0B6D00A2586F /* FootBallPickGameSettingVC.swift in Sources */,
 				E618B5B5250C7E2D00778AF1 /* ViewController.swift in Sources */,
 				E64619C82515C70200C088B9 /* FootBallResultsVC.swift in Sources */,
+				E695B8A22538AB770019AD65 /* Constant.swift in Sources */,
 				E618B5CB250CB81400778AF1 /* FootBallTabControllerViewController.swift in Sources */,
 				E60C2A1D251F2B6C005C58C1 /* MBProgressHUD.m in Sources */,
 				E6E41DFE2520E42300B3562A /* FootBallCollectionCel.swift in Sources */,
@@ -510,6 +560,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Football Stats/Football StatsRelease.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7D375MX883;

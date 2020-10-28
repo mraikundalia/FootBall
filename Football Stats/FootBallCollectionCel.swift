@@ -10,5 +10,6 @@ import UIKit
 
 class FootBallCollectionCel: UICollectionViewCell {
     
+    @IBOutlet var lblname: UILabel!
     @IBOutlet var mainimage: UIImageView!
 }

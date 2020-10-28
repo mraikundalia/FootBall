@@ -60,7 +60,10 @@ class FootBallMainSegmentVC: UIViewController
     {
         super.viewDidLoad()
         mainsegment.selectedSegmentIndex =  0
-
+          mainsegment.removeBorders()
+        mainsegment.setTitleTextAttributes([NSAttributedString.Key.font : UIFont(name: "Roboto-Bold", size: 13)!, NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+        
+         mainsegment.setTitleTextAttributes([NSAttributedString.Key.font : UIFont(name: "Roboto-Bold", size: 15)!, NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         if text == "Profile"
         {
       mainsegment.selectedSegmentIndex = TabIndex.secondChildTab.rawValue
@@ -73,8 +76,11 @@ class FootBallMainSegmentVC: UIViewController
                   
                               displayCurrentTab(0)
         }
+          
       //  self.viewControllerForSelectedSegmentIndex(0)
         // Do any additional setup after loading the view.
+        //let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+      // UIView.mainsegment.appearance().setTitleTextAttributes(titleTextAttributes, forState: .Selected)
     }
     
     func displayCurrentTab(_ tabIndex: Int)
@@ -120,4 +126,23 @@ class FootBallMainSegmentVC: UIViewController
     }
     */
 
+}
+extension UISegmentedControl {
+    func removeBorders() {
+        setBackgroundImage(imageWithColor(color: backgroundColor!), for: .normal, barMetrics: .default)
+        setBackgroundImage(imageWithColor(color: tintColor!), for: .selected, barMetrics: .default)
+        setDividerImage(imageWithColor(color: UIColor.clear), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
+    }
+
+    // create a 1x1 image with this color
+    private func imageWithColor(color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        (context ?? "" as! CGContext).setFillColor(color.cgColor);
+        context!.fill(rect);
+        let image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return image!
+    }
 }

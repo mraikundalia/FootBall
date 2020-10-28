@@ -10,6 +10,9 @@ pod 'ACFloatingTextfield-Swift', '~> 1.8'
 pod 'FSCalendar'
 pod 'Alamofire', '~> 5.2'
 pod 'iOSDropDown'
+pod 'SDWebImage'
+pod 'ReachabilitySwift'
+pod 'D2PDatePicker'
   # Pods for Football Stats
 
 end

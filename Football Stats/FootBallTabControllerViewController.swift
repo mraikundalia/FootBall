@@ -12,11 +12,12 @@ class FootBallTabControllerViewController: UITabBarController, UITabBarControlle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let appearance = UITabBarItem.appearance()
-        let attributes = [NSAttributedString.Key.font:UIFont(name: "American Typewriter", size: 17)]
+       let appearance = UITabBarItem.appearance()
+        let attributes = [NSAttributedString.Key.font:UIFont(name: "American Typewriter", size: 14)]
         appearance.setTitleTextAttributes(attributes as [NSAttributedString.Key : Any], for: .normal)
         //self.tabBarController?.delegate = self
         self.selectedIndex = 4
+        self.tabBar.unselectedItemTintColor = UIColor.black
      //    self.tabBarController?.selectedIndex = 4
         //self.tabBarController?.tabBar.selectedItem = 1
         // Do any additional setup after loading the view.

@@ -14,8 +14,15 @@ class FootBallGroupsVC: UIViewController , UITableViewDelegate, UITableViewDataS
     
     var btndropdown = NIDropDown ()
        var hud : MBProgressHUD!
-    @IBAction func btnselectAction(_ sender: Any) {
-        
+    @IBAction func btnselectAction(_ sender: Any)
+    {
+        if btndropdown.isDescendant(of: self.view)
+        {
+                                      //myView is subview of self.view, remove it.
+             btndropdown.removeFromSuperview()
+          }
+          else
+          {
         let myFloatForR = 250
           var r = CGFloat(myFloatForR)
          // lazy var value: Float = 200
@@ -24,6 +31,7 @@ class FootBallGroupsVC: UIViewController , UITableViewDelegate, UITableViewDataS
           btndropdown.setDropDownSelectionColor(UIColor.gray)
           btndropdown.delegate = self
              btndropdown.tag = 2
+        }
     }
     
      var menu = ["Mehul", "Chakri", "John" ,"Chirsty","Pickle","Jack Cheese"]
@@ -103,6 +111,8 @@ class FootBallGroupsVC: UIViewController , UITableViewDelegate, UITableViewDataS
     @IBOutlet var grouptable: UITableView!
 
     var skippedArray = NSMutableArray()
+    var hotelName =  ""
+
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -113,53 +123,17 @@ class FootBallGroupsVC: UIViewController , UITableViewDelegate, UITableViewDataS
        // databasearray = UserDefaults.standard.object(forKey: "database") as! NSMutableArray
         //self.GroupsCall()
         self.Profilecall()
+        let defaults : UserDefaults = UserDefaults.standard
+        hotelName = (defaults.value(forKey: "database_name") as! String?)!
+       if(hotelName != "")
+       {
+        btndateofmatich .setTitle(hotelName, for: .normal)
+        self.GroupsCall()
+        }
 
         // Do any additional setup after loading the view.
     }
-    func GroupsCall()
-           {
-             //SVProgressHUD.show()
-   //            var string = String.self
-   //            string = UserDefaults.standard.integer(forKey: "registerid")
-            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-
-                               hud.labelText = "Loading..."
-               let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                      // let string = btndateofmatich.currentTitle
-                   //String(UserDefaults.standard.integer(forKey: "registerid"))
-            let verify_param = ["storedProcedureName":"getDatabaseGroup","input1":str2 as Any ,"input2":btndateofmatich.currentTitle!] as [String : Any]
-                   let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                      AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                         response in
-                        DispatchQueue.main.async{
-
-                               self.hud.hide(true)
-
-                               }
-                       //  SVProgressHUD.dismiss()
-                      if let json = response.value
-                      {
-                 let jsonResponse = json as! NSDictionary
-                     print(jsonResponse)
-                      do
-                      {
-                         //UserDefaults.standard.set(jsonResponse.object(forKey: "register_id"), forKey: "registerid")
-                      // var skippedArray = NSMutableArray()
-                        self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                        self.grouptable.reloadData()
-                   
-                      // let dataarray = skippedArray.firstObject as! NSDictionary
-                       
-                      
-
-                       //Integer
-   //                      let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
-   //                         self.navigationController?.pushViewController(login!, animated: true)
-                     }
-                   }
-                  }
-             
-             }
+  
     /*
     // MARK: - Navigation
 
@@ -169,6 +143,8 @@ class FootBallGroupsVC: UIViewController , UITableViewDelegate, UITableViewDataS
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // MARK: NIDrop Delegat//////////////////////////
     func niDropDownDelegateMethod(_ sender: NIDropDown!) {
         
     }
@@ -187,13 +163,13 @@ class FootBallGroupsVC: UIViewController , UITableViewDelegate, UITableViewDataS
         btndropdown.isHidden = true
     }
     
-    
+   // MARK: Api Calls/////////////////////
      func Profilecall()
             {
 
-                hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+               // hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                    hud.labelText = "Loading..."
+                    //hud.labelText = ""
               //SVProgressHUD.show()
     //            var string = String.self
     //            string = UserDefaults.standard.integer(forKey: "registerid")
@@ -202,11 +178,11 @@ class FootBallGroupsVC: UIViewController , UITableViewDelegate, UITableViewDataS
                     //String(UserDefaults.standard.integer(forKey: "registerid"))
                 let verify_param = ["storedProcedureName":"getDatabaseNames","input1":str2 as Any] as [String : Any]
                     let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                       AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                       AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
                           response in
                         DispatchQueue.main.async{
 
-                            self.hud.hide(true)
+                            //self.hud.hide(true)
 
                             }
                         //  SVProgressHUD.dismiss()
@@ -217,30 +193,80 @@ class FootBallGroupsVC: UIViewController , UITableViewDelegate, UITableViewDataS
                        do
                        {
                           //UserDefaults.standard.set(jsonResponse.object(forKey: "register_id"), forKey: "registerid")
+                        var stringvalue:String = ""
+                        stringvalue = jsonResponse["status"] as! String
                         var skippedArray = NSMutableArray()
-                        skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                             skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                             
+                             let dataarray = skippedArray.firstObject as! NSDictionary
+                            
+                        if stringvalue == "Success"
+                          {
+                                self.databasearray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                          }
+                          else
+                          {
+                              var stringvalue1:String = ""
+                              stringvalue1 = dataarray.value(forKey:"Update") as! String
+                              self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
+                          }
+        
                         
-                        let dataarray = skippedArray.firstObject as! NSDictionary
-                       
-                        self.databasearray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                      
-                        if self.databasearray.count>0
-                        {
-                           // btndateofmatich .setTitle((self.databasearray.object(0), for: <#T##UIControl.State#>)
-                          //  UserDefaults.standard.array(dataarray, forKey:"databasearray")
-
-                        }
-                        else
-                        {
-                           
-                        }
-
-                        //Integer
-    //                      let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
-    //                         self.navigationController?.pushViewController(login!, animated: true)
+                  
                       }
                     }
                    }
               
               }
+    func GroupsCall()
+             {
+     
+              hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                                 hud.labelText = ""
+                 let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                     
+              let verify_param = ["storedProcedureName":"getDatabaseGroup","input1":str2 as Any ,"input2":btndateofmatich.currentTitle!] as [String : Any]
+                     let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                        AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                           response in
+                          DispatchQueue.main.async{
+
+                                 self.hud.hide(true)
+
+                                 }
+                        if let json = response.value
+                        {
+                   let jsonResponse = json as! NSDictionary
+                       print(jsonResponse)
+                        do
+                        {
+                      
+                          
+                          var stringvalue:String = ""
+                      stringvalue = jsonResponse["status"] as! String
+                           
+                            
+                          if stringvalue == "Success"
+                        {
+                          self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                          self.grouptable.reloadData()
+                          }
+                          else
+                          {
+                            var skippedArray1 = NSMutableArray()
+                           skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                            let dataarray = skippedArray1.firstObject as! NSDictionary
+                             var stringvalue1:String = ""
+                              stringvalue1 = dataarray.value(forKey:"Update") as! String
+                              self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                          }
+                     
+                      
+
+                       }
+                     }
+                    }
+               
+               }
 }

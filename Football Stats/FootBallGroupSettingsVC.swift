@@ -15,18 +15,31 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
     var hud : MBProgressHUD!
     var btnallowplay:String = ""
 
+    @IBOutlet var lblminimumvotestxt: UILabel!
+    @IBOutlet var minimumbtnvotesConstant: NSLayoutConstraint!
+    @IBOutlet var minimumarrow: UIImageView!
+    @IBOutlet var minimumvotelblheighcon: NSLayoutConstraint!
     @IBAction func allowiplayswtich(_ sender: Any) {
         
-        let value = allowplayswitch.isOn
+      let value = allowplayswitch.isOn
       if value == true
       {
        
        btnallowplay = "0"
+        lblminimumvotestxt.text = "Minimum Games to get stats"
+        minimumarrow.isHidden = false
+        minimumvotelblheighcon.constant = 20
+        minimumbtnvotesConstant.constant = 45
+        btnminimumvotes.setTitle("5", for: .normal)
          //self.Updatebasicsetting()
           
       }
       else{
           btnallowplay = "1"
+         lblminimumvotestxt.text = ""
+        minimumarrow.isHidden = true
+              minimumvotelblheighcon.constant = 0
+              minimumbtnvotesConstant.constant = 0
           //self.Updatebasicsetting()
       }
     }
@@ -46,16 +59,31 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
     
     
     @IBAction func defaultgamesAction(_ sender: Any) {
+        if btndropdown.isDescendant(of: self.view)
+        {
+                                      //myView is subview of self.view, remove it.
+         btndropdown.removeFromSuperview()
+      }
+      else
+      {
         let myFloatForR = 250
-                      var r = CGFloat(myFloatForR)
-                     // lazy var value: Float = 200
-                      btndropdown.isHidden = false
-                      btndropdown.show((sender as! UIButton), theHeight: &r, theArr: (defaultgamArray.value(forKey: "GameTypes") as! [Any]), theImgArr: nil, theDirection: "down", with: self)
-                      btndropdown.setDropDownSelectionColor(UIColor.gray)
-                      btndropdown.delegate = self
-                         btndropdown.tag = 0
+          var r = CGFloat(myFloatForR)
+         // lazy var value: Float = 200
+          btndropdown.isHidden = false
+          btndropdown.show((sender as! UIButton), theHeight: &r, theArr: (defaultgamArray.value(forKey: "GameTypes") as! [Any]), theImgArr: nil, theDirection: "down", with: self)
+          btndropdown.setDropDownSelectionColor(UIColor.gray)
+          btndropdown.delegate = self
+             btndropdown.tag = 0
+        }
     }
     @IBAction func minimumgamesAction(_ sender: Any) {
+        if btndropdown.isDescendant(of: self.view)
+        {
+                                      //myView is subview of self.view, remove it.
+         btndropdown.removeFromSuperview()
+      }
+      else
+      {
         let myFloatForR = 250
                       var r = CGFloat(myFloatForR)
                      // lazy var value: Float = 200
@@ -64,9 +92,18 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
                       btndropdown.setDropDownSelectionColor(UIColor.gray)
                       btndropdown.delegate = self
                          btndropdown.tag = 1
+        }
     }
     
-    @IBAction func minvotesAction(_ sender: Any) {
+    @IBAction func minvotesAction(_ sender: Any)
+    {
+        if btndropdown.isDescendant(of: self.view)
+        {
+                                      //myView is subview of self.view, remove it.
+             btndropdown.removeFromSuperview()
+          }
+          else
+          {
         let myFloatForR = 250
                       var r = CGFloat(myFloatForR)
                      // lazy var value: Float = 200
@@ -75,6 +112,7 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
                       btndropdown.setDropDownSelectionColor(UIColor.gray)
                       btndropdown.delegate = self
                          btndropdown.tag = 2
+        }
     }
     
     @IBAction func btncamAction(_ sender: Any)
@@ -102,10 +140,11 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
 
            // Add the actions
         imagePicker.delegate = self
+            alert.addAction(cameraAction1)
             alert.addAction(cameraAction)
             alert.addAction(gallaryAction)
             alert.addAction(cancelAction)
-            alert.addAction(cameraAction1)
+           
         self.present(alert, animated: true, completion: nil)
 //        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum){
 //                   print("Button capture")
@@ -130,12 +169,17 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
 
               if let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
               {
-                  profileimage.image  = img
+                profileimage.image  = img.resized(withPercentage: 0.1)
+//                let image = UIImage(data: try! Data(contentsOf: URL(string:"http://i.stack.imgur.com/Xs4RX.jpg")!))!
+//
+//                let thumb1 = image.resized(withPercentage: 0.1)
+//                let thumb2 = image.resized(toWidth: 72.0)
                  self.uploadprofilepicture()
 
               }
-              else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-                      profileimage.image = image
+              else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+              {
+                profileimage.image = image.resized(withPercentage: 0.1)
                 self.uploadprofilepicture()
                   }
 
@@ -160,19 +204,19 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
     @IBOutlet var btnminimumvotes: UIButton!
     
     @IBOutlet var btnmanofmatch: UIButton!
-    var myString: String = ""
+    var manofmatch: String = ""
     @IBAction func switchmanofAction(_ sender: Any)
     {
         let value = btnmanofswitch.isOn
                if value == true
                {
                 
-                myString = "0"
+                manofmatch = "0"
                   //self.Updatebasicsetting()
                    
                }
                else{
-                   myString = "1"
+                   manofmatch = "1"
                    //self.Updatebasicsetting()
                }
     }
@@ -180,6 +224,9 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
      var votesarray = NSMutableArray()
     var defaultgamArray = NSMutableArray()
     var maxmumgamesArray = NSMutableArray()
+    
+    
+    // MARK: view didload/////////////
     override func viewDidLoad() {
         super.viewDidLoad()
         btndefaultgames.clipsToBounds = true
@@ -283,89 +330,7 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
               self.present(alert, animated: true, completion: nil)
           }
     
-    func GroupSettingcall()
-            {
-              //SVProgressHUD.show()
-    //            var string = String.self
-    //            string = UserDefaults.standard.integer(forKey: "registerid")
-             hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-
-                        hud.labelText = "Loading..."
-                let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                       // let string = btndateofmatich.currentTitle
-                    //String(UserDefaults.standard.integer(forKey: "registerid"))
-                let verify_param = ["storedProcedureName":"getDatabaseGroupSetting","input1":str2 as Any ,"input2":btnvalue] as [String : Any]
-                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                       AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                          response in
-                         DispatchQueue.main.async{
-
-                                self.hud.hide(true)
-
-                                }
-                        //  SVProgressHUD.dismiss()
-                       if let json = response.value
-                       {
-                  let jsonResponse = json as! NSDictionary
-                      print(jsonResponse)
-                       do
-                       {
-                        
-                        var skippedArray = NSMutableArray()
-                      skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                        self.votesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
-                        self.defaultgamArray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-                        self.maxmumgamesArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                      let dataarray = skippedArray.firstObject as! NSDictionary
-                        
-                        
-                         if let partname = dataarray.value(forKey: "database_name") as? String
-                       {
-                        self.btngroupname.setTitle(partname, for: .normal)
-                        
-                        }
-                        if let partname = dataarray.value(forKey: "database_number") as? String
-                         {
-                            self.btngroupnum.setTitle(partname, for: .normal)
-                          }
-                        if let partname = dataarray.value(forKey: "database_password") as? String
-                         {
-                            self.btngrouppassword.setTitle(partname, for: .normal)
-                          }
-                        if let partname = dataarray.value(forKey: "defaultGamesSetting") as? String
-                         {
-                            self.btndefaultgames.setTitle(partname, for: .normal)
-                          }
-                        if let partname = dataarray.value(forKey: "minGamesForStats") as? String
-                        {
-                            
-                            self.btnselectminimumgames.setTitle(partname, for: .normal)
-                          
-                          }
-//                        if let partname = dataarray.value(forKey: "database_name") as? String
-//                         {
-//
-//                          }
-//                        if let partname = dataarray.value(forKey: "min_mom") as? String
-//                        {
-//
-//                         }
-//
-//                      self.txtname.text = (dataarray.value(forKey: "min_mom") as! String)
-//                        self.txtfirstname.text = (dataarray.value(forKey: "firstName") as! String)
-//                      self.txtsurname.text = (dataarray.value(forKey: "surName") as! String)
-//                      self.btnteamsupport.setTitle((dataarray.value(forKey: "team_supported") as! String), for: .normal)
-//                      self.txtdateofbirth .text = (dataarray.value(forKey: "dob") as! String)
-//                      self.txtmobileno.text = (dataarray.value(forKey: "mobilenumber") as! String)
-//                      self.btngender.setTitle((dataarray.value(forKey: "sex") as! String), for: .normal)
-    
-                        
-                        
-                      }
-                    }
-                   }
-              
-              }
+  
     
      func niDropDownDelegateMethod(_ sender: NIDropDown!) {
            
@@ -397,8 +362,90 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
            btndropdown.isHidden = true
        }
     
-    
-    
+    // MARK: Api Call /////////////////
+      func GroupSettingcall()
+                {
+                  //SVProgressHUD.show()
+        //            var string = String.self
+        //            string = UserDefaults.standard.integer(forKey: "registerid")
+                 hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                            hud.labelText = ""
+                    let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                           // let string = btndateofmatich.currentTitle
+                        //String(UserDefaults.standard.integer(forKey: "registerid"))
+                    let verify_param = ["storedProcedureName":"getDatabaseGroupSetting","input1":str2 as Any ,"input2":btnvalue] as [String : Any]
+                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                    AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                              response in
+                             DispatchQueue.main.async{
+
+                                    self.hud.hide(true)
+
+                                    }
+                            //  SVProgressHUD.dismiss()
+                           if let json = response.value
+                           {
+                      let jsonResponse = json as! NSDictionary
+                          print(jsonResponse)
+                           do
+                           {
+                            
+                            var skippedArray = NSMutableArray()
+                          skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                            self.votesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
+                            self.defaultgamArray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+                            self.maxmumgamesArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                          let dataarray = skippedArray.firstObject as! NSDictionary
+                            
+                            
+                             if let partname = dataarray.value(forKey: "database_name") as? String
+                           {
+                            self.btngroupname.setTitle(partname, for: .normal)
+                            
+                            }
+                            if let partname = dataarray.value(forKey: "database_number") as? String
+                             {
+                                self.btngroupnum.setTitle(partname, for: .normal)
+                              }
+                            if let partname = dataarray.value(forKey: "database_password") as? String
+                             {
+                                self.btngrouppassword.setTitle(partname, for: .normal)
+                              }
+                            if let partname = dataarray.value(forKey: "defaultGamesSetting") as? String
+                             {
+                                self.btndefaultgames.setTitle(partname, for: .normal)
+                              }
+                            if let partname = dataarray.value(forKey: "minGamesForStats") as? String
+                            {
+                                
+                                self.btnselectminimumgames.setTitle(partname, for: .normal)
+                              
+                              }
+    //                        if let partname = dataarray.value(forKey: "database_name") as? String
+    //                         {
+    //
+    //                          }
+    //                        if let partname = dataarray.value(forKey: "min_mom") as? String
+    //                        {
+    //
+    //                         }
+    //
+    //                      self.txtname.text = (dataarray.value(forKey: "min_mom") as! String)
+    //                        self.txtfirstname.text = (dataarray.value(forKey: "firstName") as! String)
+    //                      self.txtsurname.text = (dataarray.value(forKey: "surName") as! String)
+    //                      self.btnteamsupport.setTitle((dataarray.value(forKey: "team_supported") as! String), for: .normal)
+    //                      self.txtdateofbirth .text = (dataarray.value(forKey: "dob") as! String)
+    //                      self.txtmobileno.text = (dataarray.value(forKey: "mobilenumber") as! String)
+    //                      self.btngender.setTitle((dataarray.value(forKey: "sex") as! String), for: .normal)
+        
+                            
+                            
+                          }
+                        }
+                       }
+                  
+                  }
     func DeleteAction()
           {
                                  
@@ -406,13 +453,13 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
                      //SVProgressHUD.show()
                     hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                    hud.labelText = "Loading..."
+                    hud.labelText = ""
                 let str2 =  UserDefaults.standard.object(forKey: "registerid")
               
                 let verify_param = ["storedProcedureName": "sp_drop_database","input1":str2 as Any,"input2":"0"] as [String : Any]
                      //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
                                  let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                                 AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                                 AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
                                  if let json = response.value {
                                  let jsonResponse = json as! NSDictionary
                                     DispatchQueue.main.async{
@@ -427,7 +474,7 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
                                   var skippedArray = NSMutableArray()
                                   skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
                                                  
-                                  let dataarray = skippedArray.firstObject as! NSDictionary
+                        let dataarray = skippedArray.firstObject as! NSDictionary
                                   
               var stringvalue:String = ""
                  stringvalue = jsonResponse["status"] as! String
@@ -461,19 +508,21 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
              }
     
     }
+    //api call
     func UpdateGroupsettings()
                   {
                     //SVProgressHUD.show()
           
                    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                    hud.labelText = "Loading..."
+                    hud.labelText = ""
                     
                       let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                            
-                    let verify_param = ["storedProcedureName":"UpdateDatabaseGroupSetting","input1":str2 as Any ,"input2":btngroupnum.currentTitle!,"input3":btngroupname.currentTitle!,"input4":btnselectminimumgames.currentTitle!,"input5":btndefaultgames.currentTitle!,"input6":btnminimumvotes.currentTitle!,"input7":"1","input8":"1"] as [String : Any]
+                            let mom = Int(btnallowplay)
+                     let manof = Int(manofmatch)
+                    let verify_param = ["storedProcedureName":"UpdateDatabaseGroupSetting","input1":str2 as Any ,"input2":btngroupnum.currentTitle!,"input3":btngroupname.currentTitle!,"input4":btnselectminimumgames.currentTitle!,"input5":btndefaultgames.currentTitle!,"input6":mom as Any,"input7":btnminimumvotes.currentTitle!,"input8":manof as Any] as [String : Any]
                           let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                             AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                             AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
                                 response in
                                DispatchQueue.main.async{
 
@@ -494,48 +543,7 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
                               self.defaultgamArray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
                               self.maxmumgamesArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
                             let dataarray = skippedArray.firstObject as! NSDictionary
-                              
-                              
-//                               if let partname = dataarray.value(forKey: "database_name") as? String
-//                             {
-//                              self.btngroupname.setTitle(partname, for: .normal)
-//
-//                              }
-//                              if let partname = dataarray.value(forKey: "database_number") as? String
-//                               {
-//                                  self.btngroupnum.setTitle(partname, for: .normal)
-//                                }
-//                              if let partname = dataarray.value(forKey: "database_password") as? String
-//                               {
-//                                  self.btngrouppassword.setTitle(partname, for: .normal)
-//                                }
-//                              if let partname = dataarray.value(forKey: "defaultGamesSetting") as? String
-//                               {
-//                                  self.btndefaultgames.setTitle(partname, for: .normal)
-//                                }
-//                              if let partname = dataarray.value(forKey: "minGamesForStats") as? String
-//                              {
-//
-//                                  self.btnselectminimumgames.setTitle(partname, for: .normal)
-//
-//                                }
-      //                        if let partname = dataarray.value(forKey: "database_name") as? String
-      //                         {
-      //
-      //                          }
-      //                        if let partname = dataarray.value(forKey: "min_mom") as? String
-      //                        {
-      //
-      //                         }
-      //
-      //                      self.txtname.text = (dataarray.value(forKey: "min_mom") as! String)
-      //                        self.txtfirstname.text = (dataarray.value(forKey: "firstName") as! String)
-      //                      self.txtsurname.text = (dataarray.value(forKey: "surName") as! String)
-      //                      self.btnteamsupport.setTitle((dataarray.value(forKey: "team_supported") as! String), for: .normal)
-      //                      self.txtdateofbirth .text = (dataarray.value(forKey: "dob") as! String)
-      //                      self.txtmobileno.text = (dataarray.value(forKey: "mobilenumber") as! String)
-      //                      self.btngender.setTitle((dataarray.value(forKey: "sex") as! String), for: .normal)
-          
+
                               
                               
                             }
@@ -549,7 +557,7 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
     {
         hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-            hud.labelText = "Loading..."
+            hud.labelText = ""
            //let str2 =  UserDefaults.standard.object(forKey: "registerid")
         var imagestring = NSString()
         imagestring = self.convertImageToBase64String(image: profileimage.image!) as NSString
@@ -560,7 +568,7 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
         //let myInt3 = (str2 as! NSString).integerValue
         let verify_param = ["storedProcedureName":"updateDatabasePicture","input1":btnvalue ,"input2":imagestring] as [String : Any]
                         let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                           AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                           AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
                               response in
                             //  SVProgressHUD.dismiss()
                            if let json = response.value
@@ -587,4 +595,22 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
            return strBase64!
        }
       
+}
+extension UIImage {
+    func resized(withPercentage percentage: CGFloat, isOpaque: Bool = true) -> UIImage? {
+        let canvas = CGSize(width: size.width * percentage, height: size.height * percentage)
+        let format = imageRendererFormat
+        format.opaque = isOpaque
+        return UIGraphicsImageRenderer(size: canvas, format: format).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        }
+    }
+    func resized(toWidth width: CGFloat, isOpaque: Bool = true) -> UIImage? {
+        let canvas = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
+        let format = imageRendererFormat
+        format.opaque = isOpaque
+        return UIGraphicsImageRenderer(size: canvas, format: format).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        }
+    }
 }

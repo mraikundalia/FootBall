@@ -19,7 +19,14 @@ var btndropdown = NIDropDown ()
     
     @IBAction func btnsaveAction(_ sender: Any)
     {
+        if btnselectdate.currentTitle == "DD Month YYYY" || btnselectdate.currentTitle == "DD MMM YYYY" || btnselectdate.currentTitle == "DD/MM/YYYY"
+        {
+            self.showToast(message: "Select Date ", font: UIFont.systemFont(ofSize: 13))
+        }
+        else
+        {
         self.Updatebasicsetting()
+        }
     }
     @IBAction func btnteam1shirtAction(_ sender: Any) {
         let myFloatForR = 250
@@ -88,19 +95,19 @@ var btndropdown = NIDropDown ()
     {
         super.viewDidLoad()
         btncolorselect.clipsToBounds = true
-        btncolorselect.layer.cornerRadius = 9
+        btncolorselect.layer.cornerRadius = 8
         btncolorselect.layer.borderWidth = 1;
         btncolorselect.layer.borderColor = UIColor.lightGray.cgColor
         btnteam2color.clipsToBounds = true
-        btnteam2color.layer.cornerRadius = 9;
+        btnteam2color.layer.cornerRadius = 8;
         btnteam2color.layer.borderWidth = 1;
         btnteam2color.layer.borderColor = UIColor.lightGray.cgColor
         btnselectdate.clipsToBounds = true
-        btnselectdate.layer.cornerRadius = 9;
+        btnselectdate.layer.cornerRadius = 8;
         btnselectdate.layer.borderWidth = 1;
         btnselectdate.layer.borderColor = UIColor.lightGray.cgColor
         btnnotifications.clipsToBounds = true
-        btnnotifications.layer.cornerRadius = 9;
+        btnnotifications.layer.cornerRadius = 8;
         btnnotifications.layer.borderWidth = 1;
         btnnotifications.layer.borderColor = UIColor.lightGray.cgColor
         btnsave.clipsToBounds = true
@@ -109,59 +116,7 @@ var btndropdown = NIDropDown ()
         self.Getbasicsetting()
         // Do any additional setup after loading the view.
     }
-    func Getbasicsetting()
-    {
-                           
-               //[SVProgressHUD show];
-               //SVProgressHUD.show()
-              hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-
-              hud.labelText = "Loading..."
-      let str2 =  UserDefaults.standard.object(forKey: "registerid")
-          let verify_param = ["storedProcedureName": "getBasicSetting","input1":str2 as Any] as [String : Any]
-               //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
-                           let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                           AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
-                           if let json = response.value {
-                           let jsonResponse = json as! NSDictionary
-                              DispatchQueue.main.async{
-                                  self.hud.hide(true)
-
-                              }
-                           print(jsonResponse)
-                               
-                           do
-                           {
-//                            if jsonResponse.value(forKey: "status") = "Success"
-//                            {
-                            var skippedArray = NSMutableArray()
-                            skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                           
-                            let dataarray = skippedArray.firstObject as! NSDictionary
-//                             String)
-                              self.btncolorselect.setTitle((dataarray.value(forKey: "ShirtColour_Team1") as! String), for: .normal)
-                             self.btnteam2color.setTitle((dataarray.value(forKey: "ShirtColour_Team2") as! String), for: .normal)
-                            //let assumedString: String! = (dataarray.value(forKey: "appDateFormat") as! String)
-
-//                            if dataarray.value(forKey: "appDateFormat") = "<null>"
-//                            {
-//                                // do something with null JSON value here
-//                            }
-//                            else
-//                            {
-                                   self.btnselectdate.setTitle((dataarray.value(forKey: "appDateFormat") as! String), for: .normal)
-                            //}
-                            
-                        
-                            self.shirtscolors = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            self.datearray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-                               
-                             }
-                            //}
-                          
-                        }
-                       }
-       }
+  
     func niDropDownDelegateMethod(_ sender: NIDropDown!) {
         
     }
@@ -177,12 +132,12 @@ var btndropdown = NIDropDown ()
         btnteam2color.setTitle(title, for: .normal)
         }
         else if btndropdown.tag == 2
-               {
-                
-                let datestrmg:String = title.replacingOccurrences(of: "DD MMM YYYY", with: "", options: NSString.CompareOptions.literal, range: nil)
+       {
+        
+        let datestrmg:String = title.replacingOccurrences(of: "DD MMM YYYY", with: "", options: NSString.CompareOptions.literal, range: nil)
 
-               btnselectdate.setTitle(datestrmg, for: .normal)
-               }
+       btnselectdate.setTitle(datestrmg, for: .normal)
+       }
     }
     
     func niDropDownHidden(_ sender: NIDropDown!)
@@ -193,18 +148,23 @@ var btndropdown = NIDropDown ()
     
     func Updatebasicsetting()
         {
-                               
                    //[SVProgressHUD show];
                    //SVProgressHUD.show()
                   hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                  hud.labelText = "Loading..."
+                  hud.labelText = ""
             let myInt1 = Int(myString)
           let str2 =  UserDefaults.standard.object(forKey: "registerid")
-            let verify_param = ["storedProcedureName": "updateBasicSetting","input1":str2 as Any,"input2":btncolorselect.currentTitle!,"input3":btnteam2color.currentTitle!,"input4":btnselectdate.currentTitle!,"input5":myInt1 as Any] as [String : Any]
+            
+            let inputFormatter = DateFormatter()
+                           inputFormatter.dateFormat = "dd MMM yyyy"
+                           let showDate = inputFormatter.date(from: btnselectdate.currentTitle!)
+                           inputFormatter.dateFormat = "yyyy-MM-dd"
+                           let resultString = inputFormatter.string(from: showDate!)
+            let verify_param = ["storedProcedureName": "updateBasicSetting","input1":str2 as Any,"input2":btncolorselect.currentTitle!,"input3":btnteam2color.currentTitle!,"input4":resultString,"input5":myInt1 as Any] as [String : Any]
                    //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
                                let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                               AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                               AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
                                if let json = response.value {
                                let jsonResponse = json as! NSDictionary
                                   DispatchQueue.main.async{
@@ -217,22 +177,74 @@ var btndropdown = NIDropDown ()
                                {
     //                            if jsonResponse.value(forKey: "status") = "Success"
     //                            {
+                                var stringvalue:String = ""
+                                stringvalue = jsonResponse["status"] as! String
                                 var skippedArray = NSMutableArray()
                                 skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                               
-                               // let dataarray = skippedArray.firstObject as! NSDictionary
-    //                              self.txtname.text = (dataarray.value(forKey: "emailadd") as! String)
-    //                                self.txtfirstname.text = (dataarray.value(forKey: "firstName") as! String)
-    //                              self.txtsurname.text = (dataarray.value(forKey: "surName") as! String)
-    //                              self.btnteamsupport.setTitle((dataarray.value(forKey: "team_supported") as! String), for: .normal)
-    //                              self.txtdateofbirth .text = (dataarray.value(forKey: "dob") as! String)
-    //                              self.txtmobileno.text = (dataarray.value(forKey: "mobilenumber") as! String)
-//                                  self.btncolorselect.setTitle((dataarray.value(forKey: "ShirtColour_Team1") as! String), for: .normal)
-//                                 self.btnteam2color.setTitle((dataarray.value(forKey: "ShirtColour_Team2") as! String), for: .normal)
-//                                self.btnselectdate.setTitle((dataarray.value(forKey: "appDateFormat") as! String), for: .normal)
-//                                self.shirtscolors = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-//                                self.datearray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                   if stringvalue == "Success"
+                                   {
+                                    var stringvalue1:String = ""
+                                    stringvalue1 = skippedArray.value(forKey:"Data1") as! String
+                                         self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
+                                   }
+                                   else
+                                   {
+                                       var stringvalue1:String = ""
+                                
+                                       stringvalue1 = skippedArray.value(forKey:"ErrorDescription") as! String
+                                       self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
+                                   }
+                                 }
+                                //}
+                              
+                            }
+                           }
+           }
+      func Getbasicsetting()
+        {
+                               
+                   //[SVProgressHUD show];
+                   //SVProgressHUD.show()
+                  hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                  hud.labelText = ""
+          let str2 =  UserDefaults.standard.object(forKey: "registerid")
+              let verify_param = ["storedProcedureName": "getBasicSetting","input1":str2 as Any] as [String : Any]
+                   //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+                               let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                               AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                               if let json = response.value {
+                               let jsonResponse = json as! NSDictionary
+                                  DispatchQueue.main.async{
+                                      self.hud.hide(true)
+
+                                  }
+                               print(jsonResponse)
                                    
+                               do
+                               {
+    //                            if jsonResponse.value(forKey: "status") = "Success"
+    //                            {
+                                var stringvalue:String = ""
+                            stringvalue = jsonResponse["status"] as! String
+                                var skippedArray = NSMutableArray()
+                             skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                            
+                             let dataarray = skippedArray.firstObject as! NSDictionary
+                                if stringvalue == "Success"
+                                {
+                self.btncolorselect.setTitle((dataarray.value(forKey: "ShirtColour_Team1") as! String), for: .normal)
+               self.btnteam2color.setTitle((dataarray.value(forKey: "ShirtColour_Team2") as! String), for: .normal)
+                     self.btnselectdate.setTitle((dataarray.value(forKey: "notifications") as! String), for: .normal)
+                 self.shirtscolors = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                 self.datearray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                }
+                                else
+                                {
+                            var stringvalue1:String = ""
+                            stringvalue1 = skippedArray.value(forKey:"Update") as! String
+                            self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
+                                }
                                  }
                                 //}
                               

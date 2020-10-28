@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 import SVProgressHUD
-class FootBallSignupVC: UIViewController {
+class FootBallSignupVC: UIViewController , UITextFieldDelegate {
 
     
      var hud : MBProgressHUD!
@@ -31,9 +31,47 @@ class FootBallSignupVC: UIViewController {
     
     @IBOutlet var btngoogle: UIButton!
     
+    
+    @IBAction func btnclose(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    
     @IBAction func btnnextAction(_ sender: Any)
     {
-        self.SignupCall()
+        
+        
+        if txtemail.text == "" || txtemail.text?.count == 0
+               {
+                   self.showToast(message: "Please Enter Email", font: UIFont.systemFont(ofSize: 13))
+               }
+            
+        else if txtconfirmpassword.text == "" || txtconfirmpassword.text?.count == 0
+               {
+            self.showToast(message: "Please Enter Password", font: UIFont.systemFont(ofSize: 13))
+               }
+            else if txtfirstname.text == "" || txtfirstname.text?.count == 0
+                 {
+                self.showToast(message: "Please Enter First Name", font: UIFont.systemFont(ofSize: 13))
+                 }
+            else if txtsurname.text == "" || txtsurname.text?.count == 0
+                 {
+                self.showToast(message: "Please Enter Sur Name", font: UIFont.systemFont(ofSize: 13))
+                 }
+            else if txtconfirmpassword.text! == txpassword.text
+               {
+              self.showToast(message: "Password Not Matching ", font: UIFont.systemFont(ofSize: 13))
+               }
+               else
+               {
+                self.txpassword.resignFirstResponder()
+                self.txtconfirmpassword.resignFirstResponder()
+                self.txtsurname.resignFirstResponder()
+                self.txtfirstname.resignFirstResponder()
+                self.txtemail.resignFirstResponder()
+                     self.SignupCall()
+               }
+      
 
     }
     
@@ -60,6 +98,22 @@ class FootBallSignupVC: UIViewController {
                btnfacebook.layer.cornerRadius = 10;
                btngoogle.clipsToBounds = true
                btngoogle.layer.cornerRadius = 10;
+        txtemail.delegate = self
+        txtconfirmpassword.delegate = self
+        txtsurname.delegate = self
+        txtfirstname.delegate = self
+        txpassword.delegate = self
+        txtemail.clipsToBounds = true
+        txtconfirmpassword.layer.cornerRadius = 5
+        txtconfirmpassword.clipsToBounds = true
+        txtfirstname.layer.cornerRadius = 5
+        txtfirstname.clipsToBounds = true
+        txtsurname.layer.cornerRadius = 5
+        txtsurname.clipsToBounds = true
+        txpassword.layer.cornerRadius = 5
+        txpassword.clipsToBounds = true
+        
+        
         // Do any additional setup after loading the view.
     }
     
@@ -67,31 +121,53 @@ class FootBallSignupVC: UIViewController {
     {
         return textField .resignFirstResponder()
     }
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange,
-                           replacementString string: String) -> Bool
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
     {
-        if textField  == txtconfirmpassword || textField == txpassword
-        {
-        let maxLength = 10
-            let currentString: NSString = txtconfirmpassword!.text! as NSString
-        let newString: NSString =
-            currentString.replacingCharacters(in: range, with: string) as NSString
-        return newString.length <= maxLength
+        if textField  == txtemail
+            {
+            if !self.isValidEmail(txtemail.text!)
+            {
+                 self.showToast(message: "Please Enter Valid Email", font: UIFont.systemFont(ofSize: 13))
+            }
+                                
+            }
+//        if textField  == txtconfirmpassword || textField == txpassword
+//               {
+//               let maxLength = 10
+//                   let currentString: NSString = txtconfirmpassword!.text! as NSString
+//               let newString: NSString =
+//                   currentString.replacingCharacters(in: range, with: string) as NSString
+//               return newString.length <= maxLength
+//               }
+       if ((txpassword.text?.elementsEqual(txtconfirmpassword.text!))! != true)
+       {
+          // Passwords do not match. Display alert message and return
+           self.showToast(message: "Password Not Match", font: UIFont.systemFont(ofSize: 13))
+       
+       }
+            
+      
+               return true
         }
-        return true
-    }
+
+//    private func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange,
+//                           replacementString string: String) -> Bool
+//    {
+//
+//       // return true
+//    }
     
        func SignupCall()
       {
         //SVProgressHUD.show()
         hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                     hud.labelText = "Loading..."
+        hud.labelText = ""
         
         let verify_param = ["storedProcedureName": "sp_registerPlayer","input1":"Email","input2":txtemail.text!,"input3":txtconfirmpassword.text!,"input4":txtfirstname.text!,"input5":txtsurname.text!] as [String : Any]
         
                  let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                 AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON {
+        AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON {
                     response in
                   //  SVProgressHUD.dismiss()
                  if let json = response.value
@@ -112,7 +188,7 @@ class FootBallSignupVC: UIViewController {
                     let dataarray = skippedArray.firstObject as! NSDictionary
                   
                                            
-                                    let keyExists = dataarray["register_id"] != nil
+                    let keyExists = dataarray["registeredPlayer_ID"] != nil
                                             
                     if keyExists
                     {
@@ -124,22 +200,8 @@ class FootBallSignupVC: UIViewController {
                             }
                         else{
                 var stringvalue:String = ""
-                                 stringvalue = dataarray.value(forKey:"returnV") as! String
-                 if (stringvalue == "Invalid email address" || stringvalue == "Failure - Invalid email address" || stringvalue == "Email address has already been registered..")
-                {
-
-                 let alert = UIAlertController(title: "", message: stringvalue,         preferredStyle: UIAlertController.Style.alert)
-
-                 alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: { _ in
-                        //Cancel Action
-                    }))
-                    alert.addAction(UIAlertAction(title: "OK",
-                                                  style: UIAlertAction.Style.default,
-                                                  handler: {(_: UIAlertAction!) in
-                                                    //Sign out action
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                    }
+                stringvalue = dataarray.value(forKey:"ErrorDescription") as! String
+                self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 14))
            
             }
                 }

@@ -111,13 +111,13 @@ var isme: String = ""
                       borderview1.layer.cornerRadius = 2
                       borderview1.layer.borderColor = UIColor.darkGray.cgColor
                       borderview1.layer.borderWidth = 1
-        borderview2.clipsToBounds = true
-        borderview2.layer.cornerRadius = 2
-        borderview2.layer.borderColor = UIColor.darkGray.cgColor
-        borderview2.layer.borderWidth = 1
+        //borderview2.clipsToBounds = true
+       // borderview2.layer.cornerRadius = 2
+       // borderview2.layer.borderColor = UIColor.darkGray.cgColor
+        //borderview2.layer.borderWidth = 1
         
         btnsave.clipsToBounds = true
-        borderview2.layer.cornerRadius = 22
+        //borderview2.layer.cornerRadius = 22
         
         btncheck3.backgroundColor = UIColor.white
          btncheck2.backgroundColor = UIColor.white
@@ -159,14 +159,14 @@ var isme: String = ""
           
                    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                    hud.labelText = "Loading..."
+                    hud.labelText = ""
                     
                       let str2 =  UserDefaults.standard.object(forKey: "registerid")
                             
             let verify_param = ["storedProcedureName":"getDatabaseGroup_child"
                      ,"input1":str2 as Any ,"input2":databasename,"input3":playname] as [String : Any]
                   let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                     AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                     AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
                         response in
                        DispatchQueue.main.async{
 
@@ -180,15 +180,11 @@ var isme: String = ""
                     print(jsonResponse)
                      do
                      {
-                      
                       var skippedArray = NSMutableArray()
                     skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
                         if skippedArray.count>0
                         {
-            
                    let dataarray = skippedArray.firstObject as! NSDictionary
-                                  
-                                        
                      if let partname = dataarray.value(forKey: "emailadd") as? String
                    {
                       self.txtemail.text = partname
@@ -208,15 +204,15 @@ var isme: String = ""
                       
                       self.txtplayerid.isUserInteractionEnabled = false
                       }
-                                  if let partname = dataarray.value(forKey: "ModifyAdminStatus") as? String
-                                            {
-                                             if partname == "No"
-                                             {
-                                              self.btncheck2.isHidden = true
-                                              self.lbladmin.isHidden = true
-                                              self.iamadmin = "0"
-                                              }
-                                             }
+                      if let partname = dataarray.value(forKey: "ModifyAdminStatus") as? String
+                                {
+                                 if partname == "No"
+                                 {
+                                  self.btncheck2.isHidden = true
+                                  self.lbladmin.isHidden = true
+                                  self.iamadmin = "0"
+                                  }
+                                 }
                                   
                                   if let partname = dataarray.value(forKey: "visibleUnAssociate") as? String
                                        {
@@ -226,16 +222,22 @@ var isme: String = ""
                                           self.lblunassociate.isHidden = true
                                          }
                                         }
-                                  if let partname = dataarray.value(forKey: "thisIsMe") as? String
+                                  if let partname = dataarray.value(forKey: "thisIsMe") as? Int
                                   {
-                                   if partname == "1"
+                                    let thisisme = Int(partname)
+                                   if thisisme == 1
                                    {
+                                    self.btncheck1.setBackgroundImage(UIImage(named: "checkmark"), for:.normal)
+     
+                                    self.txtemail.isUserInteractionEnabled =  true
                                    
                                     }
                                       else
                                    {
                                         self.btncheck1.isHidden = true
                                       self.lblthisisme.isHidden = true
+                                    self.txtemail.isUserInteractionEnabled =  false
+
                                       }
                                    }
                                   
@@ -287,13 +289,13 @@ var isme: String = ""
             {
                       hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                      hud.labelText = "Loading..."
+                      hud.labelText = ""
                   //let str2 =  UserDefaults.standard.object(forKey: "registerid")
                 
                 let verify_param = ["storedProcedureName": "unassociatePlayer","input1":txtplayerid.text!] as [String : Any]
                        //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                       AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                       AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
                        if let json = response.value {
                        let jsonResponse = json as! NSDictionary
                           DispatchQueue.main.async{
@@ -346,7 +348,7 @@ var isme: String = ""
                 {
                           hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                          hud.labelText = "Loading..."
+                          hud.labelText = ""
                     let str2 =  UserDefaults.standard.object(forKey: "registerid")
                       let myInt1 = Int(isme)
                       let myInt2 = Int(iamadmin)
@@ -354,7 +356,7 @@ var isme: String = ""
                     let verify_param = ["storedProcedureName": "updateDatabaseGroup_child","input1":str2 as Any,"input2":plyid as Any,"input3":myInt1 as Any,"input4":txtgroupnickname.text!,"input5":myInt2 as Any] as [String : Any]
                            //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
                            let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                           AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                           AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
                            if let json = response.value {
                            let jsonResponse = json as! NSDictionary
                               DispatchQueue.main.async{

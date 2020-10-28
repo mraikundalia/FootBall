@@ -59,23 +59,25 @@ class FootBallSecuritySettingsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         btnenablebiometric.clipsToBounds = true
-        btnenablebiometric.layer.cornerRadius = 22
-        btnenablebiometric.layer.borderColor = UIColor.lightGray.cgColor
+        btnenablebiometric.layer.cornerRadius = 9
+        btnenablebiometric.layer.borderColor = UIColor.black.cgColor
         btnenablebiometric.layer.borderWidth = 1
         btnchnagepassword.clipsToBounds = true
-         btnchnagepassword.layer.cornerRadius = 22
-      btnchnagepassword.layer.borderColor = UIColor.lightGray.cgColor
+         btnchnagepassword.layer.cornerRadius = 9
+      btnchnagepassword.layer.borderColor = UIColor.black.cgColor
        btnchnagepassword.layer.borderWidth = 1
         
         btndeleteAction.clipsToBounds = true
-        btndeleteAction.layer.cornerRadius = 22
-       btndeleteAction.layer.borderColor = UIColor.lightGray.cgColor
+        btndeleteAction.layer.cornerRadius = 9
+       btndeleteAction.layer.borderColor = UIColor.black.cgColor
        btndeleteAction.layer.borderWidth = 1
         btnsignout.clipsToBounds = true
-       btnsignout.layer.cornerRadius = 22
-      btnsignout.layer.borderColor = UIColor.lightGray.cgColor
+       btnsignout.layer.cornerRadius = 9
+      btnsignout.layer.borderColor = UIColor.black.cgColor
       btnsignout.layer.borderWidth = 1
         self.GetsecuritySettings()
+   // bioswitch.setOn(true, animated: false)
+
         // Do any additional setup after loading the view.
     }
     
@@ -113,13 +115,13 @@ class FootBallSecuritySettingsVC: UIViewController {
                    //SVProgressHUD.show()
                   hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                  hud.labelText = "Loading..."
+                  hud.labelText = ""
               let str2 =  UserDefaults.standard.object(forKey: "registerid")
             
               let verify_param = ["storedProcedureName": "sp_deleteMyAccount","input1":str2 as Any] as [String : Any]
                    //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
                                let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                               AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                               AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
                                if let json = response.value {
                                let jsonResponse = json as! NSDictionary
                                   DispatchQueue.main.async{
@@ -177,12 +179,12 @@ class FootBallSecuritySettingsVC: UIViewController {
                        //SVProgressHUD.show()
                       hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                      hud.labelText = "Loading..."
+                      hud.labelText = ""
               let str2 =  UserDefaults.standard.object(forKey: "registerid")
                   let verify_param = ["storedProcedureName": "getSecuritySetting","input1":str2 as Any] as [String : Any]
                        //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
                                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                                   AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                                   AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
                                    if let json = response.value {
                                    let jsonResponse = json as! NSDictionary
                                       DispatchQueue.main.async{
@@ -219,21 +221,21 @@ class FootBallSecuritySettingsVC: UIViewController {
                             //var stringvalue:String = ""
                            // stringvalue = dataarray.value(forKey:"biometric") as! String
                                DispatchQueue.main.async{
-                              if let partname = dataarray.value(forKey: "biometric") as? String
+                              if let partname = dataarray.value(forKey: "biometric") as? Int
                                {
-                                 if partname == "0"
+                                 if partname == 0
                                  {
                                    // self.bioswitch.setOn(true, animated: true)
-                                    self.bioswitch.isOn = true
-                                    self.bioswitch.setOn(true, animated: true)
+                                   
+                                    self.bioswitch.setOn(true, animated: false)
                                     
                                 }
                                 
                                 else
                                  {
                                    // self.bioswitch.setOn(false, animated: true)
-                                     self.bioswitch.isOn = true
-                                    self.bioswitch.setOn(true, animated: true)
+                                   
+                                    self.bioswitch.setOn(false, animated: false)
                                 }
                                 
                                 }
@@ -257,13 +259,13 @@ class FootBallSecuritySettingsVC: UIViewController {
                               //SVProgressHUD.show()
                              hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                             hud.labelText = "Loading..."
+                             hud.labelText = ""
                      let myInt1 = Int(biometric)
                      let str2 =  UserDefaults.standard.object(forKey: "registerid")
                          let verify_param = ["storedProcedureName": "update_biometrics","input1":str2 as Any,"input2":myInt1 as Any] as [String : Any]
               //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
                           let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                          AF.request("http://868de1a00561.ngrok.io/api/FootBall/APIExecute?", method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                          AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
                           if let json = response.value {
                           let jsonResponse = json as! NSDictionary
                              DispatchQueue.main.async{
@@ -289,7 +291,7 @@ class FootBallSecuritySettingsVC: UIViewController {
                              let dataarray = skippedArray.firstObject as! NSDictionary
                                                         
                              var stringvalue:String = ""
-                             stringvalue = dataarray.value(forKey:"returnV") as! String
+                             stringvalue = dataarray.value(forKey:"ErrorDescription") as! String
                              DispatchQueue.main.async{
 
                                  self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
@@ -301,7 +303,7 @@ class FootBallSecuritySettingsVC: UIViewController {
                          {
                        let dataarray = skippedArray.firstObject as! NSDictionary
                       var stringvalue:String = ""
-                      stringvalue = dataarray.value(forKey:"returnV") as! String
+                      stringvalue = dataarray.value(forKey:"ErrorDescription") as! String
                          DispatchQueue.main.async{
                         self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
                            
