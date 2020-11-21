@@ -9,6 +9,9 @@
 import Foundation
 struct GlobalConstants {
   // Constant define here.
-    static let ApiURL       =    "http://7bb6291932a1.ngrok.io/api/FootBall/APIExecute?"
+    static let ApiURL = "http://footballandstats.com.ngrok.io/api/FootBall/APIExecute?"
+    static let FontRegular = UIFont.init(name: "Roboto-Regular", size: 22)
+      static let FontMedium = UIFont.init(name: "Roboto-Medium", size: 25)
+    //"https://7bb6291932a1.ngrok.io/api/FootBall/APIExecute?"
 
 }

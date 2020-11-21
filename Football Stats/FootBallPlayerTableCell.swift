@@ -10,6 +10,16 @@ import UIKit
 
 class FootBallPlayerTableCell: UITableViewCell {
 
+    @IBOutlet var lost10: UIView!
+    @IBOutlet var lost9: UIView!
+    @IBOutlet var lost8: UIView!
+    @IBOutlet var lost7: UIView!
+    @IBOutlet var lost6: UIView!
+    @IBOutlet var lost5: UIView!
+    @IBOutlet var lost4: UIView!
+    @IBOutlet var lost3: UIView!
+    @IBOutlet var lost2: UIView!
+    @IBOutlet var lost1: UIView!
     @IBOutlet var checkbutton: UIButton!
     @IBOutlet var profilename: UILabel!
     @IBOutlet var profileimage: UIImageView!

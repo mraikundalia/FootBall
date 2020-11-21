@@ -13,8 +13,27 @@ class FootBallTabControllerViewController: UITabBarController, UITabBarControlle
     override func viewDidLoad() {
         super.viewDidLoad()
        let appearance = UITabBarItem.appearance()
-        let attributes = [NSAttributedString.Key.font:UIFont(name: "American Typewriter", size: 14)]
-        appearance.setTitleTextAttributes(attributes as [NSAttributedString.Key : Any], for: .normal)
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+
+        // 2. check the idiom
+        switch (deviceIdiom) {
+
+        case .pad:
+            print("iPad style UI")
+            let attributes = [NSAttributedString.Key.font:UIFont(name: "American Typewriter", size: 30)]
+                   appearance.setTitleTextAttributes(attributes as [NSAttributedString.Key : Any], for: .normal)
+        case .phone:
+            print("iPhone and iPod touch style UI")
+            let attributes = [NSAttributedString.Key.font:UIFont(name: "American Typewriter", size: 14)]
+                   appearance.setTitleTextAttributes(attributes as [NSAttributedString.Key : Any], for: .normal)
+        case .tv:
+            print("tvOS style UI")
+        default:
+            print("Unspecified UI idiom")
+            let attributes = [NSAttributedString.Key.font:UIFont(name: "American Typewriter", size: 14)]
+                   appearance.setTitleTextAttributes(attributes as [NSAttributedString.Key : Any], for: .normal)
+        }
+       
         //self.tabBarController?.delegate = self
         self.selectedIndex = 4
         self.tabBar.unselectedItemTintColor = UIColor.black

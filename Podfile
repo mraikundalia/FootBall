@@ -13,6 +13,9 @@ pod 'iOSDropDown'
 pod 'SDWebImage'
 pod 'ReachabilitySwift'
 pod 'D2PDatePicker'
+pod 'GoogleSignIn'
+pod 'SwiftyJSON', '~> 4.0'
+pod "TPKeyboardAvoidingSwift"
   # Pods for Football Stats
 
 end

@@ -29,8 +29,6 @@ class FootBallMainSegmentVC: UIViewController
         displayCurrentTab((sender as AnyObject).selectedSegmentIndex)
         
     }
-  
-    
     
     lazy var firstChildTabVC: UIViewController? =
         {
@@ -61,9 +59,9 @@ class FootBallMainSegmentVC: UIViewController
         super.viewDidLoad()
         mainsegment.selectedSegmentIndex =  0
           mainsegment.removeBorders()
-        mainsegment.setTitleTextAttributes([NSAttributedString.Key.font : UIFont(name: "Roboto-Bold", size: 13)!, NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
         
-         mainsegment.setTitleTextAttributes([NSAttributedString.Key.font : UIFont(name: "Roboto-Bold", size: 15)!, NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+
+       
         if text == "Profile"
         {
       mainsegment.selectedSegmentIndex = TabIndex.secondChildTab.rawValue

@@ -144,7 +144,8 @@
         if (indexPath.row < [imageList count]) {
             cell.imageView.image = [imageList objectAtIndex:indexPath.row];
         }
-    } else if ([self.imageList count] < [self.list count]) {
+    } else if ([self.imageList count] < [self.list count])
+    {
         cell.textLabel.text =[list objectAtIndex:indexPath.row];
         if (indexPath.row < [imageList count]) {
             cell.imageView.image = [imageList objectAtIndex:indexPath.row];

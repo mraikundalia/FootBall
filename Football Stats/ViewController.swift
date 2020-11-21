@@ -40,6 +40,24 @@ class ViewController: UIViewController ,singletonProtocol,PeopleInfoMAP
         btnsignup.layer.cornerRadius = 10
         btnlogin.clipsToBounds = true
         btnlogin.layer.cornerRadius = 10;
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+               switch (deviceIdiom)
+               {
+
+                    case .pad:
+                        print("iPad style UI")
+                        
+                        btnlogin.titleLabel?.font = GlobalConstants.FontMedium
+                        btnsignup.titleLabel?.font = GlobalConstants.FontMedium
+                    case .phone:
+                        print("iPhone and iPod touch style UI")
+                    
+                    case .tv:
+                        print("tvOS style UI")
+                    default:
+                        print("Unspecified UI idiom")
+                    
+                    }
        // self.LoginApiCall()
       //  self.loginMethod()
         //self.loginvalue()
