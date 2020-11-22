@@ -980,8 +980,100 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "23"
             endingLineNumber = "23"
-            landmarkName = "btnconfirmAction(_:)"
-            landmarkType = "7">
+            landmarkName = "FootBallChangePasswordVC"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "AF13D14F-FACA-41E0-8427-8284679CEF7D - 8c2dba8412190fb1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Football___Stats.FootBallChangePasswordVC.txtcurrentpassword.getter : Swift.Optional&lt;__C.UITextField&gt;"
+                  moduleName = "Football &amp; Stats"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chakri/Desktop/Football%20Stats/Football%20Stats/Profile/FootBallChangePasswordVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "126">
+               </Location>
+               <Location
+                  uuid = "AF13D14F-FACA-41E0-8427-8284679CEF7D - 38cf8ebd93d971c5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Football___Stats.FootBallChangePasswordVC.txtcurrentpassword.setter : Swift.Optional&lt;__C.UITextField&gt;"
+                  moduleName = "Football &amp; Stats"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chakri/Desktop/Football%20Stats/Football%20Stats/Profile/FootBallChangePasswordVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "160">
+               </Location>
+               <Location
+                  uuid = "AF13D14F-FACA-41E0-8427-8284679CEF7D - 6510c10e3847f9fb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Football___Stats.FootBallChangePasswordVC.txtcurrentpassword.modify : Swift.Optional&lt;__C.UITextField&gt;"
+                  moduleName = "Football &amp; Stats"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chakri/Desktop/Football%20Stats/Football%20Stats/Profile/FootBallChangePasswordVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "18">
+               </Location>
+               <Location
+                  uuid = "AF13D14F-FACA-41E0-8427-8284679CEF7D - 4c3533f6437037f1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Football___Stats.FootBallChangePasswordVC.txtcurrentpassword.modify : Swift.Optional&lt;__C.UITextField&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Football &amp; Stats"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chakri/Desktop/Football%20Stats/Football%20Stats/Profile/FootBallChangePasswordVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  uuid = "AF13D14F-FACA-41E0-8427-8284679CEF7D - ca129167c795b63c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Football___Stats.FootBallChangePasswordVC.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; Football___Stats.FootBallChangePasswordVC"
+                  moduleName = "Football &amp; Stats"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chakri/Desktop/Football%20Stats/Football%20Stats/Profile/FootBallChangePasswordVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "418">
+               </Location>
+               <Location
+                  uuid = "AF13D14F-FACA-41E0-8427-8284679CEF7D - e0ef9f60956bc974"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Football___Stats.FootBallChangePasswordVC.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Football___Stats.FootBallChangePasswordVC&gt;"
+                  moduleName = "Football &amp; Stats"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/chakri/Desktop/Football%20Stats/Football%20Stats/Profile/FootBallChangePasswordVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "355">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1115,22 +1207,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "681EAE6E-4A33-4C52-A885-5EC01F63C21E"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Football Stats/Play/FootBallPlayVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1305"
-            endingLineNumber = "1305"
-            landmarkName = "Reorderelements()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "09A15282-E40C-4D82-B58A-AEB500C56F42"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -1138,8 +1214,8 @@
             filePath = "Football Stats/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
             landmarkName = "showauthentication()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1170,25 +1246,9 @@
             filePath = "Football Stats/Play/FootBallPlayVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "824"
-            endingLineNumber = "824"
+            startingLineNumber = "826"
+            endingLineNumber = "826"
             landmarkName = "tableView(_:moveRowAt:to:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9ED75D30-2FF1-4734-96B5-CF4C36BF8584"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Football Stats/AppDelegate.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1202,9 +1262,9 @@
             filePath = "Football Stats/Play/FootBallPlayVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "835"
-            endingLineNumber = "835"
-            landmarkName = "tapedited(_:)"
+            startingLineNumber = "837"
+            endingLineNumber = "837"
+            landmarkName = "tableView(_:moveRowAt:to:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1218,8 +1278,8 @@
             filePath = "Football Stats/Play/FootBallPlayVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "829"
-            endingLineNumber = "829"
+            startingLineNumber = "831"
+            endingLineNumber = "831"
             landmarkName = "tableView(_:moveRowAt:to:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1506,8 +1566,8 @@
             filePath = "Football Stats/Result/FootBallResultsVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "181"
-            endingLineNumber = "181"
+            startingLineNumber = "182"
+            endingLineNumber = "182"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1522,10 +1582,10 @@
             filePath = "Football Stats/Play/FootBallPlayVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
-            landmarkName = "btncheckboxAction(_:)"
-            landmarkType = "7">
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "FootBallPlayVC"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1538,8 +1598,8 @@
             filePath = "Football Stats/Play/FootBallPlayVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "btncheckboxAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1554,8 +1614,8 @@
             filePath = "Football Stats/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
             landmarkName = "showauthentication()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1570,8 +1630,8 @@
             filePath = "Football Stats/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
             landmarkName = "showauthentication()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1586,73 +1646,9 @@
             filePath = "Football Stats/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "showauthentication()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "46CC0267-606A-4A29-83B6-5A59BF83FA60 - e75168ebd326128d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Football___Stats.AppDelegate.showauthentication() -&gt; ()"
-                  moduleName = "Football &amp; Stats"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/chakri/Desktop/Football%20Stats/Football%20Stats/AppDelegate.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "76"
-                  endingLineNumber = "76"
-                  offsetFromSymbolStart = "1193">
-               </Location>
-               <Location
-                  uuid = "46CC0267-606A-4A29-83B6-5A59BF83FA60 - 9083d422544bb81d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Football___Stats.AppDelegate.showauthentication() -&gt; ()"
-                  moduleName = "Football &amp; Stats"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/chakri/Desktop/Football%20Stats/Football%20Stats/AppDelegate.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "79"
-                  endingLineNumber = "79"
-                  offsetFromSymbolStart = "186">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "CC53E409-907E-46FA-828F-93F435C583E4"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Football Stats/AppDelegate.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
-            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E324DB61-1254-4ED9-9C35-A4010A1D0D50"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Football Stats/AppDelegate.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "306"
-            endingLineNumber = "306"
-            landmarkName = "GetSessionid()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1666,8 +1662,8 @@
             filePath = "Football Stats/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
+            startingLineNumber = "289"
+            endingLineNumber = "289"
             landmarkName = "GetSessionid()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1682,9 +1678,41 @@
             filePath = "Football Stats/Login/FootBallSignupVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "255"
-            endingLineNumber = "255"
+            startingLineNumber = "343"
+            endingLineNumber = "343"
             landmarkName = "SignupCall()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "00B1067E-265A-4015-A09E-096D46516516"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Football Stats/AppDelegate.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "showauthentication()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "56AE0775-DD44-4C1A-AB05-3860D4E06AC9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Football Stats/AppDelegate.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "showauthentication()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

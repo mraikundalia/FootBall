@@ -9,8 +9,18 @@
 import UIKit
 import Alamofire
 import iOSDropDown
+import Reachability
+
 class FootBallPickGameSettingVC: UIViewController , NIDropDownDelegate
 {
+    
+    class NetworkState
+    {
+        class func isConnected() ->Bool
+        {
+            return NetworkReachabilityManager()!.isReachable
+        }
+    }
       var hud : MBProgressHUD!
     
     @IBOutlet var lbladdresstext: UILabel!
@@ -132,94 +142,99 @@ class FootBallPickGameSettingVC: UIViewController , NIDropDownDelegate
     //MARK: Api CAll
     func Gamesettings()
                   {
-                    //SVProgressHUD.show()
-          //            var string = String.self
-          //            string = UserDefaults.standard.integer(forKey: "registerid")
-                   hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                    
+                    if NetworkState.isConnected()
+                    {
+                        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
                       hud.labelText = ""
                       
                       let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                      
-                             // let string = btndateofmatich.currentTitle
-                          //String(UserDefaults.standard.integer(forKey: "registerid"))
-                      
-                      let verify_param = ["storedProcedureName":"getGameSettings","input1":str2 as Any ,"input2":btnallowplay] as [String : Any]
-                          let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                             AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                                response in
-                               DispatchQueue.main.async{
+                      let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+                                          
+        let verify_param = ["sessionID":sessionid as Any,"storedProcedureName":"getGameSettings","input1":str2 as Any ,"input2":btnallowplay] as [String : Any]
+          let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+             AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                response in
+               DispatchQueue.main.async{
 
-                                      self.hud.hide(true)
-
-                                      }
-                              //  SVProgressHUD.dismiss()
-                             if let json = response.value
-                             {
-                        let jsonResponse = json as! NSDictionary
-                            print(jsonResponse)
-                             do
-                             {
-                              
-                              var stringvalue:String = ""
-                                  stringvalue = jsonResponse["status"] as! String
-                          var skippedArray = NSMutableArray()
-                            skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                              
-                              if stringvalue == "Success"
-                              {
-                              }
-                              else
-                              {
-                                  
-                              }
-                              
-                self.LocationArray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
-              self.reverseplayers = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-              self.gamesetting = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                  let dataarray = skippedArray.firstObject as! NSDictionary
-                      //let result = self.dataarray[0] as? NSDictionary
-
-                          //  var stringvalue1 = ""
-                              //self.stringvalue1 =  NSString(format: "%@",(dataarray.value(forKey: "game_ID") as! CVarArg)) as String
-                              if let partname = dataarray.value(forKey: "Game_ID") as? String
-                              {
-                                  
-                                  self.stringvalue1 = partname
-                                  
-                                  print(self.stringvalue1)
-                                  
-                               }
-                              
-
-                       if let partname = dataarray.value(forKey: "game_date") as? String
-                     {
-                      self.btndate.setTitle(partname, for: .normal)
+                      self.hud.hide(true)
 
                       }
-                      if let partname = dataarray.value(forKey: "gametype") as? String
-                       {
-                          self.btngametype.setTitle(partname, for: .normal)
-                        }
-                      if let partname = dataarray.value(forKey: "locationName") as? String
-                       {
-                          self.btnpitchlocation.setTitle(partname, for: .normal)
-                        }
-                     if let partname = dataarray.value(forKey: "LocationAddress") as? String
+              //  SVProgressHUD.dismiss()
+             if let json = response.value
+             {
+        let jsonResponse = json as! NSDictionary
+            print(jsonResponse)
+             do
+             {
+              
+              var stringvalue:String = ""
+                  stringvalue = jsonResponse["status"] as! String
+          var skippedArray = NSMutableArray()
+            skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+              
+              if stringvalue == "Success"
+              {
+                self.LocationArray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
+           self.reverseplayers = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+           self.gamesetting = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+               let dataarray = skippedArray.firstObject as! NSDictionary
+                   //let result = self.dataarray[0] as? NSDictionary
+
+                       //  var stringvalue1 = ""
+                           //self.stringvalue1 =  NSString(format: "%@",(dataarray.value(forKey: "game_ID") as! CVarArg)) as String
+                           if let partname = dataarray.value(forKey: "Game_ID") as? String
                            {
-                            self.lbladdresstext.text = partname
+                               
+                               self.stringvalue1 = partname
+                               
+                               print(self.stringvalue1)
+                               
                             }
-                     
-                      if let partname = dataarray.value(forKey: "cost") as? Int
-                       {
-                      let str2 = String(partname)
-                      let combined1 = "£" + str2
-                          self.btncost.setTitle(combined1, for: .normal)
-                        }
-                   
-                            }
-                          }
+                           
+
+                    if let partname = dataarray.value(forKey: "game_date") as? String
+                  {
+                   self.btndate.setTitle(partname, for: .normal)
+
+                   }
+                   if let partname = dataarray.value(forKey: "gametype") as? String
+                    {
+                       self.btngametype.setTitle(partname, for: .normal)
+                     }
+                   if let partname = dataarray.value(forKey: "locationName") as? String
+                    {
+                       self.btnpitchlocation.setTitle(partname, for: .normal)
+                     }
+                  if let partname = dataarray.value(forKey: "LocationAddress") as? String
+                        {
+                         self.lbladdresstext.text = partname
                          }
+                  
+                   if let partname = dataarray.value(forKey: "cost") as? Int
+                    {
+                   let str2 = String(partname)
+                   let combined1 = "£" + str2
+                       self.btncost.setTitle(combined1, for: .normal)
+                     }
+                                                                                        
+                      }
+                      else
+                      {
+                          
+                      }
+                      
+     
+                    }
+                  }
+                 }
+                    }
+                    else{
+                        self.showAlert(message: GlobalConstants.internetmessage)
+                    }
+               
                     
                     }
     

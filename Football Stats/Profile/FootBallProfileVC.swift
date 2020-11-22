@@ -11,9 +11,18 @@ import Alamofire
 import iOSDropDown
 import FSCalendar
 import D2PDatePicker
+import Reachability
+
 
 class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIImagePickerControllerDelegate , DKDropMenuDelegate , NIDropDownDelegate , UITextFieldDelegate, FSCalendarDataSource, FSCalendarDelegate, D2PDatePickerDelegate
 {
+    class NetworkState
+       {
+         class func isConnected() ->Bool
+         {
+             return NetworkReachabilityManager()!.isReachable
+         }
+       }
     func didChange(toDate date: Date)
     {
         print(date)
@@ -434,132 +443,144 @@ class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIIm
 func uploadprofile()
     
 {
-    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+    if NetworkState.isConnected()
+    {
+        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-        hud.labelText = ""
-       let str2 =  UserDefaults.standard.object(forKey: "registerid")
-    var imagestring = NSString()
-    imagestring = self.convertImageToBase64String(image: profileimage.image!) as NSString
-                    //String(UserDefaults.standard.integer(forKey: "registerid"))
-    //let myInt3 = (str2 as! NSString).integerValue
-    //let myInt3 = Int(str2) ?? 0
-     //var value: Int { string.digits.integer ?? 0 }
-    //let myInt3 = (str2 as! NSString).integerValue
-    let verify_param = ["storedProcedureName":"updateProfilePicture","input1":str2 as Any ,"input2":imagestring] as [String : Any]
-                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                       AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                          response in
-                        //  SVProgressHUD.dismiss()
-                       if let json = response.value
-                       {
-                  let jsonResponse = json as! NSDictionary
-                      print(jsonResponse)
-                        DispatchQueue.main.async{
+            hud.labelText = ""
+           let str2 =  UserDefaults.standard.object(forKey: "registerid")
+        let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+        var imagestring = NSString()
+        imagestring = self.convertImageToBase64String(image: profileimage.image!) as NSString
+                        //String(UserDefaults.standard.integer(forKey: "registerid"))
+        //let myInt3 = (str2 as! NSString).integerValue
+        //let myInt3 = Int(str2) ?? 0
+         //var value: Int { string.digits.integer ?? 0 }
+        //let myInt3 = (str2 as! NSString).integerValue
+        let verify_param = ["sessionID":sessionid as Any,"storedProcedureName":"updateProfilePicture","input1":str2 as Any ,"input2":imagestring] as [String : Any]
+                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                           AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                              response in
+                            //  SVProgressHUD.dismiss()
+                           if let json = response.value
+                           {
+                      let jsonResponse = json as! NSDictionary
+                          print(jsonResponse)
+                            DispatchQueue.main.async{
 
-                                       self.hud.hide(true)
+                                self.hud.hide(true)
 
-                                       }
-                       do
-                       {
-                        
+                                }
+                           do
+                           {
+                            
 
-                      }
-                    }
-                   }
-   
+                          }
+                        }
+                       }
+    }
+    else
+    {
+        self.showAlert(message: GlobalConstants.internetmessage)
     }
     
-    
+   
+    }
      func Profilecall()
             {
 
-                hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        if NetworkState.isConnected()
+        {
+           hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                           hud.labelText = ""
+                
+                       let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                       let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+                       let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName":"getMyProfile","input1":str2 as Any] as [String : Any]
+                           let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                              AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                                 response in
+                               DispatchQueue.main.async{
 
-                    hud.labelText = ""
-              //SVProgressHUD.show()
-    //            var string = String.self
-    //            string = UserDefaults.standard.integer(forKey: "registerid")
-                let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
-                    //String(UserDefaults.standard.integer(forKey: "registerid"))
-                let verify_param = ["storedProcedureName":"getMyProfile","input1":str2 as Any] as [String : Any]
-                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                       AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                          response in
-                        DispatchQueue.main.async{
+                                   self.hud.hide(true)
 
-                            self.hud.hide(true)
+                                   }
+                              if let json = response.value
+                              {
+                         let jsonResponse = json as! NSDictionary
+                             print(jsonResponse)
+                              do
+                              {
+                           
+                               var skippedArray = NSMutableArray()
+                               skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                           
+                               let dataarray = skippedArray.firstObject as! NSDictionary
+                               self.txtname.text = (dataarray.value(forKey: "emailadd") as! String)
+                                 self.txtfirstname.text = (dataarray.value(forKey: "firstName") as! String)
+                               self.txtsurname.text = (dataarray.value(forKey: "surName") as! String)
+                               self.btnteamsupport.setTitle((dataarray.value(forKey: "team_supported") as! String), for: .normal)
+                               self.txtdateofbirth .text = (dataarray.value(forKey: "dob") as! String)
+                               self.txtmobileno.text = (dataarray.value(forKey: "mobilenumber") as! String)
+                               self.btngender.setTitle((dataarray.value(forKey: "sex") as! String), for: .normal)
+                               self.btndatabse.setTitle((dataarray.value(forKey: "database_name") as! String), for: .normal)
+                               let userdefaults = UserDefaults.standard
+                                   // userdefaults.set("segmenu", forKey: "refer")
+                                userdefaults.set((dataarray.value(forKey: "database_name") as! String), forKey: "database_name")
+                                   userdefaults.synchronize()
+                               DispatchQueue.main.async{
+                                   if let partname = dataarray.value(forKey: "playerPicture") as? String
+                                       {
+                                           if partname.count>0
+                                           {
+                                               let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                                          let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                                          print(decodedimage)
+                                          self.profileimage.image = decodedimage
+                                           }
+                                    
+                                   
+                                       }
+                                       }
+                               
+                               self.genderarray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                self.teamsupport = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
+                               self.database = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                               
+                               if self.database.count>0
+                               {
+                                   self.lbldatabaseheightcon.constant = 20
+                                   self.btndatabse.isHidden = false
+                                   self.defaultdatabasearrowimage.isHidden = false
+                                   self.lbldefaultdatabase.text = "Default Database"
+                                   
+                                 //  UserDefaults.standard.array(dataarray, forKey:"databasearray")
 
-                            }
-                        //  SVProgressHUD.dismiss()
-                       if let json = response.value
-                       {
-                  let jsonResponse = json as! NSDictionary
-                      print(jsonResponse)
-                       do
-                       {
-                          //UserDefaults.standard.set(jsonResponse.object(forKey: "register_id"), forKey: "registerid")
-                        var skippedArray = NSMutableArray()
-                        skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                    
-                        let dataarray = skippedArray.firstObject as! NSDictionary
-                        self.txtname.text = (dataarray.value(forKey: "emailadd") as! String)
-                          self.txtfirstname.text = (dataarray.value(forKey: "firstName") as! String)
-                        self.txtsurname.text = (dataarray.value(forKey: "surName") as! String)
-                        self.btnteamsupport.setTitle((dataarray.value(forKey: "team_supported") as! String), for: .normal)
-                        self.txtdateofbirth .text = (dataarray.value(forKey: "dob") as! String)
-                        self.txtmobileno.text = (dataarray.value(forKey: "mobilenumber") as! String)
-                        self.btngender.setTitle((dataarray.value(forKey: "sex") as! String), for: .normal)
-                        self.btndatabse.setTitle((dataarray.value(forKey: "database_name") as! String), for: .normal)
-                        let userdefaults = UserDefaults.standard
-                            // userdefaults.set("segmenu", forKey: "refer")
-                         userdefaults.set((dataarray.value(forKey: "database_name") as! String), forKey: "database_name")
-                            userdefaults.synchronize()
-                        DispatchQueue.main.async{
-                            if let partname = dataarray.value(forKey: "playerPicture") as? String
-                                {
-                                    if partname.count>0
-                                    {
-                                        let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
-                                   let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
-                                   print(decodedimage)
-                                   self.profileimage.image = decodedimage
-                                    }
-                             
-                            
-                                }
-                                }
-                       // var genderarray = NSMutableArray()
-                        
-                        self.genderarray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-                         self.teamsupport = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
-                        self.database = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                        
-                        if self.database.count>0
-                        {
-                            self.lbldatabaseheightcon.constant = 20
-                            self.btndatabse.isHidden = false
-                            self.defaultdatabasearrowimage.isHidden = false
-                            self.lbldefaultdatabase.text = "Default Database"
-                            
-                          //  UserDefaults.standard.array(dataarray, forKey:"databasearray")
+                                   
+                               }
+                               else
+                               {
+                                   self.lbldatabaseheightcon.constant = 0
+                                   self.btndatabse.isHidden = true
+                                   self.defaultdatabasearrowimage.isHidden = true
+                                   self.btnnext.setTitle("Next", for: .normal)
+                               }
 
-                            
-                        }
-                        else
-                        {
-                            self.lbldatabaseheightcon.constant = 0
-                            self.btndatabse.isHidden = true
-                            self.defaultdatabasearrowimage.isHidden = true
-                            self.btnnext.setTitle("Next", for: .normal)
-                        }
-
-                        //Integer
-    //                      let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
-    //                         self.navigationController?.pushViewController(login!, animated: true)
-                      }
-                    }
-                   }
+                               //Integer
+           //                      let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
+           //                         self.navigationController?.pushViewController(login!, animated: true)
+                             }
+                           }
+                          }
+        }
+        else
+        {
+             self.showAlert(message: GlobalConstants.internetmessage)
+        }
+                
+                
+                
+            
               
               }
     /*

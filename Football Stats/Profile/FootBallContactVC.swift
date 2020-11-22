@@ -8,10 +8,17 @@
 
 import UIKit
 import  Alamofire
+import Reachability
 class FootBallContactVC: UIViewController, UITextViewDelegate
 {
 
-    
+    class NetworkState
+               {
+                 class func isConnected() ->Bool
+                 {
+                     return NetworkReachabilityManager()!.isReachable
+                 }
+               }
     @IBAction func btnsendAction(_ sender: Any) {
         
         self.getcontact()
@@ -37,36 +44,48 @@ class FootBallContactVC: UIViewController, UITextViewDelegate
     }
     @IBOutlet var contacttextview: UITextView!
     
-    func getcontact(){
-                          
-             hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-             hud.labelText = ""
-        let str2 =  UserDefaults.standard.object(forKey: "registerid")
-         let verify_param = ["storedProcedureName": "proc_contactUs","input1":str2 as Any,"input2":contacttextview.text!] as [String : Any]
-              //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
-                          let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                          AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
-                          if let json = response.value {
-                          let jsonResponse = json as! NSDictionary
-                             DispatchQueue.main.async{
-                                 self.hud.hide(true)
+    //MARK://Api Call///////////////
+    func getcontact()
+    {
+        if NetworkState.isConnected()
+        {
+            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                     hud.labelText = ""
+               
+                let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+                let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                 let verify_param = [ "sessionID" :sessionid as Any,"storedProcedureName": "proc_contactUs","input1":str2 as Any,"input2":contacttextview.text!] as [String : Any]
+                      //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+                                  let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                                  AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                                  if let json = response.value {
+                                  let jsonResponse = json as! NSDictionary
+                                     DispatchQueue.main.async{
+                                         self.hud.hide(true)
 
-                             }
-                          print(jsonResponse)
-                              DispatchQueue.main.async{
+                                     }
+                                  print(jsonResponse)
+                                      DispatchQueue.main.async{
 
-                                      self.hud.hide(true)
+                                              self.hud.hide(true)
 
-                                  }
-                          do
-                          {
-                             
-                              
-                            }
-                 
+                                          }
+                                  do
+                                  {
+                                     
+                                      
+                                    }
                          
-                       }
-                      }
+                                 
+                               }
+                              }
+        }
+        else
+        {
+            self.showAlert(message: GlobalConstants.internetmessage)
+        }
+                          
+         
       }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

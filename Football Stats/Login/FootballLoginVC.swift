@@ -176,7 +176,7 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate ,GIDSignInDelegate
             GraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).start(completionHandler: { (connection, result, error) -> Void in
           if (error == nil){
             //everything works print the user data
-            print(result)
+           // print(result)
           }
         })
       }
@@ -261,11 +261,17 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate ,GIDSignInDelegate
     if let appleIDCredential = authorization.credential as?  ASAuthorizationAppleIDCredential
     {
     let userIdentifier = appleIDCredential.user
+        
     let fullName = appleIDCredential.fullName
+        
     let email1 = appleIDCredential.email
+        
         print("Device Token: \(fullName as? String)","Device Token: \(email1 as? String)")
+        
         type = "apple"
+        
         firstname = (fullName as? String)!
+        
         email =  (email1)!
         self.loginMethod()
     //print(User, id is \(userIdentifier) \n Full Name is \(String(describing: fullName)) \n Email id is \(String(describing: email)))
@@ -288,12 +294,7 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate ,GIDSignInDelegate
             let UUIDValue = UIDevice.current.identifierForVendor!.uuidString
             deviceid = UUIDValue
             print("UUID: \(UUIDValue)")
-
-     
-           
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
-           
             var verify_param: [String: Any] = [:]
         let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
 
@@ -307,7 +308,7 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate ,GIDSignInDelegate
             }
             else
            {
-            verify_param = ["sessionID":sessionid as Any,"storedProcedureName": "sp_Login","input1":"Email","input2":txtemail.text!,"input3":txtpassword.text!,"input4":"ios","input5":modelName,"input6":tokenvalue] as [String : Any]
+            verify_param = ["sessionID":sessionid as Any,"storedProcedureName": "sp_Login","input1":"Email","input2":txtemail.text!,"input3":txtpassword.text!,"input4":"ios","input5":modelName,"input6":appDelegate.tokenvalue] as [String : Any]
             }
            
                 //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
@@ -333,7 +334,7 @@ class FootballLoginVC: UIViewController  ,UITextFieldDelegate ,GIDSignInDelegate
                                 skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
                                 
                              
-                        let dataarray = skippedArray.firstObject as! NSDictionary
+                      //  let dataarray = skippedArray.firstObject as! NSDictionary
                                 
                                 //let keyExists = dataarray["register_id"] != nil
                                     var stringvalue:String = ""

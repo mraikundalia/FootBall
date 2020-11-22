@@ -63,75 +63,69 @@ var email  = ""
     
     func showauthentication()
     {
-        let topWindow: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
-     topWindow?.rootViewController = UIViewController()
-     topWindow?.windowLevel = UIWindow.Level.alert + 1
         let context = LAContext()
+                
         var error: NSError?
-
-        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            let reason = "Identify yourself!"
-
-            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason)
+                
+        if context.canEvaluatePolicy(
+            LAPolicy.deviceOwnerAuthenticationWithBiometrics,
+                 error: &error) {
+                    
+            if (context.biometryType == LABiometryType.faceID)
             {
-                [weak self] success, authenticationError in
-
-                DispatchQueue.main.async {
-                    if success
-                    {
-                       // self?.unlockSecretMessage()
-                    }
-                    else
-                    {
-                        // error
-                        let ac = UIAlertController(title: "Biometry unavailable", message: "Your device is not configured for biometric authentication.", preferredStyle: .alert)
-                        ac.addAction(UIAlertAction(title: "OK", style: .default))
-                        topWindow?.rootViewController?.present(ac, animated: true, completion: nil)
-
-                       
-                    }
-                }
+                context.evaluatePolicy(
+                  LAPolicy.deviceOwnerAuthenticationWithBiometrics,
+                  localizedReason: "Authentication is required for access",
+                  reply: {(success, error) in
+                      // Code to handle reply here
+                     self.ShowAlert(_messagetxt: "device has  faceid")
+                })
+                //self.ShowAlert(_messagetxt: "device has no faceid")
+                
+            } else if context.biometryType == LABiometryType.touchID
+            {
+                // Device supports Touch ID
+                 self.ShowAlert(_messagetxt: "device has  touch id")
+            } else
+            {
+                // Device has no biometric support
             }
-        } else {
-            // no biometry
-        }
-            // Get a fresh context for each login. If you use the same context on multiple attempts
-            //  (by commenting out the next line), then a previously successful authentication
-            //  causes the next policy evaluation to succeed without testing biometry again.
-            //  That's usually not what you want.
-//            context = LAContext()
+//        let topWindow: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
+//     topWindow?.rootViewController = UIViewController()
+//     topWindow?.windowLevel = UIWindow.Level.alert + 1
+//        let context = LAContext()
+//        var error: NSError?
 //
-//            context.localizedCancelTitle = "Enter Username/Password"
+//        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+//            let reason = "Identify yourself!"
 //
-//            // First check if we have the needed hardware support.
-//            var error: NSError?
-//            if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
+//            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason)
+//            {
+//                [weak self] success, authenticationError in
 //
-//                let reason = "Log in to your account"
-//                context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason ) { success, error in
+//                DispatchQueue.main.async {
+//                    if success
+//                    {
+//                       // self?.unlockSecretMessage()
+//                    }
+//                    else
+//                    {
+//                        // error
+//                        let ac = UIAlertController(title: "Biometry unavailable", message: "Your device is not configured for biometric authentication.", preferredStyle: .alert)
+//                        ac.addAction(UIAlertAction(title: "OK", style: .default))
+//                        topWindow?.rootViewController?.present(ac, animated: true, completion: nil)
 //
-//                    if success {
 //
-//                        // Move to the main thread because a state update triggers UI changes.
-//                        DispatchQueue.main.async { [unowned self] in
-//                            //self.state = .loggedin
-//                        }
-//
-//                    } else {
-//                        print(error?.localizedDescription ?? "Failed to authenticate")
-//
-//                        // Fall back to a asking for username and password.
-//                        // ...
 //                    }
 //                }
-//            } else
-//            {
-//                print(error?.localizedDescription ?? "Can't evaluate policy")
-//
-//                // Fall back to a asking for username and password.
-//                // ...
 //            }
+//        } else
+//        {
+//            // no biometry
+//        }
+
         
+    }
     }
     func application(
         _ app: UIApplication,
@@ -227,31 +221,31 @@ var email  = ""
     }
     func ShowAlert (_messagetxt : NSString)
     {
-        var topWindow: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
-              topWindow?.rootViewController = UIViewController()
-              topWindow?.windowLevel = UIWindow.Level.alert + 1
-          let alert = UIAlertController(title: "Remove player for game", message: "Are you sure you want to remove player?", preferredStyle: UIAlertController.Style.alert)
-        if let subview = alert.view.subviews.first, let actionSheet = subview.subviews.first
+      DispatchQueue.main.async
         {
-        for innerView in actionSheet.subviews
-        {
-            innerView.backgroundColor = .white
-            innerView.layer.cornerRadius = 15.0
-            innerView.clipsToBounds = true
-            innerView.layer.borderColor = UIColor.black.cgColor
-            innerView.layer.borderWidth = 1
-        }
-        }
-          alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { _ in
-                 //Cancel Action
-            topWindow?.isHidden = true // if you want to hide the topwindow then use this
-            topWindow = nil // if you want to hide the topwindow then use this
-             }))
-        topWindow?.rootViewController?.present(alert, animated: true, completion: nil)
-
-
-
+     var topWindow: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
+               topWindow?.rootViewController = UIViewController()
+               topWindow?.windowLevel = UIWindow.Level.alert + 1
+           let alert = UIAlertController(title: "Remove player for game", message: "Are you sure you want to remove player?", preferredStyle: UIAlertController.Style.alert)
+         if let subview = alert.view.subviews.first, let actionSheet = subview.subviews.first
+         {
+         for innerView in actionSheet.subviews
+         {
+             innerView.backgroundColor = .white
+             innerView.layer.cornerRadius = 15.0
+             innerView.clipsToBounds = true
+             innerView.layer.borderColor = UIColor.black.cgColor
+             innerView.layer.borderWidth = 1
          }
+         }
+           alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { _ in
+                  //Cancel Action
+             topWindow?.isHidden = true // if you want to hide the topwindow then use this
+             topWindow = nil // if you want to hide the topwindow then use this
+              }))
+         topWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+        }
+    }
     
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
 
@@ -289,6 +283,7 @@ var email  = ""
            hud.labelText = ""
            
         let str2 =  UserDefaults.standard.object(forKey: "registerid")
+        
         //let string = NSString.init(format:"%d", str2 as Any)
       
            var verify_param: [String: Any] = [:]
@@ -302,12 +297,7 @@ var email  = ""
       verify_param = ["sessionID":"-1" as Any,"storedProcedureName": "get_seq_SessionID","input1": "0"] as [String : Any]
     }
      
-    
-       
-   
-       
-          
-                let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
         
         AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
                         if let json = response.value {

@@ -8,9 +8,15 @@
 
 import UIKit
 import  Alamofire
-
+import Reachability
 class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate , UIImagePickerControllerDelegate , NIDropDownDelegate{
-    
+    class NetworkState
+    {
+        class func isConnected() ->Bool
+        {
+            return NetworkReachabilityManager()!.isReachable
+        }
+    }
     var btndropdown = NIDropDown ()
     var hud : MBProgressHUD!
     var btnallowplay:String = ""
@@ -231,45 +237,45 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
         super.viewDidLoad()
         btndefaultgames.clipsToBounds = true
                btndefaultgames.layer.cornerRadius = 2
-               btndefaultgames.layer.borderColor = UIColor.lightGray.cgColor
+        btndefaultgames.layer.borderColor = UIColor.black.cgColor
                btndefaultgames.layer.borderWidth = 1
         
                btnminimumvotes.clipsToBounds = true
                   btnminimumvotes.layer.cornerRadius = 2
-                  btnminimumvotes.layer.borderColor = UIColor.lightGray.cgColor
+                  btnminimumvotes.layer.borderColor = UIColor.black.cgColor
                   btnminimumvotes.layer.borderWidth = 1
     
                 btnmanofmatch.clipsToBounds = true
               btnmanofmatch.layer.cornerRadius = 2
-              btnmanofmatch.layer.borderColor = UIColor.lightGray.cgColor
+              btnmanofmatch.layer.borderColor = UIColor.black.cgColor
               btnmanofmatch.layer.borderWidth = 1
 
                 btngroupnum.clipsToBounds = true
               btngroupnum.layer.cornerRadius = 2
-              btngroupnum.layer.borderColor = UIColor.lightGray.cgColor
+              btngroupnum.layer.borderColor = UIColor.black.cgColor
               btngroupnum.layer.borderWidth = 1
 
         
                 btngroupname.clipsToBounds = true
                  btngroupname.layer.cornerRadius = 2
-                 btngroupname.layer.borderColor = UIColor.lightGray.cgColor
+                 btngroupname.layer.borderColor = UIColor.black.cgColor
                  btngroupname.layer.borderWidth = 1
         
          btngrouppassword.clipsToBounds = true
           btngrouppassword.layer.cornerRadius = 2
-          btngrouppassword.layer.borderColor = UIColor.lightGray.cgColor
+          btngrouppassword.layer.borderColor = UIColor.black.cgColor
           btngrouppassword.layer.borderWidth = 1
         
                btnselectminimumgames.clipsToBounds = true
                 btnselectminimumgames.layer.cornerRadius = 2
-                btnselectminimumgames.layer.borderColor = UIColor.lightGray.cgColor
+                btnselectminimumgames.layer.borderColor = UIColor.black.cgColor
                 btnselectminimumgames.layer.borderWidth = 1
            btndelegroup.clipsToBounds = true
            btndelegroup.layer.cornerRadius = 2
-           btndelegroup.layer.borderColor = UIColor.lightGray.cgColor
+           btndelegroup.layer.borderColor = UIColor.black.cgColor
            btndelegroup.layer.borderWidth = 1
-        btnsave.clipsToBounds = true
-               btnsave.layer.cornerRadius = 22
+           btnsave.clipsToBounds = true
+            btnsave.layer.cornerRadius = 22
               
         profileimage.clipsToBounds = true
         profileimage.layer.cornerRadius = profileimage.frame.width/2
@@ -385,192 +391,214 @@ class FootBallGroupSettingsVC: UIViewController , UINavigationControllerDelegate
     // MARK: Api Call /////////////////
       func GroupSettingcall()
                 {
-                  //SVProgressHUD.show()
-        //            var string = String.self
-        //            string = UserDefaults.standard.integer(forKey: "registerid")
+        if NetworkState.isConnected()
+                {
                  hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                            hud.labelText = ""
-                    let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                           // let string = btndateofmatich.currentTitle
-                        //String(UserDefaults.standard.integer(forKey: "registerid"))
-                    let verify_param = ["storedProcedureName":"getDatabaseGroupSetting","input1":str2 as Any ,"input2":btnvalue] as [String : Any]
-                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                    AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                              response in
-                             DispatchQueue.main.async{
+             hud.labelText = ""
+     let str2 =  UserDefaults.standard.object(forKey: "registerid")
+        let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+     let verify_param = ["sessionID":sessionid as Any,"storedProcedureName":"getDatabaseGroupSetting","input1":str2 as Any ,"input2":btnvalue] as [String : Any]
+         let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+     AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+               response in
+              DispatchQueue.main.async{
 
-                                    self.hud.hide(true)
+                     self.hud.hide(true)
 
-                                    }
-                            //  SVProgressHUD.dismiss()
-                           if let json = response.value
-                           {
-                      let jsonResponse = json as! NSDictionary
-                          print(jsonResponse)
-                           do
-                           {
-                            
-                            var skippedArray = NSMutableArray()
-                          skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            self.votesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            self.defaultgamArray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            self.maxmumgamesArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                          let dataarray = skippedArray.firstObject as! NSDictionary
-                            
-                            
-                             if let partname = dataarray.value(forKey: "database_name") as? String
-                           {
-                            self.btngroupname.setTitle(partname, for: .normal)
-                            
+                     }
+             //  SVProgressHUD.dismiss()
+            if let json = response.value
+            {
+       let jsonResponse = json as! NSDictionary
+           print(jsonResponse)
+            do
+            {
+             var stringvalue:String = ""
+            stringvalue = jsonResponse["status"] as! String
+                
+                if stringvalue ==  "Failure"
+                {
+                    var skippedArray = NSMutableArray()
+                       skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                    let dataarray = skippedArray.firstObject as! NSDictionary
+                            var stringvalue:String = ""
+                            stringvalue = dataarray.value(forKey:"ErrorDescription") as! String
+                            DispatchQueue.main.async{
+                
+                // self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+                        self.showAlert(message: stringvalue)
                             }
-                            if let partname = dataarray.value(forKey: "database_number") as? String
-                             {
-                                self.btngroupnum.setTitle(partname, for: .normal)
-                              }
-                            if let partname = dataarray.value(forKey: "database_password") as? String
-                             {
-                                self.btngrouppassword.setTitle(partname, for: .normal)
-                              }
-                            if let partname = dataarray.value(forKey: "defaultGamesSetting") as? String
-                             {
-                                self.btndefaultgames.setTitle(partname, for: .normal)
-                              }
-                            if let partname = dataarray.value(forKey: "minGamesForStats") as? String
-                            {
-                                
-                                self.btnselectminimumgames.setTitle(partname, for: .normal)
-                              
-                              }
-    //                        if let partname = dataarray.value(forKey: "database_name") as? String
-    //                         {
-    //
-    //                          }
-    //                        if let partname = dataarray.value(forKey: "min_mom") as? String
-    //                        {
-    //
-    //                         }
-    //
-    //                      self.txtname.text = (dataarray.value(forKey: "min_mom") as! String)
-    //                        self.txtfirstname.text = (dataarray.value(forKey: "firstName") as! String)
-    //                      self.txtsurname.text = (dataarray.value(forKey: "surName") as! String)
-    //                      self.btnteamsupport.setTitle((dataarray.value(forKey: "team_supported") as! String), for: .normal)
-    //                      self.txtdateofbirth .text = (dataarray.value(forKey: "dob") as! String)
-    //                      self.txtmobileno.text = (dataarray.value(forKey: "mobilenumber") as! String)
-    //                      self.btngender.setTitle((dataarray.value(forKey: "sex") as! String), for: .normal)
-        
-                            
-                            
-                          }
-                        }
-                       }
+                }
+                else
+                {
+                    var skippedArray = NSMutableArray()
+             skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+               self.votesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
+               self.defaultgamArray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+               self.maxmumgamesArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
                   
+             let dataarray = skippedArray.firstObject as! NSDictionary
+               
+               
+                if let partname = dataarray.value(forKey: "database_name") as? String
+              {
+               self.btngroupname.setTitle(partname, for: .normal)
+               
+               }
+               if let partname = dataarray.value(forKey: "database_number") as? String
+                {
+                   self.btngroupnum.setTitle(partname, for: .normal)
+                 }
+               if let partname = dataarray.value(forKey: "database_password") as? String
+                {
+                   self.btngrouppassword.setTitle(partname, for: .normal)
+                 }
+               if let partname = dataarray.value(forKey: "defaultGamesSetting") as? String
+                {
+                   self.btndefaultgames.setTitle(partname, for: .normal)
+                 }
+               if let partname = dataarray.value(forKey: "minGamesForStats") as? String
+               {
+                   
+                   self.btnselectminimumgames.setTitle(partname, for: .normal)
+                 
+                 }
+                }
+           
+                   }
+                 }
+        
+                }
+                    
+               }
+               else
+           {
+            self.showAlert(message: "Please Check Your Internet")
+               }
+                
                   }
+    
     func DeleteAction()
           {
                                  
-                     //[SVProgressHUD show];
-                     //SVProgressHUD.show()
-                    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+            if NetworkState.isConnected()
+            {
+                hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                    hud.labelText = ""
-                let str2 =  UserDefaults.standard.object(forKey: "registerid")
-              
-                let verify_param = ["storedProcedureName": "sp_drop_database","input1":str2 as Any,"input2":"0"] as [String : Any]
-                     //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
-                                 let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                                 AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
-                                 if let json = response.value {
-                                 let jsonResponse = json as! NSDictionary
-                                    DispatchQueue.main.async{
-                                        self.hud.hide(true)
+              hud.labelText = ""
+          let str2 =  UserDefaults.standard.object(forKey: "registerid")
+        let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
 
-                                    }
-                                 print(jsonResponse)
-                                     
-                                 do
-                                 {
+          let verify_param = ["sessionID":sessionid as Any,"storedProcedureName": "sp_drop_database","input1":str2 as Any,"input2":"0"] as [String : Any]
+               //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+               let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+               AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+               if let json = response.value {
+               let jsonResponse = json as! NSDictionary
+                  DispatchQueue.main.async{
+                      self.hud.hide(true)
 
-                                  var skippedArray = NSMutableArray()
-                                  skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                                 
-                        let dataarray = skippedArray.firstObject as! NSDictionary
-                                  
+                  }
+               print(jsonResponse)
+                   
+               do
+               {
+
+                var skippedArray = NSMutableArray()
+                skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                  //let dataarray = skippedArray.firstObject as! NSDictionary
+                            
               var stringvalue:String = ""
-                 stringvalue = jsonResponse["status"] as! String
-                    
-                    if stringvalue == "Failure"
-                    {
-                        let dataarray = skippedArray.firstObject as! NSDictionary
-                                                   
-                        var stringvalue:String = ""
-                        stringvalue = dataarray.value(forKey:"Update") as! String
-                        DispatchQueue.main.async{
-
-                            self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
-
-                        }
-                      
-                    }
-                        else
-                    {
+              stringvalue = jsonResponse["status"] as! String
+           
+              if stringvalue == "Failure"
+              {
                   let dataarray = skippedArray.firstObject as! NSDictionary
-                 var stringvalue:String = ""
-                 stringvalue = dataarray.value(forKey:"Update") as! String
-                    DispatchQueue.main.async{
-                   self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
-                                  }
-                                   }
-                                  //}
-                                
-                              }
+                                             
+                  var stringvalue:String = ""
+                  stringvalue = dataarray.value(forKey:"Update") as! String
+                  DispatchQueue.main.async{
+
+                    self.showAlert(message: stringvalue)
+
+                  }
+                
+              }
+                  else
+              {
+            let dataarray = skippedArray.firstObject as! NSDictionary
+           var stringvalue:String = ""
+           stringvalue = dataarray.value(forKey:"Update") as! String
+              DispatchQueue.main.async{
+             //self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+                self.showAlert(message: stringvalue)
+                            }
                              }
-             }
+                            //}
+                          
+                        }
+                       }
+                }
+            }
+            else
+            {
+                
+            }
+                  
     
     }
-    //api call
+   //MARK: //// Api Call////////////////////
     func UpdateGroupsettings()
                   {
                     //SVProgressHUD.show()
-          
-                   hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        if  NetworkState.isConnected()
+        {
+            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                    hud.labelText = ""
+    hud.labelText = ""
+    
+      let str2 =  UserDefaults.standard.object(forKey: "registerid")
+            let mom = Int(btnallowplay)
+     let manof = Int(manofmatch)
+            let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+
+    let verify_param = ["sessionID":sessionid as Any,"storedProcedureName":"UpdateDatabaseGroupSetting","input1":str2 as Any ,"input2":btngroupnum.currentTitle!,"input3":btngroupname.currentTitle!,"input4":btnselectminimumgames.currentTitle!,"input5":btndefaultgames.currentTitle!,"input6":mom as Any,"input7":btnminimumvotes.currentTitle!,"input8":manof as Any] as [String : Any]
+          let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+             AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                response in
+               DispatchQueue.main.async{
+
+                      self.hud.hide(true)
+
+                      }
+              //  SVProgressHUD.dismiss()
+             if let json = response.value
+             {
+        let jsonResponse = json as! NSDictionary
+            print(jsonResponse)
+             do
+             {
+              
+              var skippedArray = NSMutableArray()
+            skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+              self.votesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
+              self.defaultgamArray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+              self.maxmumgamesArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+            //let dataarray = skippedArray.firstObject as! NSDictionary
+
+              
+              
+            }
+          }
+         }
+        }
+      else
+        {
+            self.showAlert(message: "Please check your Internet")
+        }
                     
-                      let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                            let mom = Int(btnallowplay)
-                     let manof = Int(manofmatch)
-                    let verify_param = ["storedProcedureName":"UpdateDatabaseGroupSetting","input1":str2 as Any ,"input2":btngroupnum.currentTitle!,"input3":btngroupname.currentTitle!,"input4":btnselectminimumgames.currentTitle!,"input5":btndefaultgames.currentTitle!,"input6":mom as Any,"input7":btnminimumvotes.currentTitle!,"input8":manof as Any] as [String : Any]
-                          let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                             AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                                response in
-                               DispatchQueue.main.async{
-
-                                      self.hud.hide(true)
-
-                                      }
-                              //  SVProgressHUD.dismiss()
-                             if let json = response.value
-                             {
-                        let jsonResponse = json as! NSDictionary
-                            print(jsonResponse)
-                             do
-                             {
-                              
-                              var skippedArray = NSMutableArray()
-                            skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                              self.votesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
-                              self.defaultgamArray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-                              self.maxmumgamesArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            let dataarray = skippedArray.firstObject as! NSDictionary
-
-                              
-                              
-                            }
-                          }
-                         }
-                    
-                    }
+        }
    
     func uploadprofilepicture()
         

@@ -55,9 +55,9 @@ class FootBallSettingsVC: UIViewController {
         btnsecuritysettings.layer.borderColor = UIColor.black.cgColor
         btnsecuritysettings.layer.borderWidth = 1;
         btnsignout.clipsToBounds = true
-            btnsignout.layer.cornerRadius = 8
-            btnsignout.layer.borderColor = UIColor.black.cgColor
-            btnsignout.layer.borderWidth = 1;
+        btnsignout.layer.cornerRadius = 8
+        btnsignout.layer.borderColor = UIColor.black.cgColor
+        btnsignout.layer.borderWidth = 1;
         
 
         // Do any additional setup after loading the view.

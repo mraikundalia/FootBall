@@ -8,8 +8,16 @@
 
 import UIKit
 import Alamofire
+import Reachability
 class FootBallBasicSettingsVC: UIViewController , NIDropDownDelegate
 {
+    class NetworkState
+          {
+            class func isConnected() ->Bool
+            {
+                return NetworkReachabilityManager()!.isReachable
+            }
+          }
     var hud : MBProgressHUD!
 var btndropdown = NIDropDown ()
     @IBOutlet var notificationswitch: UISwitch!
@@ -91,6 +99,9 @@ var btndropdown = NIDropDown ()
      var shirtscolors = NSMutableArray()
      var datearray = NSMutableArray()
     let Stringvalue = NSString.self
+    
+    //MARK: View Did Load//////////
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -146,114 +157,131 @@ var btndropdown = NIDropDown ()
         btndropdown.isHidden = true
     }
     
+    //MARK: /////Api///CAll////////
+    
     func Updatebasicsetting()
         {
-                   //[SVProgressHUD show];
-                   //SVProgressHUD.show()
-                  hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                   
+            if NetworkState.isConnected()
+            {
+                hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                          hud.labelText = ""
+                          let myInt1 = Int(myString)
+                        let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                          
+                       let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+                          let verify_param = [ "sessionID" :sessionid as Any,"storedProcedureName": "updateBasicSetting","input1":str2 as Any,"input2":btncolorselect.currentTitle!,"input3":btnteam2color.currentTitle!,"input4":myInt1 as Any] as [String : Any]
+                                 //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+                                             let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                                             AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                                             if let json = response.value {
+                                             let jsonResponse = json as! NSDictionary
+                                                DispatchQueue.main.async{
+                                                    self.hud.hide(true)
 
-                  hud.labelText = ""
-            let myInt1 = Int(myString)
-          let str2 =  UserDefaults.standard.object(forKey: "registerid")
-            
-//            let inputFormatter = DateFormatter()
-//                           inputFormatter.dateFormat = "dd MMM yyyy"
-//                           let showDate = inputFormatter.date(from: btnselectdate.currentTitle!)
-//                           inputFormatter.dateFormat = "yyyy-MM-dd"
-//                           let resultString = inputFormatter.string(from: showDate!)
-            let verify_param = ["storedProcedureName": "updateBasicSetting","input1":str2 as Any,"input2":btncolorselect.currentTitle!,"input3":btnteam2color.currentTitle!,"input4":myInt1 as Any] as [String : Any]
-                   //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
-                               let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                               AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
-                               if let json = response.value {
-                               let jsonResponse = json as! NSDictionary
-                                  DispatchQueue.main.async{
-                                      self.hud.hide(true)
-
-                                  }
-                               print(jsonResponse)
-                                   
-                               do
-                               {
-    //                            if jsonResponse.value(forKey: "status") = "Success"
-    //                            {
-                                var stringvalue:String = ""
-                                stringvalue = jsonResponse["status"] as! String
-                                var skippedArray = NSMutableArray()
-                                skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                   if stringvalue == "Success"
-                                   {
-                                    var stringvalue1:String = ""
-                                    stringvalue1 = skippedArray.value(forKey:"Confirmation") as! String
-                                         self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
-                                   }
-                                   else
-                                   {
-                                       var stringvalue1:String = ""
-                                
-                                       stringvalue1 = skippedArray.value(forKey:"ErrorDescription") as! String
-                                       self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
-                                   }
-                                 }
-                                //}
-                              
-                            }
-                           }
+                                                }
+                                             print(jsonResponse)
+                                                 
+                                             do
+                                             {
+                  //                            if jsonResponse.value(forKey: "status") = "Success"
+                  //                            {
+                                              var stringvalue:String = ""
+                                              stringvalue = jsonResponse["status"] as! String
+                                              var skippedArray = NSMutableArray()
+                                              skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                                 if stringvalue == "Success"
+                                                 {
+                                                  var stringvalue1:String = ""
+                                                  stringvalue1 = skippedArray.value(forKey:"Confirmation") as! String
+                                                  self.showAlert(message: stringvalue1)
+                                                       //self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
+                                                 }
+                                                 else
+                                                 {
+                                                     var stringvalue1:String = ""
+                                              
+                                                     stringvalue1 = skippedArray.value(forKey:"ErrorDescription") as! String
+                                                  self.showAlert(message: stringvalue1)
+                                                     //self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
+                                                 }
+                                               }
+                                              //}
+                                            
+                                          }
+                                         }
+            }
+            else
+            {
+                self.showAlert(message: GlobalConstants.internetmessage)
+            }
+          
            }
       func Getbasicsetting()
         {
                                
                    //[SVProgressHUD show];
                    //SVProgressHUD.show()
-                  hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+            if NetworkState.isConnected()
+            {
+                hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                  hud.labelText = ""
-          let str2 =  UserDefaults.standard.object(forKey: "registerid")
-              let verify_param = ["storedProcedureName": "getBasicSetting","input1":str2 as Any] as [String : Any]
-                   //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
-                               let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                               AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
-                               if let json = response.value {
-                               let jsonResponse = json as! NSDictionary
-                                  DispatchQueue.main.async{
-                                      self.hud.hide(true)
+                              hud.labelText = ""
+                       
+                        let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+                      let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                          let verify_param = [ "sessionID" :sessionid as Any,"storedProcedureName": "getBasicSetting","input1":str2 as Any] as [String : Any]
+                               //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+                                           let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                                           AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                                           if let json = response.value {
+                                           let jsonResponse = json as! NSDictionary
+                                              DispatchQueue.main.async{
+                                                  self.hud.hide(true)
 
-                                  }
-                               print(jsonResponse)
-                                   
-                               do
-                               {
-    //                            if jsonResponse.value(forKey: "status") = "Success"
-    //                            {
-                                var stringvalue:String = ""
-                            stringvalue = jsonResponse["status"] as! String
-                                var skippedArray = NSMutableArray()
-                             skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                            
-                             let dataarray = skippedArray.firstObject as! NSDictionary
-                                if stringvalue == "Success"
-                                {
-                                    
-                self.btncolorselect.setTitle((dataarray.value(forKey: "ShirtColour_Team1") as! String), for: .normal)
-                                    
-               self.btnteam2color.setTitle((dataarray.value(forKey: "ShirtColour_Team2") as! String), for: .normal)
-                                    
-                   //  self.btnselectdate.setTitle((dataarray.value(forKey: "notifications") as! String), for: .normal)
-                 self.shirtscolors = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-               //  self.datearray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                }
-                                else
-                                {
-                            var stringvalue1:String = ""
-                            stringvalue1 = skippedArray.value(forKey:"Update") as! String
-                            self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
-                                }
-                                 }
-                                //}
-                              
-                            }
-                           }
+                                              }
+                                           print(jsonResponse)
+                                               
+                                           do
+                                           {
+                //                            if jsonResponse.value(forKey: "status") = "Success"
+                //                            {
+                                            var stringvalue:String = ""
+                                        stringvalue = jsonResponse["status"] as! String
+                                            var skippedArray = NSMutableArray()
+                                         skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                                        
+                                         let dataarray = skippedArray.firstObject as! NSDictionary
+                                            if stringvalue == "Success"
+                                            {
+                                                
+                            self.btncolorselect.setTitle((dataarray.value(forKey: "ShirtColour_Team1") as! String), for: .normal)
+                                                
+                           self.btnteam2color.setTitle((dataarray.value(forKey: "ShirtColour_Team2") as! String), for: .normal)
+                                                
+                               //  self.btnselectdate.setTitle((dataarray.value(forKey: "notifications") as! String), for: .normal)
+                             self.shirtscolors = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                           //  self.datearray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                            }
+                                            else
+                                            {
+                                        var stringvalue1:String = ""
+                                        stringvalue1 = skippedArray.value(forKey:"Update") as! String
+                                        self.showToast(message: stringvalue1, font: UIFont.systemFont(ofSize: 13))
+                                            }
+                                             }
+                                            //}
+                                          
+                                        }
+                                       }
+            }
+            else
+            {
+                self.showAlert(message: GlobalConstants.internetmessage)
+            }
+              
            }
+    
     /*
     // MARK: - Navigation
 

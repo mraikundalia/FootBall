@@ -12,6 +12,8 @@ struct GlobalConstants {
     static let ApiURL = "http://footballandstats.com.ngrok.io/api/FootBall/APIExecute?"
     static let FontRegular = UIFont.init(name: "Roboto-Regular", size: 22)
       static let FontMedium = UIFont.init(name: "Roboto-Medium", size: 25)
+    static let internetmessage = "Please Check Your Internet"
+
     //"https://7bb6291932a1.ngrok.io/api/FootBall/APIExecute?"
 
 }

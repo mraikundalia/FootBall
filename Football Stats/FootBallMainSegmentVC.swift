@@ -77,8 +77,12 @@ class FootBallMainSegmentVC: UIViewController
           
       //  self.viewControllerForSelectedSegmentIndex(0)
         // Do any additional setup after loading the view.
-        //let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-      // UIView.mainsegment.appearance().setTitleTextAttributes(titleTextAttributes, forState: .Selected)
+      mainsegment.removeBorders()
+        mainsegment.setTitleTextAttributes([NSAttributedString.Key.font : UIFont(name: "Roboto-Regular", size: 15)!, NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
+         mainsegment.setTitleTextAttributes([NSAttributedString.Key.font : UIFont(name: "Roboto-Bold", size: 16)!, NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+            mainsegment.selectedSegmentIndex = TabIndex.firstChildTab.rawValue
+                  
+                     //displayCurrentTab(0)
     }
     
     func displayCurrentTab(_ tabIndex: Int)

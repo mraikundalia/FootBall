@@ -9,8 +9,16 @@
 import UIKit
 import Alamofire
 import iOSDropDown
+import Reachability
+
 class FootBallPlayVC: UIViewController , UITableViewDelegate, UITableViewDataSource , NIDropDownDelegate{
-  
+    class NetworkState
+      {
+          class func isConnected() ->Bool
+          {
+              return NetworkReachabilityManager()!.isReachable
+          }
+      }
     @IBOutlet var gameid: UILabel!
     @IBOutlet var lblgametypetext: UILabel!
     
@@ -941,402 +949,439 @@ var menuimages = ["download", "download", "download" ,"download","download","dow
         func GetDatabaseNames()
                 {
 
+            if NetworkState.isConnected()
+            {
+                let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                             let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+                                let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName":"getDatabaseNames","input1":str2 as Any] as [String : Any]
+                                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                                AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                                          response in
+                                        DispatchQueue.main.async{
 
-                    //hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                                            //self.hud.hide(true)
 
-                        //hud.labelText = ""
-                  //SVProgressHUD.show()
-        //            var string = String.self
-        //            string = UserDefaults.standard.integer(forKey: "registerid")
-                    let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                            
-                        //String(UserDefaults.standard.integer(forKey: "registerid"))
-                    let verify_param = ["storedProcedureName":"getDatabaseNames","input1":str2 as Any] as [String : Any]
-                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                    AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                              response in
-                            DispatchQueue.main.async{
+                                            }
+                                        //  SVProgressHUD.dismiss()
+                                       if let json = response.value
+                                       {
+                                  let jsonResponse = json as! NSDictionary
+                                      print(jsonResponse)
+                                       do
+                                       {
+                                        
+                                        var skippedArray = NSMutableArray()
+                                        skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                        
+                                        //let dataarray = skippedArray.firstObject as! NSDictionary
+                                       
+                                        self.defaultdatabase = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                      
+                                        if self.databasearray.count>0
+                                        {
+                                           // btndateofmatich .setTitle((self.databasearray.object(0), for: <#T##UIControl.State#>)
+                                          //  UserDefaults.standard.array(dataarray, forKey:"databasearray")
 
-                                //self.hud.hide(true)
+                                        }
+                                        else
+                                        {
+                                           
+                                        }
 
-                                }
-                            //  SVProgressHUD.dismiss()
-                           if let json = response.value
-                           {
-                      let jsonResponse = json as! NSDictionary
-                          print(jsonResponse)
-                           do
-                           {
-                              //UserDefaults.standard.set(jsonResponse.object(forKey: "register_id"), forKey: "registerid")
-                            var skippedArray = NSMutableArray()
-                            skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            
-                            //let dataarray = skippedArray.firstObject as! NSDictionary
-                           
-                            self.defaultdatabase = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                          
-                            if self.databasearray.count>0
-                            {
-                               // btndateofmatich .setTitle((self.databasearray.object(0), for: <#T##UIControl.State#>)
-                              //  UserDefaults.standard.array(dataarray, forKey:"databasearray")
-
-                            }
-                            else
-                            {
-                               
-                            }
-
-                            //Integer
-        //                      let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
-        //                         self.navigationController?.pushViewController(login!, animated: true)
-                          }
-                        }
-                       }
+                                        //Integer
+                    //                      let login: FootBallTabControllerViewController? = (self.storyboard?.instantiateViewController(withIdentifier: "FootBallTabControllerViewController") as! FootBallTabControllerViewController)
+                    //                         self.navigationController?.pushViewController(login!, animated: true)
+                                      }
+                                    }
+                                   }
+            }
+               else
+        {
+            self.showAlert(message: GlobalConstants.internetmessage)
+        }
                   
                   }
         func PlayCall()
                   {
-                    //SVProgressHUD.show()
-          //            var string = String.self
-          //            string = UserDefaults.standard.integer(forKey: "registerid")
-                    
-                    if hudshow ==  "No"
+        if NetworkState.isConnected()
+        {
+            if hudshow ==  "No"
+        {
+          
+        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+        hud.labelText = ""
+        }
+        else if hudshow ==  "YES"
+        {
+            
+        }
+        
+          let str2 =  UserDefaults.standard.object(forKey: "registerid")
+        let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+
+                 // let string = btndateofmatich.currentTitle
+              //String(UserDefaults.standard.integer(forKey: "registerid"))
+       let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName":"getPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!] as [String : Any]
+              let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+        AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                    response in
+                   DispatchQueue.main.async{
+
+                    if self.hudshow ==  "No"
                     {
-                      
-                    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-
-                    hud.labelText = ""
-                    }
-                    else if hudshow ==  "YES"
-                    {
-                        
-                    }
+                       self.hud.hide(true)
                     
-                      let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                             // let string = btndateofmatich.currentTitle
-                          //String(UserDefaults.standard.integer(forKey: "registerid"))
-                   let verify_param = ["storedProcedureName":"getPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!] as [String : Any]
-                          let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                    AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                                response in
-                               DispatchQueue.main.async{
+                    }
+                    else  if self.hudshow ==  "YES"
+                    {
+                       self.hud.hide(true)
+                    }
+                         
 
-                                if self.hudshow ==  "No"
-                                {
-                                   self.hud.hide(true)
-                                
-                                }
-                                else  if self.hudshow ==  "YES"
-                                {
-                                   self.hud.hide(true)
-                                }
-                                     
-
-                                      }
-                              //  SVProgressHUD.dismiss()
-                             if let json = response.value
-                             {
-                        let jsonResponse = json as! NSDictionary
-                            print(jsonResponse)
-                             do
-                             {
-                              var stringvalue:String = ""
-                    stringvalue = jsonResponse["status"] as! String
-                                                        
-                                                         
-                      if stringvalue == "Success"
-                        {
-                            
-                            self.databasearray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            //et dataarray = skippedArray1.firstObject as! NSDictionary
-
-                           // self.databasearray = (jsonResponse["Data2"] as? NSArray)! as! NSMutableArray
-                            let result = self.databasearray[0] as? NSDictionary
-
-                           // var stringvalue1 = ""
-                      
-                            if let partname = result!.value(forKey: "game_date") as? String
-                                {
-                                    let datestrmg:String = partname.replacingOccurrences(of: "T00:00:00", with: "", options: NSString.CompareOptions.literal, range: nil)
-                                 
-                                    self.lbldate.text = datestrmg
-                            }
-                            
-                            if let partname = result!.value(forKey: "gametype") as? String
-                           {
-                          
-                            self.lblgametypetext.text = partname
-                            }
-                            if let partname = result!.value(forKey: "spacesAvailable") as? String
-                          {
-                            // let str2 = String(partname)
-                            if partname == "0 spaces available"
-                            {
-                                //self.btnaddPlayer.isUserInteractionEnabled = false
-                               // self.btncheckbox.isUserInteractionEnabled = false
-                            }
-                            else
-                            {
-                                self.btnaddPlayer.isUserInteractionEnabled = true
-                                self.btncheckbox.isUserInteractionEnabled = true
-                            }
-                           self.lblxspaceavail.text = partname
-                           }
-                            if let partname = result!.value(forKey: "reserves") as? String
-                             {
-                                // let str2 = String(partname)
-                              self.xreverse.text = partname
-                              }
-                            if let partname = result!.value(forKey: "Game_ID") as? Int
-                            {
-                            let str2 = String(partname)
-                             self.gameid.text = str2
-                             }
-                            self.stringvalue1 =  NSString(format: "%@",(result!.value(forKey: "iCanPlay_id") as! CVarArg)) as String
-                            print(self.stringvalue1)
-                            
-                            
-                        self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            DispatchQueue.main.async{
-                               self.playertable.reloadData()
-                            }
-                        
-                            }
-                        else
-                      {
-                         var skippedArray1 = NSMutableArray()
-                      skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                       let dataarray = skippedArray1.firstObject as! NSDictionary
-                        var stringvalue1:String = ""
-                         stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-                         //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                        self.showAlert(message: stringvalue1)
-
-                                }
-                            }
                           }
-                         }
-                    
-                    }
-    func tickicanPlayCall()
+                  //  SVProgressHUD.dismiss()
+                 if let json = response.value
+                 {
+            let jsonResponse = json as! NSDictionary
+                print(jsonResponse)
+                 do
+                 {
+                  var stringvalue:String = ""
+        stringvalue = jsonResponse["status"] as! String
+                                            
+                                             
+          if stringvalue == "Success"
+            {
+                
+                self.databasearray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                //et dataarray = skippedArray1.firstObject as! NSDictionary
+
+               // self.databasearray = (jsonResponse["Data2"] as? NSArray)! as! NSMutableArray
+                let result = self.databasearray[0] as? NSDictionary
+
+               // var stringvalue1 = ""
+          
+                if let partname = result!.value(forKey: "game_date") as? String
+                    {
+                        let datestrmg:String = partname.replacingOccurrences(of: "T00:00:00", with: "", options: NSString.CompareOptions.literal, range: nil)
+                     
+                        self.lbldate.text = datestrmg
+                }
+                
+                if let partname = result!.value(forKey: "gametype") as? String
+               {
+              
+                self.lblgametypetext.text = partname
+                }
+                if let partname = result!.value(forKey: "spacesAvailable") as? String
+              {
+                // let str2 = String(partname)
+                if partname == "0 spaces available"
                 {
-                  //SVProgressHUD.show()
-        //            var string = String.self
-        //            string = UserDefaults.standard.integer(forKey: "registerid")
-                 hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-                hud.labelText = ""
-                    let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                    let myInt1 = Int(myString)
-                    //let playid = Int(stringvalue1)
-                 let verify_param = ["storedProcedureName":"iCanPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!,"input3":"","input4":myInt1 as Any] as [String : Any]
-                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                    AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                              response in
-                             DispatchQueue.main.async{
-
-                                    self.hud.hide(true)
-
-                                    }
-                            //  SVProgressHUD.dismiss()
-                           if let json = response.value
-                           {
-                      let jsonResponse = json as! NSDictionary
-                          print(jsonResponse)
-                           do
-                           {
-                            var stringvalue:String = ""
-                  stringvalue = jsonResponse["status"] as! String
-                                                      
-                                                       
-                    if stringvalue == "Success"
-                      {
-                            
-                      self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                      self.playertable.reloadData()
-                          }
-                      else
-                    {
-                       var skippedArray1 = NSMutableArray()
-                    skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                     let dataarray = skippedArray1.firstObject as! NSDictionary
-                      var stringvalue1:String = ""
-                       stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-                       //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                        self.showAlert(message: stringvalue1)
-                              }
-                          }
-                        }
-                       }
-                  
+                    //self.btnaddPlayer.isUserInteractionEnabled = false
+                   // self.btncheckbox.isUserInteractionEnabled = false
+                }
+                else
+                {
+                    self.btnaddPlayer.isUserInteractionEnabled = true
+                    self.btncheckbox.isUserInteractionEnabled = true
+                }
+               self.lblxspaceavail.text = partname
+               }
+                if let partname = result!.value(forKey: "reserves") as? String
+                 {
+                    // let str2 = String(partname)
+                  self.xreverse.text = partname
                   }
-    func untickicanPlayCall()
-                  {
-                    //SVProgressHUD.show()
-          //            var string = String.self
-          //            string = UserDefaults.standard.integer(forKey: "registerid")
-                   hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-                  hud.labelText = ""
-                      let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                      let myInt1 = Int("0")
-                    // let playid = Int(stringvalue1)
-                   let verify_param = ["storedProcedureName":"iCanPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!,"input3":playername,"input4":myInt1 as Any] as [String : Any]
-                          let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                    AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                                response in
-                               DispatchQueue.main.async{
+                if let partname = result!.value(forKey: "Game_ID") as? Int
+                {
+                let str2 = String(partname)
+                 self.gameid.text = str2
+                 }
+                self.stringvalue1 =  NSString(format: "%@",(result!.value(forKey: "iCanPlay_id") as! CVarArg)) as String
+                print(self.stringvalue1)
+                
+                
+            self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                DispatchQueue.main.async{
+                   self.playertable.reloadData()
+                }
+            
+                }
+            else
+          {
+             var skippedArray1 = NSMutableArray()
+          skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+           let dataarray = skippedArray1.firstObject as! NSDictionary
+            var stringvalue1:String = ""
+             stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+             //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+            self.showAlert(message: stringvalue1)
 
-                                      self.hud.hide(true)
+                    }
+                }
+              }
+             }
+        }
+        else
+        {
+            self.showAlert(message: GlobalConstants.internetmessage)
+        }
+        
+            }
+    
+    func tickicanPlayCall()
+        {
+    
+        if NetworkState.isConnected()
+        {
+            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hud.labelText = ""
+            let str2 =  UserDefaults.standard.object(forKey: "registerid")
+            let myInt1 = Int(myString)
+            let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
 
-                                      }
-                              //  SVProgressHUD.dismiss()
-                             if let json = response.value
-                             {
-                        let jsonResponse = json as! NSDictionary
-                            print(jsonResponse)
-                             do
-                             {
-                              var stringvalue:String = ""
-                    stringvalue = jsonResponse["status"] as! String
-                                                        
-                                                         
-                      if stringvalue == "Success"
-                        {
-                              
-                      var skippedArray1 = NSMutableArray()
-                      skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                       let dataarray = skippedArray1.firstObject as! NSDictionary
-                        var stringvalue1:String = ""
-                         stringvalue1 = dataarray.value(forKey:"Confirmation") as! String
-                         self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                            self.PlayCall()
+            //let playid = Int(stringvalue1)
+         let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName":"iCanPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!,"input3":"","input4":myInt1 as Any] as [String : Any]
+                let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+            AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                      response in
+                     DispatchQueue.main.async{
+
+                            self.hud.hide(true)
+
                             }
-                        else
-                      {
-                         var skippedArray1 = NSMutableArray()
-                      skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                       let dataarray = skippedArray1.firstObject as! NSDictionary
-                        var stringvalue1:String = ""
-                         stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-                         //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                        self.showAlert(message: stringvalue1)
+                    //  SVProgressHUD.dismiss()
+                   if let json = response.value
+                   {
+              let jsonResponse = json as! NSDictionary
+                  print(jsonResponse)
+                   do
+                   {
+                    var stringvalue:String = ""
+          stringvalue = jsonResponse["status"] as! String
+                                              
+                                               
+            if stringvalue == "Success"
+              {
+                    
+              self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+              self.playertable.reloadData()
+                  }
+              else
+            {
+               var skippedArray1 = NSMutableArray()
+            skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+             let dataarray = skippedArray1.firstObject as! NSDictionary
+              var stringvalue1:String = ""
+               stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+               //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                self.showAlert(message: stringvalue1)
+                      }
+                  }
+                }
+               }
+        }
+        else
+        {
+            self.showAlert(message: GlobalConstants.internetmessage)
+        }
+               
+        }
+    func untickicanPlayCall()
+            {
+                  
+                if NetworkState.isConnected()
+                {
+                    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+            hud.labelText = ""
+                let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                let myInt1 = Int("0")
+              let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+
+              // let playid = Int(stringvalue1)
+             let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName":"iCanPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!,"input3":playername,"input4":myInt1 as Any] as [String : Any]
+                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+              AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                          response in
+                         DispatchQueue.main.async{
+
+                                self.hud.hide(true)
 
                                 }
-                            }
+                        //  SVProgressHUD.dismiss()
+                       if let json = response.value
+                       {
+                  let jsonResponse = json as! NSDictionary
+                      print(jsonResponse)
+                       do
+                       {
+                        var stringvalue:String = ""
+              stringvalue = jsonResponse["status"] as! String
+                                                  
+                                                   
+                if stringvalue == "Success"
+                  {
+                        
+                var skippedArray1 = NSMutableArray()
+                skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                 let dataarray = skippedArray1.firstObject as! NSDictionary
+                  var stringvalue1:String = ""
+                   stringvalue1 = dataarray.value(forKey:"Confirmation") as! String
+                   self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                      self.PlayCall()
+                      }
+                  else
+                {
+                   var skippedArray1 = NSMutableArray()
+                skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                 let dataarray = skippedArray1.firstObject as! NSDictionary
+                  var stringvalue1:String = ""
+                   stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+                   //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                  self.showAlert(message: stringvalue1)
+
                           }
-                         }
-                    
+                      }
                     }
+                   }
+                }
+                else
+              {
+                self.showAlert(message: GlobalConstants.internetmessage)
+                }
+         
+                    
+            }
+    
     func icanPlayCall()
         {
-                    //SVProgressHUD.show()
-            //            var string = String.self
-            //            string = UserDefaults.standard.integer(forKey: "registerid")
-                    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-                    hud.labelText = ""
-                        let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                        let myInt1 = Int(myString)
-                    let verify_param = ["storedProcedureName":"getPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!,"input3":btntuesday.currentTitle!,"input4":myInt1 as Any] as [String : Any]
-                            let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-            AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                                response in
-                                DispatchQueue.main.async{
+  
+            if NetworkState.isConnected()
+            {
+                hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+     hud.labelText = ""
+         let str2 =  UserDefaults.standard.object(forKey: "registerid")
+         let myInt1 = Int(myString)
+    let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+     let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName":"getPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!,"input3":btntuesday.currentTitle!,"input4":myInt1 as Any] as [String : Any]
+             let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+    AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                 response in
+                 DispatchQueue.main.async{
 
-                                        self.hud.hide(true)
+                         self.hud.hide(true)
 
-                                        }
-                                //  SVProgressHUD.dismiss()
-                            if let json = response.value
+                         }
+                 //  SVProgressHUD.dismiss()
+             if let json = response.value
+             {
+         let jsonResponse = json as! NSDictionary
+             print(jsonResponse)
+             do
+             {
+                 var stringvalue:String = ""
+     stringvalue = jsonResponse["status"] as! String
+     self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                 
+         if stringvalue == "Success"
+         {
+                 
+         self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+         self.playertable.reloadData()
+             }
+         else
+         {
+         var skippedArray1 = NSMutableArray()
+         skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+         let dataarray = skippedArray1.firstObject as! NSDictionary
+         var stringvalue1:String = ""
+         stringvalue1 = dataarray.value(forKey:"Column1") as! String
+        // self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+             self.showAlert(message: stringvalue1)
+
+                 }
+             }
+             }
+         }
+            }
+            else
+            {
+                self.showAlert(message: GlobalConstants.internetmessage)
+            }
+                 
+                    
+            }
+    
+    func Reorderelements()
+    {
+        
+        if NetworkState.isConnected()
+        {
+           hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+            hud.labelText = ""
+               let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+                let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                //let myInt1 = Int(myString)
+            let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName":"iCanPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!,"input3":stringvaluename,"input4":icanplay as Any,"input5":souceindex as Any,"input6":destination as Any] as [String : Any]
+                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+             AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                                    response in
+                                 
+                                    DispatchQueue.main.async{
+                                     self.hud.hide(true)
+                                     }
+                                    //  SVProgressHUD.dismiss()
+                                if let json = response.value
+                                {
+                            let jsonResponse = json as! NSDictionary
+                                print(jsonResponse)
+                                do
+                                {
+                                    var stringvalue:String = ""
+                        stringvalue = jsonResponse["status"] as! String
+                       
+                            if stringvalue == "Success"
                             {
-                        let jsonResponse = json as! NSDictionary
-                            print(jsonResponse)
-                            do
+                          var skippedArray1 = NSMutableArray()
+                             
+                            skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                            let dataarray = skippedArray1.firstObject as! NSDictionary
+                            var stringvalue1:String = ""
+                            stringvalue1 = dataarray.value(forKey:"Confirmation") as! String
+                           // self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                             self.hudshow = "YES"
+                             self.PlayCall()
+                                }
+                            else
                             {
-                                var stringvalue:String = ""
-                    stringvalue = jsonResponse["status"] as! String
-                    self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                
-                        if stringvalue == "Success"
-                        {
-                                
-                        self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                        self.playertable.reloadData()
-                            }
-                        else
-                        {
-                        var skippedArray1 = NSMutableArray()
-                        skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                        let dataarray = skippedArray1.firstObject as! NSDictionary
-                        var stringvalue1:String = ""
-                        stringvalue1 = dataarray.value(forKey:"Column1") as! String
-                       // self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                            self.showAlert(message: stringvalue1)
-
+                             
+                            var skippedArray1 = NSMutableArray()
+                            skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                            let dataarray = skippedArray1.firstObject as! NSDictionary
+                            var stringvalue1:String = ""
+                            stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+                             if stringvalue1 == "Failure - Someone else has change the ordering already"
+                             {
+                                 self.hudshow = "YES"
+                                 self.PlayCall()
+                             }
+                             self.showAlert(message: stringvalue1)
+                            //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                              
+                              }
+                                }
+                                 
                                 }
                             }
-                            }
-                        }
-                    
-                    }
-    func Reorderelements()
-           {
-                       //SVProgressHUD.show()
-               //            var string = String.self
-               //            string = UserDefaults.standard.integer(forKey: "registerid")
-                       hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-                       hud.labelText = ""
-                           let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                           //let myInt1 = Int(myString)
-                       let verify_param = ["storedProcedureName":"iCanPlay","input1":str2 as Any ,"input2":btntuesday.currentTitle!,"input3":stringvaluename,"input4":icanplay as Any,"input5":souceindex as Any,"input6":destination as Any] as [String : Any]
-                               let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-            AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                                   response in
-                                
-                                   DispatchQueue.main.async{
-                                    self.hud.hide(true)
-                                    }
-                                   //  SVProgressHUD.dismiss()
-                               if let json = response.value
-                               {
-                           let jsonResponse = json as! NSDictionary
-                               print(jsonResponse)
-                               do
-                               {
-                                   var stringvalue:String = ""
-                       stringvalue = jsonResponse["status"] as! String
-                      
-                           if stringvalue == "Success"
-                           {
-                         var skippedArray1 = NSMutableArray()
-                            
-                           skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                           let dataarray = skippedArray1.firstObject as! NSDictionary
-                           var stringvalue1:String = ""
-                           stringvalue1 = dataarray.value(forKey:"Confirmation") as! String
-                          // self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                            self.hudshow = "YES"
-                            self.PlayCall()
-                               }
-                           else
-                           {
-                            
-                           var skippedArray1 = NSMutableArray()
-                           skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                           let dataarray = skippedArray1.firstObject as! NSDictionary
-                           var stringvalue1:String = ""
-                           stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-                            if stringvalue1 == "Failure - Someone else has change the ordering already"
-                            {
-                                self.hudshow = "YES"
-                                self.PlayCall()
-                            }
-                                
-                           self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                             
-                             }
-                               }
-                                
-                               }
-                           }
+        }
+        else
+        {
+            self.showAlert(message: GlobalConstants.internetmessage)
+        }
+        
+ 
                        
                        }
     var lastContentOffset: CGFloat = 0

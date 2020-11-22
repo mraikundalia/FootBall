@@ -8,6 +8,15 @@
 
 import UIKit
 import Alamofire
+import Reachability
+
+class NetworkState
+     {
+       class func isConnected() ->Bool
+       {
+           return NetworkReachabilityManager()!.isReachable
+       }
+     }
 class FootBallSecuritySettingsVC: UIViewController {
     var biometric: String = ""
     var hud : MBProgressHUD!
@@ -130,145 +139,160 @@ class FootBallSecuritySettingsVC: UIViewController {
            self.present(alert, animated: true, completion: nil)
        }
     
+    //MARK: API Calll/////////////
       func DeleteAction()
         {
                                
-                   //[SVProgressHUD show];
-                   //SVProgressHUD.show()
-                  hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+             
+            if NetworkState.isConnected()
+            {
+                let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+                           hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                  hud.labelText = ""
-              let str2 =  UserDefaults.standard.object(forKey: "registerid")
-            
-              let verify_param = ["storedProcedureName": "sp_deleteMyAccount","input1":str2 as Any] as [String : Any]
-                   //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
-                               let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                               AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
-                               if let json = response.value {
-                               let jsonResponse = json as! NSDictionary
-                                  DispatchQueue.main.async{
-                                      self.hud.hide(true)
+                           hud.labelText = ""
+                       let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                             let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName": "sp_deleteMyAccount","input1":str2 as Any] as [String : Any]
+                            //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+                                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                                        AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+                                        if let json = response.value {
+                                        let jsonResponse = json as! NSDictionary
+                                           DispatchQueue.main.async{
+                                               self.hud.hide(true)
 
-                                  }
-                               print(jsonResponse)
-                                   
-                               do
-                               {
+                                           }
+                                        print(jsonResponse)
+                                            
+                                        do
+                                        {
 
-                                var skippedArray = NSMutableArray()
-                                skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                               
-                                let dataarray = skippedArray.firstObject as! NSDictionary
-                                
-            var stringvalue:String = ""
-               stringvalue = jsonResponse["status"] as! String
-                  
-                  if stringvalue == "Failure"
-                  {
-                      let dataarray = skippedArray.firstObject as! NSDictionary
-                                                 
-                      var stringvalue:String = ""
-                      stringvalue = dataarray.value(forKey:"returnV") as! String
-                      DispatchQueue.main.async{
+                                         var skippedArray = NSMutableArray()
+                                         skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                                        
+                                        // let dataarray = skippedArray.firstObject as! NSDictionary
+                                         
+                     var stringvalue:String = ""
+                        stringvalue = jsonResponse["status"] as! String
+                           
+                           if stringvalue == "Failure"
+                           {
+                               let dataarray = skippedArray.firstObject as! NSDictionary
+                                                          
+                               var stringvalue:String = ""
+                               stringvalue = dataarray.value(forKey:"returnV") as! String
+                               DispatchQueue.main.async{
+                                 self.showAlert(message:stringvalue)
+                                   //self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
 
-                          self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
-
-                      }
-                    
-                  }
-                      else
-                  {
-                let dataarray = skippedArray.firstObject as! NSDictionary
-               var stringvalue:String = ""
-               stringvalue = dataarray.value(forKey:"returnV") as! String
-                  DispatchQueue.main.async{
-                 self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
-                                }
-                                 }
-                                //}
-                              
-                            }
+                               }
+                             
                            }
-           }
+                               else
+                           {
+                         let dataarray = skippedArray.firstObject as! NSDictionary
+                        var stringvalue:String = ""
+                        stringvalue = dataarray.value(forKey:"returnV") as! String
+                           DispatchQueue.main.async{
+                          //self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+                             self.showAlert(message: stringvalue)
+                                         }
+                                          }
+                                         //}
+                                       
+                                     }
+                                    }
+                    }
+            }
+            else{
+                self.showAlert(message: GlobalConstants.internetmessage)
+            }
         
    
 }
     
      func GetsecuritySettings()
             {
-                                   
-                       //[SVProgressHUD show];
-                       //SVProgressHUD.show()
-                      hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                     
+        if NetworkState.isConnected()
+        {
+        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                      hud.labelText = ""
-              let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                  let verify_param = ["storedProcedureName": "getSecuritySetting","input1":str2 as Any] as [String : Any]
-                       //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
-                                   let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                                   AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
-                                   if let json = response.value {
-                                   let jsonResponse = json as! NSDictionary
-                                      DispatchQueue.main.async{
-                                          self.hud.hide(true)
+        hud.labelText = ""
+        let str2 =  UserDefaults.standard.object(forKey: "registerid")
+        let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+        let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName": "getSecuritySetting","input1":str2 as Any] as [String : Any]
+        //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+        AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+        if let json = response.value {
+        let jsonResponse = json as! NSDictionary
+        DispatchQueue.main.async{
+        self.hud.hide(true)
 
-                                      }
-                                   print(jsonResponse)
-                                       
-                                   do
-                                   {
+        }
+        print(jsonResponse)
+
+        do
+        {
         //                            if jsonResponse.value(forKey: "status") = "Success"
         //                            {
-                                    var skippedArray = NSMutableArray()
-                                    skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                   var stringvalue:String = ""
-                            stringvalue = jsonResponse["status"] as! String
-                               
-                               if stringvalue == "Failure"
-                               {
-                                   let dataarray = skippedArray.firstObject as! NSDictionary
-                                                              
-                                   var stringvalue:String = ""
-                                   stringvalue = dataarray.value(forKey:"returnV") as! String
-                                   DispatchQueue.main.async{
+        var skippedArray = NSMutableArray()
+        skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+        var stringvalue:String = ""
+        stringvalue = jsonResponse["status"] as! String
 
-                                       self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+        if stringvalue == "Failure"
+        {
+        let dataarray = skippedArray.firstObject as! NSDictionary
+                          
+        var stringvalue:String = ""
+        stringvalue = dataarray.value(forKey:"returnV") as! String
+        DispatchQueue.main.async{
+        self.showAlert(message: stringvalue)
+        //self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
 
-                                   }
-                                 
-                               }
-                                   else
-                               {
-                             let dataarray = skippedArray.firstObject as! NSDictionary
-                            //var stringvalue:String = ""
-                           // stringvalue = dataarray.value(forKey:"biometric") as! String
-                               DispatchQueue.main.async{
-                              if let partname = dataarray.value(forKey: "biometric") as? Int
-                               {
-                                 if partname == 0
-                                 {
-                                   // self.bioswitch.setOn(true, animated: true)
-                                   
-                                    self.bioswitch.setOn(true, animated: false)
-                                    
-                                }
-                                
-                                else
-                                 {
-                                   // self.bioswitch.setOn(false, animated: true)
-                                   
-                                    self.bioswitch.setOn(false, animated: false)
-                                }
-                                
-                                }
-                                }
-                                                               
-                                }
-                                    //}
-                                  
-                                }
-                               }
-               }
+        }
+
+        }
+        else
+        {
+        let dataarray = skippedArray.firstObject as! NSDictionary
+        //var stringvalue:String = ""
+        // stringvalue = dataarray.value(forKey:"biometric") as! String
+        DispatchQueue.main.async{
+        if let partname = dataarray.value(forKey: "biometric") as? Int
+        {
+        if partname == 0
+        {
+        // self.bioswitch.setOn(true, animated: true)
+
+        self.bioswitch.setOn(true, animated: false)
+
+        }
+
+        else
+        {
+        // self.bioswitch.setOn(false, animated: true)
+
+        self.bioswitch.setOn(false, animated: false)
+        }
+
+        }
+        }
+                           
+        }
+        //}
+
+        }
+        }
+        }
+        }
+        else{
+        self.showAlert(message: GlobalConstants.internetmessage)
+        }
+                       //[SVProgressHUD show];
+                       //SVProgressHUD.show()
+             
        
     }
     
@@ -276,69 +300,78 @@ class FootBallSecuritySettingsVC: UIViewController {
     
      func Getbiometric()
                    {
-                                          
-                              //[SVProgressHUD show];
-                              //SVProgressHUD.show()
-                             hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-
-                             hud.labelText = ""
-                     let myInt1 = Int(biometric)
-                     let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                         let verify_param = ["storedProcedureName": "update_biometrics","input1":str2 as Any,"input2":myInt1 as Any] as [String : Any]
-              //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
-                          let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                          AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
-                          if let json = response.value {
-                          let jsonResponse = json as! NSDictionary
-                             DispatchQueue.main.async{
-                                 self.hud.hide(true)
-
-                             }
-                          print(jsonResponse)
+                    if NetworkState.isConnected()
+                    {
                               
-                          do
-                          {
-    //                            if jsonResponse.value(forKey: "status") = "Success"
-    //                            {
-                           var skippedArray = NSMutableArray()
-                           skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                          
-                           let dataarray = skippedArray.firstObject as! NSDictionary
-    //                             String)
-                       var stringvalue:String = ""
-                      stringvalue = jsonResponse["status"] as! String
-                         
-                         if stringvalue == "Failure"
-                         {
-                             let dataarray = skippedArray.firstObject as! NSDictionary
-                                                        
-                             var stringvalue:String = ""
-                             stringvalue = dataarray.value(forKey:"ErrorDescription") as! String
-                             DispatchQueue.main.async{
+                  //[SVProgressHUD show];
+                  //SVProgressHUD.show()
+                 hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                                 self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+                 hud.labelText = ""
+         let myInt1 = Int(biometric)
+         let str2 =  UserDefaults.standard.object(forKey: "registerid")
+        let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
 
-                             }
+             let verify_param = ["sessionID" :sessionid as Any,"storedProcedureName": "update_biometrics","input1":str2 as Any,"input2":myInt1 as Any] as [String : Any]
+  //let verify_param = ["storedProcedureName": "sp_Login","input1":"Email","input2":"mehul.raikundalia@gmail.com","input3":"StrongSeparateWell"] as [String : Any]
+              let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+              AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers: signin_headers).responseJSON { response in
+              if let json = response.value {
+              let jsonResponse = json as! NSDictionary
+                 DispatchQueue.main.async{
+                     self.hud.hide(true)
+
+                 }
+              print(jsonResponse)
+                  
+              do
+              {
+//                            if jsonResponse.value(forKey: "status") = "Success"
+//                            {
+               var skippedArray = NSMutableArray()
+               skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                              
+              // let dataarray = skippedArray.firstObject as! NSDictionary
+//                             String)
+           var stringvalue:String = ""
+          stringvalue = jsonResponse["status"] as! String
+             
+             if stringvalue == "Failure"
+             {
+                 let dataarray = skippedArray.firstObject as! NSDictionary
+                                            
+                 var stringvalue:String = ""
+                 stringvalue = dataarray.value(forKey:"ErrorDescription") as! String
+                 DispatchQueue.main.async{
+                    self.showAlert(message: stringvalue)
+                     //self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+
+                 }
+               
+             }
+                 else
+             {
+           let dataarray = skippedArray.firstObject as! NSDictionary
+          var stringvalue:String = ""
+          stringvalue = dataarray.value(forKey:"ErrorDescription") as! String
+             DispatchQueue.main.async{
+            //self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
+                self.showAlert(message: stringvalue)
                            
-                         }
-                             else
-                         {
-                       let dataarray = skippedArray.firstObject as! NSDictionary
-                      var stringvalue:String = ""
-                      stringvalue = dataarray.value(forKey:"ErrorDescription") as! String
-                         DispatchQueue.main.async{
-                        self.showToast(message: stringvalue, font: UIFont.systemFont(ofSize: 12))
-                           
-                                       
-                                       }
-                                                         
-                               }
+                           }
+                                             
+                   }
 
-                                              
-                                            }
-                                           //}
-                                         
-                                       }
-                                      }
-                      }
+                                  
+                                }
+                               //}
+                             
+                           }
+                          }
+        }
+        else{
+            self.showAlert(message: GlobalConstants.internetmessage)
+            }
+
+          }
 }

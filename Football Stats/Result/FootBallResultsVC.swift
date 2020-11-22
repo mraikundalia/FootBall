@@ -61,7 +61,8 @@ class FootBallResultsVC: UIViewController , UITableViewDelegate, UITableViewData
     var hotelName =  ""
     var stored = ""
     //MARK: //ViewDidLoad ////////////////////////
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
         let defaults : UserDefaults = UserDefaults.standard
             hotelName = (defaults.value(forKey: "database_name") as! String?)!

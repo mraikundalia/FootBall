@@ -7,12 +7,12 @@
 //
 
 import UIKit
-
 @objc protocol PeopleInfoMAP
 {
     @objc optional func getResponseForMap()
      @objc optional func getLoginResponse()
 }
+
 class Model: NSObject,singletonProtocol,PeopleInfoMAP
 {
     var peopleInfoMAPDelegate: PeopleInfoMAP?
@@ -20,6 +20,7 @@ class Model: NSObject,singletonProtocol,PeopleInfoMAP
     var viewingmeDataDict = [String:[AnyObject]]()
     var arraydata :[String]?
      var tokenString = String()
+    
     func sendListOfUserRequest(_ currentViewController : UIViewController,storedProcedureName:String,email:String ,emailid:String, password:String,viewControllerName:String)
     {
       
@@ -120,5 +121,6 @@ class Model: NSObject,singletonProtocol,PeopleInfoMAP
         }
 
     }
-
+    
+   
 }
