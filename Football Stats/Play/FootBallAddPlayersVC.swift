@@ -38,7 +38,8 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
         
         self.showalertview()
     }
-    var arrSelectedRows:[Int] = []
+    //var arrSelectedRows:[Int] = []
+     var arrSelectedRows:[String] = []
     @IBOutlet var tableview: UITableView!
     @IBOutlet var searchbar: UISearchBar!
     @IBOutlet var btnaddplayer: UIButton!
@@ -95,7 +96,7 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
                                    cell.borderview.layer.cornerRadius = 32
                                    cell.borderview.layer.borderWidth = 1;
                                    cell.borderview.layer.borderColor = UIColor.black.cgColor
-                                        if self.arrSelectedRows.contains(indexPath.row)
+                                        if self.arrSelectedRows.contains(cell.profilename.text!)
                                   {
                                       cell.checkbutton.setImage(UIImage(named:"checkmark"), for: .normal)
                                   }
@@ -122,7 +123,7 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
                               cell.checkbutton.clipsToBounds = true
                               cell.checkbutton.tag = indexPath.row
                               cell.checkbutton.layer.cornerRadius = cell.checkbutton.frame.size.width/2
-                            if self.arrSelectedRows.contains(indexPath.row)
+                                        if self.arrSelectedRows.contains(cell.profilename.text!)
                               {
                                   cell.checkbutton.setImage(UIImage(named:"checkmark"), for: .normal)
                               }
@@ -173,15 +174,18 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
                        }
     @objc func checkBoxSelection(_ sender:UIButton)
     {
-        
-        if self.arrSelectedRows.contains(sender.tag)
+       // let array = self.filterArray[sender.tag]
+       // playername = ((array  as AnyObject).value(forKey: "name") as? String)!
+        let Strinvalue = String(sender.tag)
+        if self.arrSelectedRows.contains(Strinvalue)
         {
             if filterArray.count>0
             {
                 let array = self.filterArray[sender.tag]
               playername = ((array  as AnyObject).value(forKey: "name") as? String)!
                myString = "0"
-              self.arrSelectedRows.remove(at: self.arrSelectedRows.firstIndex(of: sender.tag)!)
+                self.arrSelectedRows.remove(at: sender.tag)
+                self.arrSelectedRows.append(playername)
               self.tickicanPlayCall()
             }
             else
@@ -189,7 +193,8 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
                 let array = self.skippedArray[sender.tag]
               playername = ((array  as AnyObject).value(forKey: "name") as? String)!
                myString = "0"
-              self.arrSelectedRows.remove(at: self.arrSelectedRows.firstIndex(of: sender.tag)!)
+                
+//              self.arrSelectedRows.remove(at: self.arrSelectedRows.firstIndex(of: sender.tag)!)
               self.tickicanPlayCall()
             }
           
@@ -200,7 +205,8 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
             {
             let array = self.filterArray[sender.tag]
            playername = ((array  as AnyObject).value(forKey: "name") as? String)!
-           self.arrSelectedRows.append(sender.tag)
+           //self.arrSelectedRows.append(sender.tag)
+            self.arrSelectedRows.append(playername)
             myString = "1"
             self.untickicanPlayCall()
             }
@@ -213,7 +219,8 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
             }
                //playername = ((array  as AnyObject).value(forKey: "name") as? String)!
                 
-               self.arrSelectedRows.append(sender.tag)
+             //  self.arrSelectedRows.append(sender.tag)
+                self.arrSelectedRows.append(playername)
                 myString = "1"
                 self.untickicanPlayCall()
             }
@@ -321,9 +328,10 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
                           skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
                            let dataarray = skippedArray1.firstObject as! NSDictionary
                             var stringvalue1:String = ""
-                             stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+                             stringvalue1 = dataarray.value(forKey:"Confirmation") as! String
+                            
                             // self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                                    self.showAlert(message: stringvalue1)
+                                   
 
                                      }
                                  else
@@ -335,6 +343,7 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
                                   stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
                                  // self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
                                 self.showAlert(message: stringvalue1)
+                                
 
                                          }
                                      }
@@ -390,9 +399,21 @@ class FootBallAddPlayersVC: UIViewController , UITableViewDataSource, UITableVie
              skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
                  let dataarray = skippedArray1.firstObject as! NSDictionary
                  var stringvalue1:String = ""
-             stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+             stringvalue1 = dataarray.value(forKey:"Confirmation") as! String
+            if let partname = dataarray.value(forKey: "DisplayMessage") as? Int
+            {
+               if partname == 1
+               {
+                  self.showAlert(message: stringvalue1)
+              }
+              else
+               {
+                  
+              }
+
+             }
         // self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-         self.showAlert(message: stringvalue1)
+         //self.showAlert(message: stringvalue1)
 
        // self.skippedArray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
         //self.tableview.reloadData()

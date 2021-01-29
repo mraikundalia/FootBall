@@ -301,18 +301,18 @@ class FootBallSelectPlayerVC: UIViewController ,UITableViewDelegate,UITableViewD
               self.skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
                       var skippedArray1 = NSMutableArray()
                       skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                       let dataarray = skippedArray1.firstObject as! NSDictionary
-                        var stringvalue1:String = ""
-                         stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-                      
-                      if stringvalue1 == "All players allocation to the pitch"
-                      {
-                           
-                      }
-                      else
-                      {
+                      // let dataarray = skippedArray1.firstObject as! NSDictionary
+//                        var stringvalue1:String = ""
+//                         stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+//
+//                      if stringvalue1 == "All players allocation to the pitch"
+//                      {
+//
+//                      }
+//                      else
+//                      {
                           self.selectplayertbl.reloadData()
-                      }
+                      //}
                    
                          }
                      else

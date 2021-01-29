@@ -126,70 +126,72 @@ class FootBallWholeTeamVC: UIViewController ,UICollectionViewDataSource, UIColle
               
                 }
     //MARK: API CALL////////////////////
-             func GetWholeTeamCall()
-                          {
-                
-                            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+     func GetWholeTeamCall()
+    {
+        if NetworkState.isConnected()
+        {
+            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                            hud.labelText = ""
-                            
-                            let defaults : UserDefaults = UserDefaults.standard
-                            var hotelName =  ""
-                            hotelName = (defaults.value(forKey: "database_name") as! String?)!
-                              let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                                  
-                           let verify_param = ["storedProcedureName":"getWholeTeamStats","input1":str2 as Any ,"input2":hotelName] as [String : Any]
-                                  let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                            AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                                        response in
-                               
-                                       DispatchQueue.main.async
-                                           {
-                                           self.hud.hide(true)
-                                              }
-                                      //  SVProgressHUD.dismiss()
-                                     if let json = response.value
-                                     {
-                                let jsonResponse = json as! NSDictionary
-                                    print(jsonResponse)
-                                     do
-                                     {
-                                      var stringvalue:String = ""
-                            stringvalue = jsonResponse["status"] as! String
-                                                                
-                                                                 
-                              if stringvalue == "Success"
-                                {
-                                    
-                                    self.databasearray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                                  // self.skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                 hud.labelText = ""
                  
-                                   // let dataarray = skippedArray.firstObject as! NSDictionary
+                 let defaults : UserDefaults = UserDefaults.standard
+                 var hotelName =  ""
+                 hotelName = (defaults.value(forKey: "database_name") as! String?)!
+                   let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                       let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
 
-                                    //self.skippedArray = (jsonResponse["Data1"] as? NSArray)! as! NSMutableArray
-                                   
-                                   // let result = self.skippedArray[0] as? NSDictionary
-
-                                    
-                                    DispatchQueue.main.async{
-                                   self.wholeteamCollection.reloadData()
-                                    }
-                                
-                                    }
-                                else
-                              {
-                                 var skippedArray1 = NSMutableArray()
-                              skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                               let dataarray = skippedArray1.firstObject as! NSDictionary
-                                var stringvalue1:String = ""
-                                 stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-                                 self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                                        }
-                                    }
-                                  }
-                                 }
-                            
-                            }
+            let verify_param = ["sessionID":sessionid as Any,"storedProcedureName":"getWholeTeamStats","input1":str2 as Any ,"input2":hotelName] as [String : Any]
+                       let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                 AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                             response in
+                    
+                            DispatchQueue.main.async
+                                {
+                                self.hud.hide(true)
+                                   }
+                           //  SVProgressHUD.dismiss()
+                          if let json = response.value
+                          {
+                     let jsonResponse = json as! NSDictionary
+                         print(jsonResponse)
+                          do
+                          {
+                           var stringvalue:String = ""
+                 stringvalue = jsonResponse["status"] as! String
+                                                     
+                                                      
+                   if stringvalue == "Success"
+                     {
+                         
+                         self.databasearray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                    
+                         
+                         DispatchQueue.main.async{
+                        self.wholeteamCollection.reloadData()
+                         }
+                     
+                         }
+                     else
+                   {
+                      var skippedArray1 = NSMutableArray()
+                   skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                    let dataarray = skippedArray1.firstObject as! NSDictionary
+                     var stringvalue1:String = ""
+                      stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+                    self.showAlert(message: stringvalue1)
+                      //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                             }
+                         }
+                       }
+                      }
+        }
+        else
+        {
+            self.showAlert(message: GlobalConstants.internetmessage)
+       }
+     
+        
+        }
     /*
     // MARK: - Navigation
 

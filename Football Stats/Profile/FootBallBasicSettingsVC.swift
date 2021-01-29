@@ -36,7 +36,14 @@ var btndropdown = NIDropDown ()
         self.Updatebasicsetting()
         }
     }
-    @IBAction func btnteam1shirtAction(_ sender: Any) {
+    @IBAction func btnteam1shirtAction(_ sender: Any)
+    {
+        if btndropdown.isDescendant(of: self.view) {
+                         //myView is subview of self.view, remove it.
+                        btndropdown.removeFromSuperview()
+                     }
+                     else
+                     {
         let myFloatForR = 250
                       var r = CGFloat(myFloatForR)
                      // lazy var value: Float = 200
@@ -45,10 +52,18 @@ var btndropdown = NIDropDown ()
                       btndropdown.setDropDownSelectionColor(UIColor.gray)
                       btndropdown.delegate = self
                          btndropdown.tag = 0
+        }
     }
     
     
-    @IBAction func btnteam2shirtAction(_ sender: Any) {
+    @IBAction func btnteam2shirtAction(_ sender: Any)
+    {
+        if btndropdown.isDescendant(of: self.view) {
+                         //myView is subview of self.view, remove it.
+                        btndropdown.removeFromSuperview()
+                     }
+                     else
+                     {
         let myFloatForR = 250
                       var r = CGFloat(myFloatForR)
                      // lazy var value: Float = 200
@@ -57,17 +72,26 @@ var btndropdown = NIDropDown ()
                       btndropdown.setDropDownSelectionColor(UIColor.gray)
                       btndropdown.delegate = self
                          btndropdown.tag = 1
+        }
     }
     
-    @IBAction func btndateAction(_ sender: Any) {
+    @IBAction func btndateAction(_ sender: Any)
+    {
+        if btndropdown.isDescendant(of: self.view) {
+                         //myView is subview of self.view, remove it.
+                        btndropdown.removeFromSuperview()
+                     }
+                     else
+                     {
         let myFloatForR = 250
-                             var r = CGFloat(myFloatForR)
-                            // lazy var value: Float = 200
-                             btndropdown.isHidden = false
-                             btndropdown.show((sender as! UIButton), theHeight: &r, theArr: (datearray.value(forKey: "valueList") as! [Any]), theImgArr: nil, theDirection: "down", with: self)
-                             btndropdown.setDropDownSelectionColor(UIColor.gray)
-                             btndropdown.delegate = self
-                                btndropdown.tag = 2
+     var r = CGFloat(myFloatForR)
+    // lazy var value: Float = 200
+     btndropdown.isHidden = false
+     btndropdown.show((sender as! UIButton), theHeight: &r, theArr: (datearray.value(forKey: "valueList") as! [Any]), theImgArr: nil, theDirection: "down", with: self)
+     btndropdown.setDropDownSelectionColor(UIColor.gray)
+     btndropdown.delegate = self
+        btndropdown.tag = 2
+        }
     }
     var myString: String = ""
     

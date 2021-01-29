@@ -104,12 +104,25 @@ class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIIm
          picker.frame = CGRect(x:30.0, y:230, width:pickerSize.width, height:300)
          // you probably don't want to set background color as black
         picker.backgroundColor = UIColor.white
+        let myFirstButton = UIButton()
+
+        myFirstButton.setTitle("Done", for: .normal)
+        myFirstButton.setTitleColor(UIColor.blue, for: .normal)
+        myFirstButton.frame = CGRect(x: 15, y: picker.frame.size.height+20, width: 100, height: 40)
+        myFirstButton.addTarget(self, action: #selector(pressed(sender:)), for: .touchUpInside)
+        picker.addSubview(myFirstButton)
         self.view.addSubview(picker)
         // Init DatePickerView
- 
         
     }
-    
+    @objc func pressed(sender: UIButton!)
+    {
+        var alertView = UIAlertView()
+        alertView.addButton(withTitle: "Ok")
+        alertView.title = "title"
+        alertView.message = "message"
+        alertView.show()
+    }
  @objc func dueDateChanged(sender:UIDatePicker)
  {
        let dateFormatter = DateFormatter()
@@ -143,7 +156,8 @@ class FootBallProfileVC: UIViewController , UINavigationControllerDelegate, UIIm
     
     @IBAction func btnActionteamsupport(_ sender: Any)
     {
-        if btndropdown.isDescendant(of: self.view) {
+        if btndropdown.isDescendant(of: self.view)
+        {
                   //myView is subview of self.view, remove it.
                  btndropdown.removeFromSuperview()
               }

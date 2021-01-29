@@ -35,7 +35,7 @@ var email  = ""
         GIDSignIn.sharedInstance().clientID = "106972369674-2e9l5ddp1o4ke65hkk29spual116k2l6.apps.googleusercontent.com"
         GIDSignIn.sharedInstance().delegate = self  // If AppDelegate conforms to GIDSignInDelegate
         
-        self.showauthentication()
+       // self.showauthentication()
         
         let reachability = try! Reachability()
 
@@ -286,7 +286,8 @@ var email  = ""
         
         //let string = NSString.init(format:"%d", str2 as Any)
       
-           var verify_param: [String: Any] = [:]
+    var verify_param: [String: Any] = [:]
+        
     if ((str2) != nil)
    {
      verify_param = ["sessionID":"-1" as Any,"storedProcedureName": "get_seq_SessionID","input1": str2 as Any] as [String : Any]
@@ -346,7 +347,7 @@ var email  = ""
                             }
                             else
                             {
-                                UserDefaults.standard.set(skippedArray.value(forKeyPath: "Column1"), forKey: "Sessionid")
+                                UserDefaults.standard.set(skippedArray.value(forKeyPath: "sessionID"), forKey: "Sessionid")
                                                                                      //Integer
                       
                                 

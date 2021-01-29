@@ -394,376 +394,398 @@ class FootBallHeadtoHeadVC: UIViewController , NIDropDownDelegate
        func GetNameHeadCall()
        {
                       
-          hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        
+        
+        if NetworkState.isConnected()
+        {
+            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-          hud.labelText = ""
-          
-          let defaults : UserDefaults = UserDefaults.standard
-          var hotelName =  ""
-          hotelName = (defaults.value(forKey: "database_name") as! String?)!
-            let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                
-        let verify_param = ["storedProcedureName":"getHeadToHead","input1":str2 as Any ,"input2":hotelName,"input3":btnname.currentTitle!,"input4":btnnameoponent.currentTitle!] as [String : Any]
-                let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-          AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                      response in
-             
-                     DispatchQueue.main.async
-                         {
-                         self.hud.hide(true)
-                            }
-                   if let json = response.value
-                   {
-              let jsonResponse = json as! NSDictionary
-                  print(jsonResponse)
-                   do
-                   {
-                    var stringvalue:String = ""
-          stringvalue = jsonResponse["status"] as! String
-                                              
-                                               
-            if stringvalue == "Success"
-              {
+                  hud.labelText = ""
                   
-                  self.databasearray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-               self.namesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
-               self.opoarray = (jsonResponse["Data5"]! as! NSArray).mutableCopy() as! NSMutableArray
-                   self.skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                  self.oponentarray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-               
-                  DispatchQueue.main.async
-                   {
-                       let result = self.skippedArray[0] as? NSDictionary
+                  let defaults : UserDefaults = UserDefaults.standard
+                  var hotelName =  ""
+                  hotelName = (defaults.value(forKey: "database_name") as! String?)!
+                    let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                    let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
 
-                                                  // var stringvalue1 = ""
-                  if let partname = result!.value(forKey: "playerName") as? String
+            let verify_param = ["sessionID":sessionid as Any,"storedProcedureName":"getHeadToHead","input1":str2 as Any ,"input2":hotelName,"input3":btnname.currentTitle!,"input4":btnnameoponent.currentTitle!] as [String : Any]
+                        let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                  AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                              response in
+                     
+                             DispatchQueue.main.async
+                                 {
+                                 self.hud.hide(true)
+                                    }
+                           if let json = response.value
+                           {
+                      let jsonResponse = json as! NSDictionary
+                          print(jsonResponse)
+                           do
+                           {
+                            var stringvalue:String = ""
+                  stringvalue = jsonResponse["status"] as! String
+                                                      
+                                                       
+                    if stringvalue == "Success"
                       {
+                          
+                          self.databasearray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+                       self.namesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
+                       self.opoarray = (jsonResponse["Data5"]! as! NSArray).mutableCopy() as! NSMutableArray
+                           self.skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                          self.oponentarray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                       
+                          DispatchQueue.main.async
+                           {
+                               let result = self.skippedArray[0] as? NSDictionary
 
-                       self.btnname.setTitle(partname, for: .normal)
-                  }
-                       if let partname = result!.value(forKey: "ProfilePicture") as? String
-                         {
-                         if partname.count>0
-                       {
-                       let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
-                       let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
-                       print(decodedimage)
-                       self.profilenameimg.image = decodedimage
-                       }
+                                                          // var stringvalue1 = ""
+                          if let partname = result!.value(forKey: "playerName") as? String
+                              {
 
-                     }
-                  }
-               let result1 = self.oponentarray[0] as? NSDictionary
+                               self.btnname.setTitle(partname, for: .normal)
+                          }
+                               if let partname = result!.value(forKey: "ProfilePicture") as? String
+                                 {
+                                 if partname.count>0
+                               {
+                               let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                               let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                               print(decodedimage)
+                               self.profilenameimg.image = decodedimage
+                               }
+
+                             }
+                          }
+                       let result1 = self.oponentarray[0] as? NSDictionary
+
+                                   // var stringvalue1 = ""
+                          if let partname = result1!.value(forKey: "opponentName") as? String
+                              {
+
+                               self.btnnameoponent.setTitle(partname, for: .normal)
+                          }
+                               if let partname = result1!.value(forKey: "opponentProfilePicture") as? String
+                                 {
+                                 if partname.count>0
+                               {
+                               let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                               let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                               print(decodedimage)
+                               self.profilenameoponentimg.image = decodedimage
+                               }
+
+                             }
+                       let result2 = self.databasearray[0] as? NSDictionary
 
                            // var stringvalue1 = ""
-                  if let partname = result1!.value(forKey: "opponentName") as? String
-                      {
-
-                       self.btnnameoponent.setTitle(partname, for: .normal)
-                  }
-                       if let partname = result1!.value(forKey: "opponentProfilePicture") as? String
-                         {
-                         if partname.count>0
+                       if let partname = result2!.value(forKey: "name_TotalGames") as? Int
+                          {
+                           let str2 = String(partname)
+                              self.lblapperance.text = " Apperance"+"  "+str2
+                          }
+                       if let partname = result2!.value(forKey: "opp_TotalGames") as? Int
                        {
-                       let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
-                       let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
-                       print(decodedimage)
-                       self.profilenameoponentimg.image = decodedimage
+                             let str2 = String(partname)
+                           self.lblapperanceoponent.text = " Apperance"+"  "+str2
+                       }
+                     if let partname = result2!.value(forKey: "Won") as? Int
+                       {
+                           let str2 = String(partname)
+                           self.lblwon.text = "Won "+str2
+                       }
+                       if let partname = result2!.value(forKey: "Loss") as? Int
+                       {
+                           let str2 = String(partname)
+                           self.lbllost.text = "Loss "+str2
+                       }
+                       if let partname = result2!.value(forKey: "Draw") as? Int
+                      {
+                          let str2 = String(partname)
+                          self.lbldraw.text = "Draw "+str2
+                      }
+                       if let partname = result2!.value(forKey: "opponent_Won") as? Int
+                        {
+                           let str2 = String(partname)
+                            self.lblwonoponent.text = "Won "+str2
+                        }
+                        if let partname = result2!.value(forKey: "opponent_Loss") as? Int
+                        {
+                           let str2 = String(partname)
+                            self.lbllostoponent.text = "Loss "+str2
+                        }
+                        if let partname = result2!.value(forKey: "opponent_Draw") as? Int
+                       {
+                           let str2 = String(partname)
+                           self.lbldrawoponent.text = "Draw "+str2
+                       }
+                       if let partname = result2!.value(forKey: "playedTogether_percentage") as? Int
+                          {
+                             let str2 = String(partname)
+                              self.lblplayedtogether.text = "  Played together "+str2
+                          }
+                       if let partname = result2!.value(forKey: "BothPlaying") as? Int
+                      {
+                              let str2 = String(partname)
+                         // self.gamesplayed.text = "  Games played against/with "+str2
+                       self.gamedplayedper.text =  str2+" %"
+                      }
+                       if let partname = result2!.value(forKey: "wonTogether") as? Int
+                       {
+                               let str2 = String(partname)
+                           self.lblwintogether.text = "  Win togother % "
+                           self.wintogetherper.text = str2+" %"
+                       }
+                       if let partname = result2!.value(forKey: "playedAgainst") as? Int
+                      {
+                              let str2 = String(partname)
+                          self.lblplayagainst.text = " Played against "+str2+" time(S)"
+
+                      }
+                       if let partname = result2!.value(forKey: "beaten_percentage") as? Int
+                                 {
+                                         let str2 = String(partname)
+                                     self.lblheadtohead.text = "Head-to-head "+str2+" %"
+                                 }
+
+                       if let partname = result2!.value(forKey: "lostTo_percentage") as? Int
+                                 {
+                                         let str2 = String(partname)
+                                     self.lblheadtoheadoponent.text = "Head-to-head "+str2+" %"
+                                 }
+                       if let partname = result2!.value(forKey: "playedTogether_percentage") as? Int
+                       {
+                               let str2 = String(partname)
+                           self.playedtogetherper.text = str2+" %"
+                       }
+                       if let partname = result2!.value(forKey: "playedAgainst_percentage") as? Int
+                       {
+                               let str2 = String(partname)
+                           self.playagainstper.text = str2+" %"
                        }
 
-                     }
-               let result2 = self.databasearray[0] as? NSDictionary
-
-                   // var stringvalue1 = ""
-               if let partname = result2!.value(forKey: "name_TotalGames") as? Int
-                  {
-                   let str2 = String(partname)
-                      self.lblapperance.text = " Apperance"+"  "+str2
-                  }
-               if let partname = result2!.value(forKey: "opp_TotalGames") as? Int
-               {
-                     let str2 = String(partname)
-                   self.lblapperanceoponent.text = " Apperance"+"  "+str2
-               }
-             if let partname = result2!.value(forKey: "Won") as? Int
-               {
-                   let str2 = String(partname)
-                   self.lblwon.text = "Won "+str2
-               }
-               if let partname = result2!.value(forKey: "Loss") as? Int
-               {
-                   let str2 = String(partname)
-                   self.lbllost.text = "Loss "+str2
-               }
-               if let partname = result2!.value(forKey: "Draw") as? Int
-              {
-                  let str2 = String(partname)
-                  self.lbldraw.text = "Draw "+str2
-              }
-               if let partname = result2!.value(forKey: "opponent_Won") as? Int
-                {
-                   let str2 = String(partname)
-                    self.lblwonoponent.text = "Won "+str2
-                }
-                if let partname = result2!.value(forKey: "opponent_Loss") as? Int
-                {
-                   let str2 = String(partname)
-                    self.lbllostoponent.text = "Loss "+str2
-                }
-                if let partname = result2!.value(forKey: "opponent_Draw") as? Int
-               {
-                   let str2 = String(partname)
-                   self.lbldrawoponent.text = "Draw "+str2
-               }
-               if let partname = result2!.value(forKey: "playedTogether_percentage") as? Int
-                  {
-                     let str2 = String(partname)
-                      self.lblplayedtogether.text = "  Played together "+str2
-                  }
-               if let partname = result2!.value(forKey: "BothPlaying") as? Int
-              {
-                      let str2 = String(partname)
-                 // self.gamesplayed.text = "  Games played against/with "+str2
-               self.gamedplayedper.text =  str2+" %"
-              }
-               if let partname = result2!.value(forKey: "wonTogether") as? Int
-               {
-                       let str2 = String(partname)
-                   self.lblwintogether.text = "  Win togother % "
-                   self.wintogetherper.text = str2+" %"
-               }
-               if let partname = result2!.value(forKey: "playedAgainst") as? Int
-              {
-                      let str2 = String(partname)
-                  self.lblplayagainst.text = " Played against "+str2+" time(S)"
-
-              }
-               if let partname = result2!.value(forKey: "beaten_percentage") as? Int
-                         {
-                                 let str2 = String(partname)
-                             self.lblheadtohead.text = "Head-to-head "+str2+" %"
-                         }
-
-               if let partname = result2!.value(forKey: "lostTo_percentage") as? Int
-                         {
-                                 let str2 = String(partname)
-                             self.lblheadtoheadoponent.text = "Head-to-head "+str2+" %"
-                         }
-               if let partname = result2!.value(forKey: "playedTogether_percentage") as? Int
-               {
-                       let str2 = String(partname)
-                   self.playedtogetherper.text = str2+" %"
-               }
-               if let partname = result2!.value(forKey: "playedAgainst_percentage") as? Int
-               {
-                       let str2 = String(partname)
-                   self.playagainstper.text = str2+" %"
-               }
-
-                  }
-              
-                  
-              else
-            {
-               var skippedArray1 = NSMutableArray()
-            skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-             let dataarray = skippedArray1.firstObject as! NSDictionary
-              var stringvalue1:String = ""
-               stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-               self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                      }
-                                          }
-                                        }
-                                       }
+                          }
+                      
+                          
+                      else
+                    {
+                       var skippedArray1 = NSMutableArray()
+                    skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                     let dataarray = skippedArray1.firstObject as! NSDictionary
+                      var stringvalue1:String = ""
+                       stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+                       //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                        self.showAlert(message: stringvalue1)
+                              }
+                          }
+                        }
+                       }
+        }
+      else
+        {
+            self.showAlert(message: GlobalConstants.internetmessage)
+        }
                                   
-                                  }
+            }
     //MARK: API CALL////////////////////
           func GetNameoponentHeadCall()
           {
-                         
-             hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-
-             hud.labelText = ""
-             
-             let defaults : UserDefaults = UserDefaults.standard
-             var hotelName =  ""
-             hotelName = (defaults.value(forKey: "database_name") as! String?)!
-               let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                   
-           let verify_param = ["storedProcedureName":"getHeadToHead","input1":str2 as Any ,"input2":hotelName,"input3":btnnameoponent.currentTitle! ,"input4":btnname.currentTitle!] as [String : Any]
-                   let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-             AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                         response in
-                
-                        DispatchQueue.main.async
-                            {
-                            self.hud.hide(true)
-                               }
-                      if let json = response.value
-                      {
-                 let jsonResponse = json as! NSDictionary
-                     print(jsonResponse)
-                      do
-                      {
-                       var stringvalue:String = ""
-             stringvalue = jsonResponse["status"] as! String
-                                                 
-                                                  
-               if stringvalue == "Success"
-                 {
-                     
-                     self.databasearray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-                  self.namesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
-                  self.opoarray = (jsonResponse["Data5"]! as! NSArray).mutableCopy() as! NSMutableArray
-                      self.skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                     self.oponentarray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-
-                     DispatchQueue.main.async
-                      {
-                          let result = self.skippedArray[0] as? NSDictionary
-
-                                                     // var stringvalue1 = ""
-                     if let partname = result!.value(forKey: "playerName") as? String
-                         {
-
-                          self.btnname.setTitle(partname, for: .normal)
-                     }
-                          if let partname = result!.value(forKey: "ProfilePicture") as? String
-                            {
-                            if partname.count>0
-                          {
-                          let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
-                          let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
-                          print(decodedimage)
-                          self.profilenameimg.image = decodedimage
-                          }
-
-                        }
-                     }
-                  let result1 = self.oponentarray[0] as? NSDictionary
-
-                              // var stringvalue1 = ""
-                     if let partname = result1!.value(forKey: "opponentName") as? String
-                         {
-
-                          self.btnnameoponent.setTitle(partname, for: .normal)
-                     }
-                          if let partname = result1!.value(forKey: "opponentProfilePicture") as? String
-                            {
-                            if partname.count>0
-                          {
-                          let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
-                          let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
-                          print(decodedimage)
-                          self.profilenameoponentimg.image = decodedimage
-                          }
-
-                        }
-                  let result2 = self.databasearray[0] as? NSDictionary
-
-                      // var stringvalue1 = ""
-                  if let partname = result2!.value(forKey: "name_TotalGames") as? Int
-                     {
-                      let str2 = String(partname)
-                         self.lblapperance.text = " Apperance"+"  "+str2
-                     }
-                  if let partname = result2!.value(forKey: "opp_TotalGames") as? Int
-                  {
-                        let str2 = String(partname)
-                      self.lblapperanceoponent.text = " Apperance"+"  "+str2
-                  }
-                if let partname = result2!.value(forKey: "Won") as? Int
-                  {
-                      let str2 = String(partname)
-                      self.lblwon.text = "Won "+str2
-                  }
-                  if let partname = result2!.value(forKey: "Loss") as? Int
-                  {
-                      let str2 = String(partname)
-                      self.lbllost.text = "Loss "+str2
-                  }
-                  if let partname = result2!.value(forKey: "Draw") as? Int
-                 {
-                     let str2 = String(partname)
-                     self.lbldraw.text = "Draw "+str2
-                 }
-                  if let partname = result2!.value(forKey: "opponent_Won") as? Int
-                   {
-                      let str2 = String(partname)
-                       self.lblwonoponent.text = "Won "+str2
-                   }
-                   if let partname = result2!.value(forKey: "opponent_Loss") as? Int
-                   {
-                      let str2 = String(partname)
-                       self.lbllostoponent.text = "Loss "+str2
-                   }
-                   if let partname = result2!.value(forKey: "opponent_Draw") as? Int
-                  {
-                      let str2 = String(partname)
-                      self.lbldrawoponent.text = "Draw "+str2
-                  }
-                  if let partname = result2!.value(forKey: "playedTogether_percentage") as? Int
-                     {
-                        let str2 = String(partname)
-                         self.lblplayedtogether.text = "  Played together "+str2
-                     }
-                  if let partname = result2!.value(forKey: "BothPlaying") as? Int
-                 {
-                         let str2 = String(partname)
-                    // self.gamesplayed.text = "  Games played against/with "+str2
-                  self.gamedplayedper.text =  str2+" %"
-                 }
-                  if let partname = result2!.value(forKey: "wonTogether") as? Int
-                  {
-                          let str2 = String(partname)
-                      self.lblwintogether.text = "  Win togother % "
-                      self.wintogetherper.text = str2+" %"
-                  }
-                  if let partname = result2!.value(forKey: "playedAgainst") as? Int
-                 {
-                         let str2 = String(partname)
-                     self.lblplayagainst.text = " Played against "+str2+" time(S)"
-
-                 }
-                  if let partname = result2!.value(forKey: "beaten_percentage") as? Int
-                            {
-                                    let str2 = String(partname)
-                                self.lblheadtohead.text = "Head-to-head "+str2+" %"
-                            }
-
-                  if let partname = result2!.value(forKey: "lostTo_percentage") as? Int
-                            {
-                                    let str2 = String(partname)
-                                self.lblheadtoheadoponent.text = "Head-to-head "+str2+" %"
-                            }
-                  if let partname = result2!.value(forKey: "playedTogether_percentage") as? Int
-                  {
-                          let str2 = String(partname)
-                      self.playedtogetherper.text = str2+" %"
-                  }
-                  if let partname = result2!.value(forKey: "playedAgainst_percentage") as? Int
-                  {
-                          let str2 = String(partname)
-                      self.playagainstper.text = str2+" %"
-                  }
-
-                     }
                  
-                     
-                 else
-               {
-                  var skippedArray1 = NSMutableArray()
-               skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                let dataarray = skippedArray1.firstObject as! NSDictionary
-                 var stringvalue1:String = ""
-                  stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-                  self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                         }
-                                             }
-                                           }
+            
+        if NetworkState.isConnected()
+        {
+            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+
+                hud.labelText = ""
+                        
+            let defaults : UserDefaults = UserDefaults.standard
+            var hotelName =  ""
+            hotelName = (defaults.value(forKey: "database_name") as! String?)!
+        let str2 =  UserDefaults.standard.object(forKey: "registerid")
+        let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+
+        let verify_param = ["sessionID":sessionid as Any,"storedProcedureName":"getHeadToHead","input1":str2 as Any ,"input2":hotelName,"input3":btnnameoponent.currentTitle! ,"input4":btnname.currentTitle!] as [String : Any]
+                              let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                        AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                                    response in
+                           
+                                   DispatchQueue.main.async
+                                       {
+                                       self.hud.hide(true)
                                           }
-                                     
+                                 if let json = response.value
+                                 {
+                            let jsonResponse = json as! NSDictionary
+                                print(jsonResponse)
+                                 do
+                                 {
+                                  var stringvalue:String = ""
+                        stringvalue = jsonResponse["status"] as! String
+                                                            
+                                                             
+                          if stringvalue == "Success"
+                            {
+                                
+                                self.databasearray = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+                             self.namesarray = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
+                             self.opoarray = (jsonResponse["Data5"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                 self.skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                                self.oponentarray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+
+                                DispatchQueue.main.async
+                                 {
+                                     let result = self.skippedArray[0] as? NSDictionary
+
+                                                                // var stringvalue1 = ""
+                                if let partname = result!.value(forKey: "playerName") as? String
+                                    {
+
+                                     self.btnname.setTitle(partname, for: .normal)
+                                }
+                                     if let partname = result!.value(forKey: "ProfilePicture") as? String
+                                       {
+                                       if partname.count>0
+                                     {
+                                     let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                                     let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                                     print(decodedimage)
+                                     self.profilenameimg.image = decodedimage
                                      }
+
+                                   }
+                                }
+                             let result1 = self.oponentarray[0] as? NSDictionary
+
+                                         // var stringvalue1 = ""
+                                if let partname = result1!.value(forKey: "opponentName") as? String
+                                    {
+
+                                     self.btnnameoponent.setTitle(partname, for: .normal)
+                                }
+                                     if let partname = result1!.value(forKey: "opponentProfilePicture") as? String
+                                       {
+                                       if partname.count>0
+                                     {
+                                     let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                                     let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                                     print(decodedimage)
+                                     self.profilenameoponentimg.image = decodedimage
+                                     }
+
+                                   }
+                             let result2 = self.databasearray[0] as? NSDictionary
+
+                                 // var stringvalue1 = ""
+                             if let partname = result2!.value(forKey: "name_TotalGames") as? Int
+                                {
+                                 let str2 = String(partname)
+                                    self.lblapperance.text = " Apperance"+"  "+str2
+                                }
+                             if let partname = result2!.value(forKey: "opp_TotalGames") as? Int
+                             {
+                                   let str2 = String(partname)
+                                 self.lblapperanceoponent.text = " Apperance"+"  "+str2
+                             }
+                           if let partname = result2!.value(forKey: "Won") as? Int
+                             {
+                                 let str2 = String(partname)
+                                 self.lblwon.text = "Won "+str2
+                             }
+                             if let partname = result2!.value(forKey: "Loss") as? Int
+                             {
+                                 let str2 = String(partname)
+                                 self.lbllost.text = "Loss "+str2
+                             }
+                             if let partname = result2!.value(forKey: "Draw") as? Int
+                            {
+                                let str2 = String(partname)
+                                self.lbldraw.text = "Draw "+str2
+                            }
+                             if let partname = result2!.value(forKey: "opponent_Won") as? Int
+                              {
+                                 let str2 = String(partname)
+                                  self.lblwonoponent.text = "Won "+str2
+                              }
+                              if let partname = result2!.value(forKey: "opponent_Loss") as? Int
+                              {
+                                 let str2 = String(partname)
+                                  self.lbllostoponent.text = "Loss "+str2
+                              }
+                              if let partname = result2!.value(forKey: "opponent_Draw") as? Int
+                             {
+                                 let str2 = String(partname)
+                                 self.lbldrawoponent.text = "Draw "+str2
+                             }
+                             if let partname = result2!.value(forKey: "playedTogether_percentage") as? Int
+                                {
+                                   let str2 = String(partname)
+                                    self.lblplayedtogether.text = "  Played together "+str2
+                                }
+                             if let partname = result2!.value(forKey: "BothPlaying") as? Int
+                            {
+                                    let str2 = String(partname)
+                               // self.gamesplayed.text = "  Games played against/with "+str2
+                             self.gamedplayedper.text =  str2+" %"
+                            }
+                             if let partname = result2!.value(forKey: "wonTogether") as? Int
+                             {
+                                     let str2 = String(partname)
+                                 self.lblwintogether.text = "  Win togother % "
+                                 self.wintogetherper.text = str2+" %"
+                             }
+                             if let partname = result2!.value(forKey: "playedAgainst") as? Int
+                            {
+                                    let str2 = String(partname)
+                                self.lblplayagainst.text = " Played against "+str2+" time(S)"
+
+                            }
+                             if let partname = result2!.value(forKey: "beaten_percentage") as? Int
+                                       {
+                                               let str2 = String(partname)
+                                           self.lblheadtohead.text = "Head-to-head "+str2+" %"
+                                       }
+
+                             if let partname = result2!.value(forKey: "lostTo_percentage") as? Int
+                                       {
+                                               let str2 = String(partname)
+                                           self.lblheadtoheadoponent.text = "Head-to-head "+str2+" %"
+                                       }
+                             if let partname = result2!.value(forKey: "playedTogether_percentage") as? Int
+                             {
+                                     let str2 = String(partname)
+                                 self.playedtogetherper.text = str2+" %"
+                             }
+                             if let partname = result2!.value(forKey: "playedAgainst_percentage") as? Int
+                             {
+                                     let str2 = String(partname)
+                                 self.playagainstper.text = str2+" %"
+                             }
+
+                                }
+                            
+                                
+                            else
+                          {
+                             var skippedArray1 = NSMutableArray()
+                          skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                           let dataarray = skippedArray1.firstObject as! NSDictionary
+                            var stringvalue1:String = ""
+                             stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+                             //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                            self.showAlert(message: stringvalue1)
+                                    }
+                                }
+                              }
+                             }
+        }
+        else
+        {
+            self.showAlert(message: GlobalConstants.internetmessage)
+        }
+            
+                                     
+        }
     /*
     // MARK: - Navigation
 

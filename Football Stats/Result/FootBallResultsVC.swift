@@ -193,11 +193,12 @@ class FootBallResultsVC: UIViewController , UITableViewDelegate, UITableViewData
                 hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
          hud.labelText = ""
-         
+         let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+
         let str2 =  UserDefaults.standard.object(forKey: "registerid")
                   // let string = btndateofmatich.currentTitle
                //String(UserDefaults.standard.integer(forKey: "registerid"))
-        let verify_param = ["storedProcedureName":"getAllMatches","input1":str2 as Any ,"input2":btntuesday.currentTitle!] as [String : Any]
+                let verify_param = ["sessionID":sessionid as Any,"storedProcedureName":"getAllMatches","input1":str2 as Any ,"input2":btntuesday.currentTitle!] as [String : Any]
                let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
          AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
                      response in
@@ -236,7 +237,8 @@ class FootBallResultsVC: UIViewController , UITableViewDelegate, UITableViewData
             let dataarray = skippedArray1.firstObject as! NSDictionary
              var stringvalue1:String = ""
               stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-              self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+              //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+            self.showAlert(message: stringvalue1)
                      }
                  }
                }
@@ -245,11 +247,9 @@ class FootBallResultsVC: UIViewController , UITableViewDelegate, UITableViewData
                }
                   else
              {
-                self.showToast(message: "Internet Not Available", font: UIFont.systemFont(ofSize: 14))
+                self.showAlert(message: GlobalConstants.internetmessage)
+                //self.showToast(message: "Internet Not Available", font: UIFont.systemFont(ofSize: 14))
                 }
-                       
-                 
-                     
                      }
     /*
     // MARK: - Navigation

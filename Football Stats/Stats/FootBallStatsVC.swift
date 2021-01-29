@@ -215,88 +215,88 @@ class FootBallStatsVC: UIViewController , UICollectionViewDataSource, UICollecti
 
     }
     //MARK: API CALL////////////////////
-          func GetStatsCall()
-            {
-                        //SVProgressHUD.show()
-            //            var string = String.self
-            //            string = UserDefaults.standard.integer(forKey: "registerid")
+  func GetStatsCall()
+    {
+                //SVProgressHUD.show()
+    //            var string = String.self
+    //            string = UserDefaults.standard.integer(forKey: "registerid")
                         
-                    
-                        
-                        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        if NetworkState.isConnected()
+        {
+             hud = MBProgressHUD.showAdded(to: self.view, animated: true)
 
-                        hud.labelText = ""
-                        
-                        
-                        
-                        let str2 =  UserDefaults.standard.object(forKey: "registerid")
-                                // let string = btndateofmatich.currentTitle
-                            //String(UserDefaults.standard.integer(forKey: "registerid"))
-                    let verify_param = ["storedProcedureName":"getplayerStats","input1":str2 as Any ,"input2":hotelName,"input3":playername] as [String : Any]
-                            let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
-                        AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
-                                    response in
-                        
-                                DispatchQueue.main.async
-                                    {
-                                    self.hud.hide(true)
-                                        }
-                                //  SVProgressHUD.dismiss()
-                                if let json = response.value
-                                {
-                            let jsonResponse = json as! NSDictionary
-                                print(jsonResponse)
-                                do
-                                {
-                                var stringvalue:String = ""
-                        stringvalue = jsonResponse["status"] as! String
-                                                            
-                                                            
-                        if stringvalue == "Success"
+                hud.labelText = ""
+                
+                let str2 =  UserDefaults.standard.object(forKey: "registerid")
+                        // let string = btndateofmatich.currentTitle
+                    //String(UserDefaults.standard.integer(forKey: "registerid"))
+            let sessionid =  UserDefaults.standard.object(forKey: "Sessionid")
+
+            let verify_param = ["sessionID":sessionid as Any,"storedProcedureName":"getplayerStats","input1":str2 as Any ,"input2":hotelName,"input3":playername] as [String : Any]
+                    let signin_headers: HTTPHeaders = ["x-api-key":"CODEX@123"]
+                AF.request(GlobalConstants.ApiURL, method: .post, parameters: verify_param, encoding: URLEncoding.httpBody, headers:signin_headers).responseJSON {
+                            response in
+                
+                        DispatchQueue.main.async
                             {
-                                
-                                self.databasearray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            self.skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                            self.hud.hide(true)
+                                }
+                        //  SVProgressHUD.dismiss()
+                        if let json = response.value
+                        {
+                    let jsonResponse = json as! NSDictionary
+                        print(jsonResponse)
+                        do
+                        {
+                        var stringvalue:String = ""
+                stringvalue = jsonResponse["status"] as! String
+                                                    
+                                                    
+                if stringvalue == "Success"
+                    {
+                        
+                        self.databasearray = (jsonResponse["Data2"]! as! NSArray).mutableCopy() as! NSMutableArray
+                    self.skippedArray = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
 //                                if <#condition#> {
 //                                    <#code#>
 //                                }
-                    self.playernames = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
-                    self.databasenames = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
-                            // let dataarray = skippedArray.firstObject as! NSDictionary
+            self.playernames = (jsonResponse["Data3"]! as! NSArray).mutableCopy() as! NSMutableArray
+            self.databasenames = (jsonResponse["Data4"]! as! NSArray).mutableCopy() as! NSMutableArray
+                    // let dataarray = skippedArray.firstObject as! NSDictionary
 
-                                //self.skippedArray = (jsonResponse["Data1"] as? NSArray)! as! NSMutableArray
-                            
-                                let result = self.skippedArray[0] as? NSDictionary
+                        //self.skippedArray = (jsonResponse["Data1"] as? NSArray)! as! NSMutableArray
+                    
+                        let result = self.skippedArray[0] as? NSDictionary
 
-                            // var stringvalue1 = ""
-                        
-                                if let partname = result!.value(forKey: "playername") as? String
-                                    {
-                                    
-                                    self.profilename.text = partname
-                                }
-//
-                                if let partname = result!.value(forKey: "playerPic") as? String
-                                {
-                                    if partname.count>0
-                                    {
-                                    let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
-                                    let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
-                                    print(decodedimage)
-                                    self.profileimage.image = decodedimage
-                                    }
-                                }
-                            
-                                if let partname = result!.value(forKey: "Measure") as? Int
+                    // var stringvalue1 = ""
+                
+                        if let partname = result!.value(forKey: "playername") as? String
                             {
-                                let str2 = String(partname)
-                            self.lblnumgames.text = str2
+                            
+                            self.profilename.text = partname
+                        }
+//
+                        if let partname = result!.value(forKey: "playerPic") as? String
+                        {
+                            if partname.count>0
+                            {
+                            let dataDecoded:NSData = NSData(base64Encoded: partname, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                            let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                            print(decodedimage)
+                            self.profileimage.image = decodedimage
                             }
-                                if let partname = result!.value(forKey: "MeasureName") as? String
-                                {
-                                    // let str2 = String(partname)
-                                self.gamesplayed.text = partname
-                                }
+                        }
+                    
+                        if let partname = result!.value(forKey: "Measure") as? Int
+                    {
+                        let str2 = String(partname)
+                    self.lblnumgames.text = str2
+                    }
+                        if let partname = result!.value(forKey: "MeasureName") as? String
+                        {
+                            // let str2 = String(partname)
+                        self.gamesplayed.text = partname
+                        }
 //                             if let partname = result!.value(forKey: "Game_ID") as? Int
 //                             {
 //                             let str2 = String(partname)
@@ -305,25 +305,33 @@ class FootBallStatsVC: UIViewController , UICollectionViewDataSource, UICollecti
 //                             self.stringvalue1 =  NSString(format: "%@",(result!.value(forKey: "iCanPlay_id") as! CVarArg)) as String
 //                             print(self.stringvalue1)
 //
-                                
-                                DispatchQueue.main.async{
-                            self.statscollectionview.reloadData()
-                                }
-                            
-                                }
-                            else
-                        {
-                            var skippedArray1 = NSMutableArray()
-                        skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
-                        let dataarray = skippedArray1.firstObject as! NSDictionary
-                            var stringvalue1:String = ""
-                            stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
-                            self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
-                                    }
-                                }
-                            }
-                            }
                         
+                        DispatchQueue.main.async{
+                    self.statscollectionview.reloadData()
+                        }
+                    
+                        }
+                    else
+                {
+                    var skippedArray1 = NSMutableArray()
+                skippedArray1 = (jsonResponse["Data1"]! as! NSArray).mutableCopy() as! NSMutableArray
+                let dataarray = skippedArray1.firstObject as! NSDictionary
+                    var stringvalue1:String = ""
+                    stringvalue1 = dataarray.value(forKey:"ErrorDescription") as! String
+                    //self.showToast(message:stringvalue1 , font: UIFont.systemFont(ofSize: 14))
+                    self.showAlert(message: stringvalue1)
+                            }
+                        }
+                    }
+                    }
+                
+        }
+        else
+        {
+            self.showAlert(message: GlobalConstants.internetmessage)
+        }
+                        
+                       
                         }
     private func add(asChildViewController viewController: UIViewController) {
         // Add Child View Controller
